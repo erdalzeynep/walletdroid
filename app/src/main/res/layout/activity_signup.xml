@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".SignupActivity">
 
     <EditText
-        android:id="@+id/txt_login_email"
+        android:id="@+id/txt_signUp_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -17,7 +17,16 @@
         android:hint="Enter your email" />
 
     <EditText
-        android:id="@+id/txt_login_password"
+        android:id="@+id/txt_signUp_displayName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Enter display name" />
+
+    <EditText
+        android:id="@+id/txt_signUp_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -27,23 +36,14 @@
         android:inputType="textPassword"/>
 
     <Button
-        android:id="@+id/btn_login_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:onClick="login"
-        android:text="Login" />
-
-    <Button
-        android:id="@+id/btn_login_signup"
+        android:id="@+id/btn_signUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:text="sign up"
-        android:onClick="goToSignUpPage"/>
+        android:onClick="signUp"
+        />
 
 </LinearLayout>
