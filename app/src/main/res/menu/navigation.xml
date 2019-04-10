@@ -20,4 +20,9 @@
         android:icon="@drawable/settle"
         android:title="@string/title_settle"/>
 
+    <item
+        android:id="@+id/navigation_stock"
+        android:icon="@drawable/invest"
+        android:title="@string/title_invest"/>
+
 </menu>

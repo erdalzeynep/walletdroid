@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import io.sudutech.walletdroid.fragments.ExpenseFragment;
 import io.sudutech.walletdroid.fragments.GroupFragment;
+import io.sudutech.walletdroid.fragments.InvestFragment;
 import io.sudutech.walletdroid.fragments.QueyFragment;
 import io.sudutech.walletdroid.fragments.SettleFragment;
 
@@ -36,6 +37,8 @@ public class ServiceActivity extends AppCompatActivity {
                 case R.id.navigation_settle:
                     fragment = new SettleFragment();
                     break;
+                case R.id.navigation_stock:
+                    fragment = new InvestFragment();
             }
             return loadFragment(fragment);
         }

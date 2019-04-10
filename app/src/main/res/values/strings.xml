@@ -5,13 +5,24 @@
     <string name="title_expnese">Expense</string>
     <string name="title_query">Query</string>
     <string name="title_settle">Settle</string>
-    
+    <string name="title_invest">Invest</string>
+
     
     <string-array name="sample_group_name">
-        <item> Group one</item>
-        <item> Group two</item>
-        <item> Group three</item>
-        <item> Group four</item>
-        <item> Group five</item>
+        <item> Roomate</item>
+        <item> Colleague</item>
+        <item> Friends</item>
+        <item> Family</item>
     </string-array>
+
+
+    <string-array name="sample_stock_name">
+        <item> Google</item>
+        <item> Facebook</item>
+        <item> Twitter</item>
+        <item> Microsoft</item>
+        <item> Intel</item>
+    </string-array>
+
+
 </resources>
