@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_group"
+        android:icon="@drawable/group"
+        android:title="@string/title_groups" />
+
+    <item
+        android:id="@+id/navigation_expense"
+        android:icon="@drawable/money"
+        android:title="@string/title_expnese" />
+
+    <item
+        android:id="@+id/navigation_query"
+        android:icon="@drawable/question"
+        android:title="@string/title_query" />
+    <item
+        android:id="@+id/navigation_settle"
+        android:icon="@drawable/settle"
+        android:title="@string/title_settle"/>
+
+</menu>

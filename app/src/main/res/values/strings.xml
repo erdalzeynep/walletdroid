@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">WalletDroid</string>
+    <string name="title_activity_service">ServiceActivity</string>
+    <string name="title_groups">Groups</string>
+    <string name="title_expnese">Expense</string>
+    <string name="title_query">Query</string>
+    <string name="title_settle">Settle</string>
+    
+    
+    <string-array name="sample_group_name">
+        <item> Group one</item>
+        <item> Group two</item>
+        <item> Group three</item>
+        <item> Group four</item>
+        <item> Group five</item>
+    </string-array>
+</resources>
