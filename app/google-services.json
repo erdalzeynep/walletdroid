@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "780796991017",
+    "firebase_url": "https://test-e393d.firebaseio.com",
+    "project_id": "test-e393d",
+    "storage_bucket": "test-e393d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780796991017:android:f43e24c6a69a4b70",
+        "android_client_info": {
+          "package_name": "io.sudutech.walletdroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "780796991017-4gtcn5phdpun1u47b30tjf3o47pulhsf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.sudutech.walletdroid",
+            "certificate_hash": "e3443fcbfdb78c9b7f3ba6554a45a2c2dfe6f19f"
+          }
+        },
+        {
+          "client_id": "780796991017-ejmaaq1g1apuf8olgftamor2gfb93iua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7aepCTtfkmeYF7hMltpyw-HzPg0kiUQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "780796991017-ejmaaq1g1apuf8olgftamor2gfb93iua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
