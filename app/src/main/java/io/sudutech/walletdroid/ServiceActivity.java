@@ -6,6 +6,9 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import io.sudutech.walletdroid.fragments.ExpenseFragment;
 import io.sudutech.walletdroid.fragments.GroupFragment;
@@ -14,7 +17,7 @@ import io.sudutech.walletdroid.fragments.QueyFragment;
 import io.sudutech.walletdroid.fragments.SettleFragment;
 
 public class ServiceActivity extends AppCompatActivity {
-
+    private FirebaseAuth mAuth;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -46,6 +49,7 @@ public class ServiceActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -62,5 +66,11 @@ public class ServiceActivity extends AppCompatActivity {
             return true;
         }
             return false;
+    }
+
+    public void signOut(View view) {
+        mAuth.signOut();
+        finish();
+        startActivity(getIntent());
     }
 }
