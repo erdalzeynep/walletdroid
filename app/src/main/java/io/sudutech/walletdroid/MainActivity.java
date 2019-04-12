@@ -46,6 +46,26 @@ public class MainActivity extends AppCompatActivity {
     public void goToSignUpPage(View view) {
         Intent intent = new Intent(this, io.sudutech.walletdroid.SignupActivity.class);
         startActivity(intent);
+    }
 
+    public void resetPasswordViaEmail(View view) {
+        String email = ((EditText) findViewById(R.id.txt_login_email)).getText().toString();
+        if (!email.equals("")) {
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Password reset email has sent your mail. Check your email!", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                // ...
+                            }
+                        }
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

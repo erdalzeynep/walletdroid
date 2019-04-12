@@ -46,4 +46,5 @@
         android:text="sign up"
         android:onClick="goToSignUpPage"/>
 
+
 </LinearLayout>
