@@ -1,4 +1,4 @@
-package io.sudutech.walletdroid.data;
+package com.sda5.walletdroid.model;
 
 import java.util.ArrayList;
 
@@ -37,6 +37,3 @@ public class Group {
         this.list = list;
     }
 }
-
-
-

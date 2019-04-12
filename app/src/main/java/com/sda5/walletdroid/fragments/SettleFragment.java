@@ -1,4 +1,4 @@
-package io.sudutech.walletdroid.fragments;
+package com.sda5.walletdroid.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,12 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import io.sudutech.walletdroid.R;
+import com.sda5.walletdroid.R;
 
-public class InvestFragment extends Fragment {
+public class SettleFragment extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_invest, null);
+        return inflater.inflate(R.layout.fragment_settle, null);
     }
 }

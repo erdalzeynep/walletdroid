@@ -1,4 +1,4 @@
-package io.sudutech.walletdroid;
+package com.sda5.walletdroid;
 
 import org.junit.Test;
 

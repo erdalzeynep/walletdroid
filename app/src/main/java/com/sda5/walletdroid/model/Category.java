@@ -1,19 +1,16 @@
-package io.sudutech.walletdroid.data;
-
-import com.google.firebase.database.Exclude;
+package com.sda5.walletdroid.model;
 
 public class Category {
     private int id;
     private String title;
-    private int maxBudjet;
+    private int maxBudget;
 
 
     public Category(String title, int maxBudjet) {
         this.title = title;
-        this.maxBudjet = maxBudjet;
+        this.maxBudget = maxBudjet;
     }
 
-    @Exclude
     public int getId() {
         return id;
     }
@@ -30,11 +27,11 @@ public class Category {
         this.title = title;
     }
 
-    public int getMaxBudjet() {
-        return maxBudjet;
+    public int getMaxBudget() {
+        return maxBudget;
     }
 
-    public void setMaxBudjet(int maxBudjet) {
-        this.maxBudjet = maxBudjet;
+    public void setMaxBudget(int maxBudget) {
+        this.maxBudget = maxBudget;
     }
 }
