@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SignupActivity">
+    tools:context="com.sda5.walletdroid.activities.SignupActivity">
 
     <EditText
         android:id="@+id/txt_signUp_email"

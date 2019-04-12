@@ -1,4 +1,4 @@
-package io.sudutech.walletdroid.fragments;
+package com.sda5.walletdroid.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import io.sudutech.walletdroid.R;
+import com.sda5.walletdroid.R;
 
 public class ExpenseFragment extends Fragment {
     @Nullable

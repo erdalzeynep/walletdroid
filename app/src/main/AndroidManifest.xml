@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.sudutech.walletdroid">
+    package="com.sda5.walletdroid">
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -14,12 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SignupActivity"
+            android:name="com.sda5.walletdroid.activities.SignupActivity"
             android:label="@string/title_activity_signup" />
         <activity
-            android:name=".ServiceActivity"
+            android:name="com.sda5.walletdroid.activities.ServiceActivity"
             android:label="@string/title_activity_service" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.sda5.walletdroid.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

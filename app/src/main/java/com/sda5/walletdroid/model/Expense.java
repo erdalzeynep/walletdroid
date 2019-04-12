@@ -1,4 +1,4 @@
-package io.sudutech.walletdroid.data;
+package com.sda5.walletdroid.model;
 
 import android.icu.util.LocaleData;
 
@@ -13,7 +13,6 @@ public class Expense {
     private ArrayList<AppUser> expenseUsers;
     private LocaleData date;
     private boolean type;
-
 
     public int getId() {
         return id;

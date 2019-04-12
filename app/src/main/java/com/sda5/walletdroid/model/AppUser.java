@@ -1,4 +1,4 @@
-package io.sudutech.walletdroid.data;
+package com.sda5.walletdroid.model;
 
 public class AppUser {
     private int id;
@@ -7,7 +7,6 @@ public class AppUser {
     private String email;
     private int monthlyBudget;
     private int monthlySave;
-
 
 
     public AppUser(String name, String number, String email) {
@@ -54,5 +53,13 @@ public class AppUser {
 
     public void setMonthlySave(int monthlySave) {
         this.monthlySave = monthlySave;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

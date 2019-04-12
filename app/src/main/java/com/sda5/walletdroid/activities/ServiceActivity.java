@@ -1,4 +1,4 @@
-package io.sudutech.walletdroid;
+package com.sda5.walletdroid.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,11 +10,12 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import io.sudutech.walletdroid.fragments.ExpenseFragment;
-import io.sudutech.walletdroid.fragments.GroupFragment;
-import io.sudutech.walletdroid.fragments.InvestFragment;
-import io.sudutech.walletdroid.fragments.QueyFragment;
-import io.sudutech.walletdroid.fragments.SettleFragment;
+import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.fragments.ExpenseFragment;
+import com.sda5.walletdroid.fragments.GroupFragment;
+import com.sda5.walletdroid.fragments.InvestFragment;
+import com.sda5.walletdroid.fragments.QueyFragment;
+import com.sda5.walletdroid.fragments.SettleFragment;
 
 public class ServiceActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
