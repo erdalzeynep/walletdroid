@@ -1,3 +1,4 @@
+// this program uses a free API to get the exchange rates with SEK as base currency into a jason file
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
