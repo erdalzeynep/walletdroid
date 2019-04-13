@@ -17,11 +17,11 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 
 import com.sda5.walletdroid.R;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     EditText etEmail;
-    EditText etDisplayname;
+    EditText etDisplayName;
     EditText etPassword;
 
     @Override
@@ -31,20 +31,20 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         etEmail = findViewById(R.id.txt_signUp_email);
-        etDisplayname = findViewById(R.id.txt_signUp_displayName);
+        etDisplayName = findViewById(R.id.txt_signUp_displayName);
         etPassword = findViewById(R.id.txt_signUp_password);
     }
 
     public void signUp(View view) {
 
         //Check if user fills all fields
-        if(etEmail.getText().toString().trim().isEmpty() ||
-            etPassword.getText().toString().trim().isEmpty() ||
-            etDisplayname.getText().toString().trim().isEmpty()){
+        if (etEmail.getText().toString().trim().isEmpty() ||
+                etPassword.getText().toString().trim().isEmpty() ||
+                etDisplayName.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-        } else{
+        } else {
             final String email = etEmail.getText().toString();
-            final String displayName = etDisplayname.getText().toString();
+            final String displayName = etDisplayName.getText().toString();
             final String password = etPassword.getText().toString();
 
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -56,7 +56,7 @@ public class SignupActivity extends AppCompatActivity {
                                 updateUserDisplayName(user, displayName, password);
 
                             } else {
-                                Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -72,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Toast.makeText(SignupActivity.this, "Authentication failed.",
+                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -92,8 +92,7 @@ public class SignupActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             postSignUpLogin(user.getEmail(), password);
-                            startActivity(new Intent(SignupActivity.this, ServiceActivity.class));
-
+                            startActivity(new Intent(SignUpActivity.this, ServiceActivity.class));
                         }
                     }
                 });

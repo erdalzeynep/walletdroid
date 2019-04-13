@@ -1,24 +1,22 @@
-package com.sda5.walletdroid.model;
+package com.sda5.walletdroid.models;
 
 import android.icu.util.LocaleData;
 
-import java.util.ArrayList;
-
 public class Expense {
-    private int id;
+    private String id;
     private String title;
-    private int amount;
+    private Double amount;
     private Category category;
-    private AppUser buyer;
-    private ArrayList<AppUser> expenseUsers;
+    private String payerAccountId;
+    private String groupId;
     private LocaleData date;
-    private boolean type;
+    private boolean isRecursive;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -30,11 +28,11 @@ public class Expense {
         this.title = title;
     }
 
-    public int getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
@@ -46,20 +44,20 @@ public class Expense {
         this.category = category;
     }
 
-    public AppUser getBuyer() {
-        return buyer;
+    public String getpayerAccountId() {
+        return payerAccountId;
     }
 
-    public void setBuyer(AppUser buyer) {
-        this.buyer = buyer;
+    public void setpayerAccountId(String payerAccountId) {
+        this.payerAccountId = payerAccountId;
     }
 
-    public ArrayList<AppUser> getExpenseUsers() {
-        return expenseUsers;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setExpenseUsers(ArrayList<AppUser> expenseUsers) {
-        this.expenseUsers = expenseUsers;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public LocaleData getDate() {
@@ -71,10 +69,10 @@ public class Expense {
     }
 
     public boolean isRecursive() {
-        return type;
+        return isRecursive;
     }
 
     public void setRecursive(boolean recursive) {
-        this.type = recursive;
+        this.isRecursive = recursive;
     }
 }

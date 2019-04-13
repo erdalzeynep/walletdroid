@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToSignUpPage(View view) {
-        Intent intent = new Intent(this, SignupActivity.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 

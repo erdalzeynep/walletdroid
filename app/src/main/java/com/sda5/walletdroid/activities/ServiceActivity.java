@@ -1,5 +1,6 @@
 package com.sda5.walletdroid.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -73,5 +74,10 @@ public class ServiceActivity extends AppCompatActivity {
         mAuth.signOut();
         finish();
         startActivity(getIntent());
+    }
+
+    public void createNewGroup(View view) {
+        Intent intent = new Intent(this, CreateNewGroupActivity.class);
+        startActivity(intent);
     }
 }
