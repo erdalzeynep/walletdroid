@@ -20,33 +20,48 @@ import com.sda5.walletdroid.R;
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
+    EditText etEmail;
+    EditText etDisplayname;
+    EditText etPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        etEmail = findViewById(R.id.txt_signUp_email);
+        etDisplayname = findViewById(R.id.txt_signUp_displayName);
+        etPassword = findViewById(R.id.txt_signUp_password);
     }
 
     public void signUp(View view) {
-        final String email = ((EditText) findViewById(R.id.txt_signUp_email)).getText().toString();
-        final String displayName = ((EditText) findViewById(R.id.txt_signUp_displayName)).getText().toString();
-        final String password = ((EditText) findViewById(R.id.txt_signUp_password)).getText().toString();
 
+        //Check if user fills all fields
+        if(etEmail.getText().toString().trim().isEmpty() ||
+            etPassword.getText().toString().trim().isEmpty() ||
+            etDisplayname.getText().toString().trim().isEmpty()){
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        } else{
+            final String email = etEmail.getText().toString();
+            final String displayName = etDisplayname.getText().toString();
+            final String password = etPassword.getText().toString();
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = task.getResult().getUser();
-                            updateUserDisplayName(user, displayName, password);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = task.getResult().getUser();
+                                updateUserDisplayName(user, displayName, password);
 
-                        } else {
-                            Toast.makeText(SignupActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
 
