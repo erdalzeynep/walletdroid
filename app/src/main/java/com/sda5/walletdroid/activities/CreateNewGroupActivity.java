@@ -24,6 +24,7 @@ import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CreateNewGroupActivity extends AppCompatActivity {
     private AccountAdapter accountAdapter;
@@ -68,9 +69,9 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     }
 
     public void saveNewGroup(View view) {
-
+        List<String> selectedAccountIDList = accountAdapter.getSelectedAccountIDList();
         String groupName = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
-        if (accountAdapter.getSelectedAccountIDList().size() != 0) {
+        if (!groupName.equals("") && selectedAccountIDList.size() != 0) {
             Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList());
             database.collection("Groups").document().set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -85,7 +86,8 @@ public class CreateNewGroupActivity extends AppCompatActivity {
             });
 
         } else {
-            Toast.makeText(this, "Please select group members", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
         }
     }
 }
+
