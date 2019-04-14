@@ -1,7 +1,6 @@
 package com.sda5.walletdroid.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -35,15 +34,15 @@ public class AccountAdapter extends ArrayAdapter<Account> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.account, parent, false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.list_account_item, parent, false);
 
         Account account = accounts.get(position);
 
-        TextView textViewAccount = listItem.findViewById(R.id.textview_account);
+        TextView textViewAccount = listItem.findViewById(R.id.textview_account_item);
         textViewAccount.setText(account.getOwnerName());
         textViewAccount.setTag(account.getId());
 
-        final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account);
+        final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account_item);
         checkBoxAccount.setTag(account.getId());
 
 

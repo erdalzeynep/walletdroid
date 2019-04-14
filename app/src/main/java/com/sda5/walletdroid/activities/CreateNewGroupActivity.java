@@ -69,20 +69,23 @@ public class CreateNewGroupActivity extends AppCompatActivity {
 
     public void saveNewGroup(View view) {
 
-        String groupName = ((EditText)findViewById(R.id.et_group_name)).getText().toString();
-        Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList());
-        database.collection("groups").document().set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Intent intent = new Intent(CreateNewGroupActivity.this, ServiceActivity.class);
-                    startActivity(intent);
+        String groupName = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
+        if (accountAdapter.getSelectedAccountIDList().size() != 0) {
+            Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList());
+            database.collection("Groups").document().set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Intent intent = new Intent(CreateNewGroupActivity.this, ServiceActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(CreateNewGroupActivity.this, "Creating group failed", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else {
-                    Toast.makeText(CreateNewGroupActivity.this, "Creating group failed", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+            });
 
+        } else {
+            Toast.makeText(this, "Please select group members", Toast.LENGTH_SHORT).show();
+        }
     }
 }
