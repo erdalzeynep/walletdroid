@@ -7,7 +7,7 @@
     android:descendantFocusability="blocksDescendants">
 
     <TextView
-        android:id="@+id/account"
+        android:id="@+id/textview_account"
         android:layout_width="252dp"
         android:layout_height="77dp"
         android:layout_marginStart="4dp"
@@ -16,10 +16,12 @@
         android:gravity="center|left"
         android:text="TextView"
         android:textSize="18sp"
+        android:choiceMode="multipleChoice"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="39dp" />
 
     <CheckBox
+        android:id="@+id/checkbox_account"
         android:layout_width="30dp"
         android:layout_height="30dp" />
 

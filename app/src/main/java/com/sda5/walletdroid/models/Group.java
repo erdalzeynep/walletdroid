@@ -1,24 +1,15 @@
 package com.sda5.walletdroid.models;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Group {
-    private String id;
-    private String name;
-    private ArrayList<String> accountIdList;
 
-    public Group(String id, String name, ArrayList<String> list) {
-        this.id = id;
+    private String name;
+    private List<String> accountIdList;
+
+    public Group(String name, List<String> list) {
         this.name = name;
         this.accountIdList = list;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -29,11 +20,11 @@ public class Group {
         this.name = name;
     }
 
-    public ArrayList<String> getList() {
+    public List<String> getAccountIdList() {
         return accountIdList;
     }
 
-    public void setList(ArrayList<String> list) {
-        this.accountIdList = list;
+    public void setAccountIdList(List<String> accountIdList) {
+        this.accountIdList = accountIdList;
     }
 }

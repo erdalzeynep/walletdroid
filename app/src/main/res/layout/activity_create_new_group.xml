@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/lbl_group_name"
-        android:layout_width="337dp"
-        android:layout_height="70dp"
+        android:layout_width="388dp"
+        android:layout_height="63dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
         android:text="Group Name"
@@ -19,12 +19,12 @@
         android:id="@+id/et_group_name"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:text="Enter group name" />
+        android:hint="Enter group name" />
 
     <TextView
         android:id="@+id/lbl_select_people"
-        android:layout_width="337dp"
-        android:layout_height="70dp"
+        android:layout_width="388dp"
+        android:layout_height="69dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
         android:text="Select people"
@@ -34,13 +34,15 @@
     <ListView
         android:id="@+id/account_list"
         android:layout_width="match_parent"
-        android:layout_height="174dp" />
+        android:layout_height="303dp"
+        />
 
     <Button
         android:id="@+id/btn_create_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ok" />
+        android:text="Ok"
+        android:onClick="saveNewGroup"/>
 
 
 </LinearLayout>
