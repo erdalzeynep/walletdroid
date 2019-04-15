@@ -1,5 +1,6 @@
 package com.sda5.walletdroid.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -10,6 +11,7 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.fragments.ExpenseFragment;
 import com.sda5.walletdroid.fragments.GroupFragment;
@@ -72,6 +74,5 @@ public class ServiceActivity extends AppCompatActivity {
     public void signOut(View view) {
         mAuth.signOut();
         finish();
-        startActivity(getIntent());
     }
 }
