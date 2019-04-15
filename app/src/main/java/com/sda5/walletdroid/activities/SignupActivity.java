@@ -2,10 +2,12 @@ package com.sda5.walletdroid.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,7 +17,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.model.User;
+
+import java.util.Arrays;
 
 public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -23,12 +34,22 @@ public class SignupActivity extends AppCompatActivity {
     EditText etEmail;
     EditText etDisplayname;
     EditText etPassword;
+    FirebaseFirestore database;
+    String userId;
+    String email;
+    String userDisplayName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        database = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        database.setFirestoreSettings(settings);
 
         etEmail = findViewById(R.id.txt_signUp_email);
         etDisplayname = findViewById(R.id.txt_signUp_displayName);
@@ -38,11 +59,11 @@ public class SignupActivity extends AppCompatActivity {
     public void signUp(View view) {
 
         //Check if user fills all fields
-        if(etEmail.getText().toString().trim().isEmpty() ||
-            etPassword.getText().toString().trim().isEmpty() ||
-            etDisplayname.getText().toString().trim().isEmpty()){
+        if (etEmail.getText().toString().trim().isEmpty() ||
+                etPassword.getText().toString().trim().isEmpty() ||
+                etDisplayname.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-        } else{
+        } else {
             final String email = etEmail.getText().toString();
             final String displayName = etDisplayname.getText().toString();
             final String password = etPassword.getText().toString();
@@ -80,6 +101,8 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void updateUserDisplayName(final FirebaseUser user, final String displayName, final String password) {
+        userId = user.getUid();
+        email  = user.getEmail();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(displayName)
@@ -90,6 +113,8 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            User user = new User(userId, email, displayName);
+                            database.collection("Users").document().set(user);
 
                             postSignUpLogin(user.getEmail(), password);
                             startActivity(new Intent(SignupActivity.this, ServiceActivity.class));

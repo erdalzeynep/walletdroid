@@ -74,5 +74,6 @@ public class ServiceActivity extends AppCompatActivity {
     public void signOut(View view) {
         mAuth.signOut();
         finish();
+        startActivity(new Intent(this, MainActivity.class));
     }
 }
