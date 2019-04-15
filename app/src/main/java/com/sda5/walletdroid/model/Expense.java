@@ -9,8 +9,8 @@ public class Expense {
     private String title;
     private int amount;
     private Category category;
-    private AppUser buyer;
-    private ArrayList<AppUser> expenseUsers;
+    private Account buyer;
+    private ArrayList<Account> expenseUsers;
     private LocaleData date;
     private boolean type;
 
@@ -46,19 +46,19 @@ public class Expense {
         this.category = category;
     }
 
-    public AppUser getBuyer() {
+    public Account getBuyer() {
         return buyer;
     }
 
-    public void setBuyer(AppUser buyer) {
+    public void setBuyer(Account buyer) {
         this.buyer = buyer;
     }
 
-    public ArrayList<AppUser> getExpenseUsers() {
+    public ArrayList<Account> getExpenseUsers() {
         return expenseUsers;
     }
 
-    public void setExpenseUsers(ArrayList<AppUser> expenseUsers) {
+    public void setExpenseUsers(ArrayList<Account> expenseUsers) {
         this.expenseUsers = expenseUsers;
     }
 
