@@ -8,21 +8,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
-import com.sda5.walletdroid.adapters.AccountAdapter;
+import com.sda5.walletdroid.activities.CreateNewGroupActivity;
 import com.sda5.walletdroid.adapters.GroupAdapter;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class GroupFragment extends Fragment {
     private GroupAdapter groupAdapter;
@@ -37,10 +40,6 @@ public class GroupFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         database = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        database.setFirestoreSettings(settings);
 
         String currentUSerID = mAuth.getCurrentUser().getUid();
 
@@ -49,6 +48,7 @@ public class GroupFragment extends Fragment {
 
         groupAdapter = new GroupAdapter(v.getContext(), groups);
         listView.setAdapter(groupAdapter);
+
 
         database.collection("Groups")
                 .whereEqualTo("userID", currentUSerID)

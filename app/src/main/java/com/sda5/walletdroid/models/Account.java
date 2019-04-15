@@ -1,13 +1,19 @@
 package com.sda5.walletdroid.models;
 
+import java.util.UUID;
+
 public class Account {
     private String id;
+    private String userID;
     private boolean isInternalAccount;
     private String ownerName;
     private String email;
     private String phoneNumber;
     private Double monthlyBudget;
     private Double monthlySave;
+    private String tokenID;
+
+    public Account(){}
 
     public Account(boolean isInternalAccount, String ownerName, String email,
                    String phoneNumber, Double monthlyBudget, Double monthlySave) {
@@ -25,7 +31,37 @@ public class Account {
         this.email = email;
     }
 
-    public Account(){}
+    public Account( boolean isInternalAccount, String ownerName, String email, String tokenID) {
+        this.isInternalAccount = isInternalAccount;
+        this.ownerName = ownerName;
+        this.email = email;
+        this.tokenID = tokenID;
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setDocumentID(String documentID) {
+        this.id = documentID;
+    }
+
+    public String getTokenID() {
+        return tokenID;
+    }
+
+    public void setTokenID(String tokenID) {
+        this.tokenID = tokenID;
+    }
 
     public String getOwnerName() {
         return ownerName;
@@ -65,14 +101,6 @@ public class Account {
 
     public void setMonthlySave(Double monthlySave) {
         this.monthlySave = monthlySave;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public boolean isInternalAccount() {

@@ -1,34 +1,87 @@
 {
   "project_info": {
-    "project_number": "780796991017",
-    "firebase_url": "https://test-e393d.firebaseio.com",
-    "project_id": "test-e393d",
-    "storage_bucket": "test-e393d.appspot.com"
+    "project_number": "718366885828",
+    "firebase_url": "https://walletdroid.firebaseio.com",
+    "project_id": "walletdroid",
+    "storage_bucket": "walletdroid.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:780796991017:android:80a81d9eba63c91e",
+        "mobilesdk_app_id": "1:718366885828:android:80a81d9eba63c91e",
         "android_client_info": {
           "package_name": "com.sda5.walletdroid"
         }
       },
       "oauth_client": [
         {
-          "client_id": "780796991017-ejmaaq1g1apuf8olgftamor2gfb93iua.apps.googleusercontent.com",
+          "client_id": "718366885828-2lv8osetkt60udhn133i02o24h50i4c2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sda5.walletdroid",
+            "certificate_hash": "fbec3892ec12f7b861f13a2cb7b1439c6db99d1b"
+          }
+        },
+        {
+          "client_id": "718366885828-6q7gmn9effo505b30t985gsrugem1o63.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sda5.walletdroid",
+            "certificate_hash": "e10e975073c78ce5475166216df7d7c18917ddff"
+          }
+        },
+        {
+          "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA7aepCTtfkmeYF7hMltpyw-HzPg0kiUQ8"
+          "current_key": "AIzaSyDiCNoN-c4fBCEuU1oXGRA7FCb_y5RoABU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "780796991017-ejmaaq1g1apuf8olgftamor2gfb93iua.apps.googleusercontent.com",
+              "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718366885828:android:f43e24c6a69a4b70",
+        "android_client_info": {
+          "package_name": "io.sudutech.walletdroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "718366885828-9vjo49a54k9kil8crnii28seffgtsgkb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.sudutech.walletdroid",
+            "certificate_hash": "105272ee2e204ce8555ab7e8b46c1625fe04a252"
+          }
+        },
+        {
+          "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiCNoN-c4fBCEuU1oXGRA7FCb_y5RoABU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

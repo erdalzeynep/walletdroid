@@ -1,11 +1,13 @@
 package com.sda5.walletdroid.models;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.List;
 import java.util.UUID;
 
 public class Group {
+
     private FirebaseAuth mAuth;
     private String userID;
     private String id;
@@ -18,8 +20,8 @@ public class Group {
         mAuth = FirebaseAuth.getInstance();
         this.name = name;
         this.accountIdList = list;
-        this.id = UUID.randomUUID().toString();
         this.userID = mAuth.getCurrentUser().getUid();
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
@@ -45,4 +47,5 @@ public class Group {
     public String getUserID() {
         return userID;
     }
+
 }

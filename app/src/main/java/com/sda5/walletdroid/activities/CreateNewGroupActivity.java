@@ -12,10 +12,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
@@ -25,11 +25,12 @@ import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CreateNewGroupActivity extends AppCompatActivity {
     private AccountAdapter accountAdapter;
     private ArrayList<Account> accounts = new ArrayList<>();
-
+    FirebaseAuth mAuth;
     FirebaseFirestore database;
 
     @Override
@@ -39,10 +40,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_group);
 
         database = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        database.setFirestoreSettings(settings);
+        mAuth = FirebaseAuth.getInstance();
 
         ListView listView = findViewById(R.id.account_list);
         listView.setScrollingCacheEnabled(false);
@@ -50,8 +48,8 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         accountAdapter = new AccountAdapter(getApplicationContext(), accounts);
         listView.setAdapter(accountAdapter);
 
-        database.collection("Account")
-                .whereEqualTo("isInternal", true)
+        database.collection("Accounts")
+                .whereEqualTo("internalAccount", true)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -59,9 +57,11 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                         if (e != null) {
                             return;
                         }
-
                         for (QueryDocumentSnapshot doc : value) {
-                            accounts.add(doc.toObject(Account.class));
+                            Account account = doc.toObject(Account.class);
+                            if(!account.getUserID().equals(mAuth.getUid())) {
+                                accounts.add(account);
+                            }
                         }
                         accountAdapter.notifyDataSetChanged();
                     }
@@ -69,9 +69,33 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     }
 
     public void saveNewGroup(View view) {
-        List<String> selectedAccountIDList = accountAdapter.getSelectedAccountIDList();
+        String userID = mAuth.getCurrentUser().getUid();
+        final List<String> selectedAccountIDList = accountAdapter.getSelectedAccountIDList();
+        database.collection("Accounts").whereEqualTo("userID", userID).get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot accountSnapshot = task.getResult();
+                            if (null != accountSnapshot) {
+                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                                if (account.isPresent()) {
+                                    persistGroup(account.get(), selectedAccountIDList);
+                                } else {
+                                    Toast.makeText(CreateNewGroupActivity.this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    }
+                }
+
+        );
+    }
+
+    private void persistGroup(Account account, List<String> memberIDs) {
+        memberIDs.add(account.getId());
         String groupName = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
-        if (!groupName.equals("") && selectedAccountIDList.size() != 0) {
+        if (!groupName.equals("") && memberIDs.size() != 0) {
             Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList());
             database.collection("Groups").document().set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -84,9 +108,6 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                     }
                 }
             });
-
-        } else {
-            Toast.makeText(this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
         }
     }
 }

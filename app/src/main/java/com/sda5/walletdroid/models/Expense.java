@@ -2,6 +2,8 @@ package com.sda5.walletdroid.models;
 
 import android.icu.util.LocaleData;
 
+import java.util.UUID;
+
 public class Expense {
     private String id;
     private String title;
@@ -11,6 +13,17 @@ public class Expense {
     private String groupId;
     private LocaleData date;
     private boolean isRecursive;
+
+    public Expense(String title, Double amount, Category category, String payerAccountId, String groupId, LocaleData date, boolean isRecursive) {
+        this.title = title;
+        this.amount = amount;
+        this.category = category;
+        this.payerAccountId = payerAccountId;
+        this.groupId = groupId;
+        this.date = date;
+        this.isRecursive = isRecursive;
+        this.id = UUID.randomUUID().toString();
+    }
 
     public String getId() {
         return id;

@@ -50,7 +50,6 @@ public class GroupAdapter extends ArrayAdapter {
                 getContext().startActivity(intent);
             }
         });
-
         return listItem;
     }
 }
