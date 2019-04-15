@@ -13,13 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.CreateNewGroupActivity"></activity>
         <activity
-            android:name="com.sda5.walletdroid.activities.SignupActivity"
+            android:name=".activities.SignUpActivity"
             android:label="@string/title_activity_signup" />
         <activity
-            android:name="com.sda5.walletdroid.activities.ServiceActivity"
+            android:name=".activities.ServiceActivity"
             android:label="@string/title_activity_service" />
-        <activity android:name="com.sda5.walletdroid.activities.MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

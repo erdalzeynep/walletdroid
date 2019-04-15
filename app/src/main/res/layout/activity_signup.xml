@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.sda5.walletdroid.activities.SignupActivity">
+    tools:context="com.sda5.walletdroid.activities.SignUpActivity">
 
     <EditText
         android:id="@+id/txt_signUp_email"
@@ -23,7 +23,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:hint="Enter display name" />
+        android:hint="Enter display ownerName" />
 
     <EditText
         android:id="@+id/txt_signUp_password"
@@ -33,7 +33,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:hint="Enter password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btn_signUp"
@@ -42,8 +42,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:text="sign up"
         android:onClick="signUp"
-        />
+        android:text="sign up" />
 
 </LinearLayout>

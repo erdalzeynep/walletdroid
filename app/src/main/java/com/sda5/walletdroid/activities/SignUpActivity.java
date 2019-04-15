@@ -16,15 +16,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.sda5.walletdroid.R;
-import com.sda5.walletdroid.model.Account;
+import com.sda5.walletdroid.models.Account;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     EditText etEmail;
-    EditText etDisplayname;
+    EditText etDisplayName;
     EditText etPassword;
     FirebaseFirestore database;
     String userId;
@@ -39,13 +38,9 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         database = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        database.setFirestoreSettings(settings);
 
         etEmail = findViewById(R.id.txt_signUp_email);
-        etDisplayname = findViewById(R.id.txt_signUp_displayName);
+        etDisplayName = findViewById(R.id.txt_signUp_displayName);
         etPassword = findViewById(R.id.txt_signUp_password);
     }
 
@@ -54,11 +49,11 @@ public class SignupActivity extends AppCompatActivity {
         //Check if user fills all fields
         if (etEmail.getText().toString().trim().isEmpty() ||
                 etPassword.getText().toString().trim().isEmpty() ||
-                etDisplayname.getText().toString().trim().isEmpty()) {
+                etDisplayName.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
         } else {
             final String email = etEmail.getText().toString();
-            final String displayName = etDisplayname.getText().toString();
+            final String displayName = etDisplayName.getText().toString();
             final String password = etPassword.getText().toString();
 
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -70,7 +65,7 @@ public class SignupActivity extends AppCompatActivity {
                                 updateUserDisplayName(user, displayName, password);
 
                             } else {
-                                Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -86,7 +81,7 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Toast.makeText(SignupActivity.this, "Authentication failed.",
+                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -105,7 +100,7 @@ public class SignupActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
-                             idToken = task.getResult().getToken();
+                            idToken = task.getResult().getToken();
                             // Send token to your backend via HTTPS
                             // ...
                         } else {
@@ -120,11 +115,11 @@ public class SignupActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Account userAccount = new Account(true, displayName, email, idToken);
+                            userAccount.setUserID(mAuth.getCurrentUser().getUid());
                             database.collection("Accounts").document().set(userAccount);
 
                             postSignUpLogin(user.getEmail(), password);
-                            startActivity(new Intent(SignupActivity.this, ServiceActivity.class));
-
+                            startActivity(new Intent(SignUpActivity.this, ServiceActivity.class));
                         }
                     }
                 });
