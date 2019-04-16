@@ -28,7 +28,6 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseFirestore database;
     String userId;
     String email;
-    String userDisplayName;
     String idToken;
 
     @Override

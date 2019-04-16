@@ -59,7 +59,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                         }
                         for (QueryDocumentSnapshot doc : value) {
                             Account account = doc.toObject(Account.class);
-                            if(!account.getUserID().equals(mAuth.getUid())) {
+                            if (!account.getUserID().equals(mAuth.getUid())) {
                                 accounts.add(account);
                             }
                         }
@@ -80,22 +80,23 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                             if (null != accountSnapshot) {
                                 Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
                                 if (account.isPresent()) {
-                                    persistGroup(account.get(), selectedAccountIDList);
-                                } else {
-                                    Toast.makeText(CreateNewGroupActivity.this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
+                                    if (selectedAccountIDList.size() != 0) {
+                                        persistGroup(account.get(), selectedAccountIDList);
+                                    } else {
+                                        Toast.makeText(CreateNewGroupActivity.this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         }
                     }
                 }
-
         );
     }
 
     private void persistGroup(Account account, List<String> memberIDs) {
         memberIDs.add(account.getId());
         String groupName = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
-        if (!groupName.equals("") && memberIDs.size() != 0) {
+        if (!groupName.equals("")) {
             Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList());
             database.collection("Groups").document().set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -108,7 +109,8 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                     }
                 }
             });
+        } else {
+            Toast.makeText(CreateNewGroupActivity.this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
         }
     }
 }
-
