@@ -80,4 +80,9 @@ public class ServiceActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateNewGroupActivity.class);
         startActivity(intent);
     }
+
+    public void addExpense(View v){
+        Intent intent = new Intent(getApplicationContext(), AddExpenseActicity.class);
+        startActivity(intent);
+    }
 }

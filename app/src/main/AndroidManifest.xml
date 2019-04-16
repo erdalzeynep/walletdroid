@@ -20,6 +20,9 @@
         <activity
             android:name=".activities.ServiceActivity"
             android:label="@string/title_activity_service" />
+        <activity
+            android:name=".activities.AddExpenseActicity"
+            android:label="@string/title_activity_add_expense" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

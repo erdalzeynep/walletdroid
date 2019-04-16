@@ -38,4 +38,9 @@ public class Category {
     public void setMaxBudget(int maxBudget) {
         this.maxBudget = maxBudget;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

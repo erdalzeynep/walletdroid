@@ -48,4 +48,8 @@ public class Group {
         return userID;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }
