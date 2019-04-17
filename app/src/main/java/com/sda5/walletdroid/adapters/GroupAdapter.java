@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.sda5.walletdroid.R;
-import com.sda5.walletdroid.fragments.GroupFragment;
+import com.sda5.walletdroid.activities.GroupDetailActivity;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class GroupAdapter extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 String groupId = view.getTag().toString();
-                Intent intent = new Intent(getContext(), GroupFragment.class);
+                Intent intent = new Intent(getContext(), GroupDetailActivity.class);
                 intent.putExtra("group_id", groupId);
                 getContext().startActivity(intent);
             }
