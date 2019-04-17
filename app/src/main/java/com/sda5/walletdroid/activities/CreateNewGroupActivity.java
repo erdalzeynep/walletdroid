@@ -32,6 +32,8 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     private ArrayList<Account> accounts = new ArrayList<>();
     FirebaseAuth mAuth;
     FirebaseFirestore database;
+    private String currentUserId;
+    private String accountId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class CreateNewGroupActivity extends AppCompatActivity {
 
         database = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+        currentUserId = mAuth.getCurrentUser().getUid();
 
         ListView listView = findViewById(R.id.account_list);
         listView.setScrollingCacheEnabled(false);
@@ -81,7 +85,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                                 Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
                                 if (account.isPresent()) {
                                     if (selectedAccountIDList.size() != 0) {
-                                        persistGroup(account.get(), selectedAccountIDList);
+                                        persistGroup(selectedAccountIDList);
                                     } else {
                                         Toast.makeText(CreateNewGroupActivity.this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
                                     }
@@ -93,24 +97,42 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         );
     }
 
-    private void persistGroup(Account account, List<String> memberIDs) {
-        memberIDs.add(account.getId());
-        String groupName = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
-        if (!groupName.equals("")) {
-            Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList());
-            database.collection("Groups").document(group.getId()).set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Intent intent = new Intent(CreateNewGroupActivity.this, ServiceActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(CreateNewGroupActivity.this, "Creating group failed", Toast.LENGTH_SHORT).show();
+    private void persistGroup(final List<String> memberIDs) {
+        database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot accountSnapshot = task.getResult();
+                            if (null != accountSnapshot) {
+                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                                if (account.isPresent()) {
+                                    accountId = account.get().getId();
+                                    memberIDs.add(account.get().getId());
+                                    String groupName = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
+                                    if (!groupName.equals("")) {
+                                        Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList(), accountId);
+                                        database.collection("Groups").document(group.getId()).set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Intent intent = new Intent(CreateNewGroupActivity.this, ServiceActivity.class);
+                                                    startActivity(intent);
+                                                } else {
+                                                    Toast.makeText(CreateNewGroupActivity.this, "Creating group failed", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        Toast.makeText(CreateNewGroupActivity.this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            }
+                        }
                     }
-                }
-            });
-        } else {
-            Toast.makeText(CreateNewGroupActivity.this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
-        }
+                });
+
+
     }
 }

@@ -21,7 +21,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.adapters.AccountAdapter;
-import com.sda5.walletdroid.fragments.GroupFragment;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
@@ -77,7 +76,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                         }
                         if (null != value) {
                             group = value.toObjects(Group.class).get(0);
-                            if (!group.getUserID().equals(currentUserId)) {
+                            if (!group.getAdminUserId().equals(currentUserId)) {
                                 btnAddMember.setVisibility(View.GONE);
                                 btnDeleteMember.setVisibility(View.GONE);
                                 btnDeleteGroup.setVisibility(View.GONE);
@@ -135,5 +134,27 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
 
+    public void addMember(View view) {
+    }
+
+
+    public void deleteMembers(View view) {
+        int sizeOfSelectedAccountIdList = accountAdapter.getSelectedAccountIDList().size();
+        for (int i=0 ; i< sizeOfSelectedAccountIdList ; i++){
+            group.getAccountIdList().remove(accountAdapter.getSelectedAccountIDList().get(i));
+        }
+
+        dataBase.collection("Groups").document(groupID)
+                .update("accountIdList" , group.getAccountIdList())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        accountAdapter.notifyDataSetChanged();
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+    }
+    
 }
 

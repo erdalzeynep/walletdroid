@@ -34,20 +34,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Add Member" />
+        android:text="Add Member"
+        android:onClick="addMember"/>
 
     <Button
         android:id="@+id/btn_delete_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Delete Member" />
+        android:text="Delete Members"
+        android:onClick="deleteMembers"/>
 
     <Button
         android:id="@+id/btn_delete_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Delete Group" />
+        android:text="Delete Group"
+        android:onClick="deleteGroup"/>
 
 </LinearLayout>
