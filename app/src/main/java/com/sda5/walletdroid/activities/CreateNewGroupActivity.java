@@ -44,14 +44,12 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         database = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        Intent intent = new Intent();
-
         currentUserId = mAuth.getCurrentUser().getUid();
 
         ListView listView = findViewById(R.id.account_list);
         listView.setScrollingCacheEnabled(false);
 
-        accountAdapter = new AccountAdapter(getApplicationContext(), accounts);
+        accountAdapter = new AccountAdapter(getApplicationContext(), accounts, true);
         listView.setAdapter(accountAdapter);
 
         database.collection("Accounts")
@@ -134,7 +132,5 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
     }
 }

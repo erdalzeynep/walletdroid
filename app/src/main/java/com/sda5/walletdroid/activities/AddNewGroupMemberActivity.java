@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class AddNewGroupMemberActivity extends AppCompatActivity {
     private AccountAdapter accountAdapter;
     private ArrayList<Account> accounts = new ArrayList<>();
-    private ArrayList<String> updatedAccountIdList = new ArrayList<>();
     FirebaseAuth mAuth;
     FirebaseFirestore database;
     String currentUserId;
@@ -51,7 +50,7 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.account_list);
         listView.setScrollingCacheEnabled(false);
 
-        accountAdapter = new AccountAdapter(getApplicationContext(), accounts);
+        accountAdapter = new AccountAdapter(getApplicationContext(), accounts, true);
         listView.setAdapter(accountAdapter);
 
 
@@ -99,7 +98,9 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
                             Toast.makeText(AddNewGroupMemberActivity.this, "Members are added successfully",
                                     Toast.LENGTH_SHORT).show();
 
-                            startActivity(new Intent(AddNewGroupMemberActivity.this, ServiceActivity.class));
+                            Intent intent = new Intent(AddNewGroupMemberActivity.this, GroupDetailActivity.class);
+                            intent.putExtra("group_id", groupID);
+                            startActivity(intent);
                         }
                     }
                 });
