@@ -30,7 +30,7 @@ public class GroupFragment extends Fragment {
     FirebaseFirestore database;
     private FirebaseAuth mAuth;
     private String accountId;
-    String currentUSerID;
+    String currentUserId;
 
     @Nullable
     @Override
@@ -38,10 +38,10 @@ public class GroupFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_group, null);
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
-        currentUSerID = mAuth.getCurrentUser().getUid();
+        currentUserId = mAuth.getCurrentUser().getUid();
 
 
-        database.collection("Accounts").whereEqualTo("userID", currentUSerID).get().addOnCompleteListener(
+        database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

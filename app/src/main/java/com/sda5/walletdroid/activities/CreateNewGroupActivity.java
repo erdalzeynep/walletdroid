@@ -98,7 +98,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         String groupName = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
         if (!groupName.equals("")) {
             Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList());
-            database.collection("Groups").document().set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
+            database.collection("Groups").document(group.getId()).set(group).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {

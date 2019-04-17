@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountAdapter extends ArrayAdapter<Account> {
+    private boolean isAdmin;
     private Context mContext;
     private final List<Account> accounts;
     List<String> selectedAccountIDList = new ArrayList<>();
@@ -28,6 +29,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         mContext = context;
         this.accounts = accounts;
     }
+
 
     @NonNull
     @Override
