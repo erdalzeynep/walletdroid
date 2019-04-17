@@ -1,7 +1,6 @@
 package com.sda5.walletdroid.models;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.Exclude;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,19 +8,21 @@ import java.util.UUID;
 public class Group {
 
     private FirebaseAuth mAuth;
-    private String userID;
+    private String adminUserId;
     private String id;
     private String name;
     private List<String> accountIdList;
+    private String adminAccountId;
 
     public Group(){}
 
-    public Group(String name, List<String> list) {
+    public Group(String name, List<String> list , String adminAccountId) {
         mAuth = FirebaseAuth.getInstance();
         this.name = name;
         this.accountIdList = list;
-        this.userID = mAuth.getCurrentUser().getUid();
+        this.adminUserId = mAuth.getCurrentUser().getUid();
         this.id = UUID.randomUUID().toString();
+        this.adminAccountId = adminAccountId;
     }
 
     public String getId() {
@@ -44,8 +45,16 @@ public class Group {
         this.accountIdList = accountIdList;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getAdminUserId() {
+        return adminUserId;
+    }
+
+    public String getAdminAccountId() {
+        return adminAccountId;
+    }
+
+    public void setAdminAccountId(String adminAccountId) {
+        this.adminAccountId = adminAccountId;
     }
 
     @Override

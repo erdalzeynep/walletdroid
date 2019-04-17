@@ -30,7 +30,7 @@ public class GroupFragment extends Fragment {
     FirebaseFirestore database;
     private FirebaseAuth mAuth;
     private String accountId;
-    String currentUSerID;
+    String currentUserId;
 
     @Nullable
     @Override
@@ -38,10 +38,15 @@ public class GroupFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_group, null);
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
-        currentUSerID = mAuth.getCurrentUser().getUid();
+        currentUserId = mAuth.getCurrentUser().getUid();
 
+        ListView listView = v.findViewById(R.id.group_list);
+        listView.setScrollingCacheEnabled(false);
 
-        database.collection("Accounts").whereEqualTo("userID", currentUSerID).get().addOnCompleteListener(
+        groupAdapter = new GroupAdapter(v.getContext(), groups);
+        listView.setAdapter(groupAdapter);
+
+        database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -71,14 +76,7 @@ public class GroupFragment extends Fragment {
                         }
                     }
                 }
-
         );
-
-        ListView listView = v.findViewById(R.id.group_list);
-        listView.setScrollingCacheEnabled(false);
-
-        groupAdapter = new GroupAdapter(v.getContext(), groups);
-        listView.setAdapter(groupAdapter);
 
         return v;
     }

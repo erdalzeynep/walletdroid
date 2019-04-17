@@ -20,14 +20,17 @@ import java.util.List;
 public class AccountAdapter extends ArrayAdapter<Account> {
     private Context mContext;
     private final List<Account> accounts;
-    List<String> selectedAccountIDList = new ArrayList<>();
+    private final boolean showCheckboxes;
+    private final List<String> selectedAccountIDList = new ArrayList<>();
 
 
-    public AccountAdapter(Context context, ArrayList<Account> accounts) {
+    public AccountAdapter(Context context, ArrayList<Account> accounts, boolean showCheckboxes) {
         super(context, 0, accounts);
         mContext = context;
         this.accounts = accounts;
+        this.showCheckboxes = showCheckboxes;
     }
+
 
     @NonNull
     @Override
@@ -45,6 +48,11 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account_item);
         checkBoxAccount.setTag(account.getId());
 
+        if (showCheckboxes) {
+            checkBoxAccount.setVisibility(View.VISIBLE);
+        } else {
+            checkBoxAccount.setVisibility(View.GONE);
+        }
 
         checkBoxAccount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -52,8 +60,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
                 String selectedAccountID = checkBoxAccount.getTag().toString();
                 if (isChecked) {
                     selectedAccountIDList.add(selectedAccountID);
-                }
-                else {
+                } else {
                     selectedAccountIDList.remove(selectedAccountID);
                 }
             }
