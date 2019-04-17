@@ -52,6 +52,7 @@ public class ServiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
         BottomNavigationView navigation = findViewById(R.id.navigation);

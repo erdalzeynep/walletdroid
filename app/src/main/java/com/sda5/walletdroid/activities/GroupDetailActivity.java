@@ -54,6 +54,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         groupID = intent.getStringExtra("group_id");
 
+
         final ListView listView = findViewById(R.id.member_list);
         listView.setScrollingCacheEnabled(false);
 
@@ -135,8 +136,10 @@ public class GroupDetailActivity extends AppCompatActivity {
 
 
     public void addMember(View view) {
+        Intent intent = new Intent(this, AddNewGroupMemberActivity.class);
+        intent.putExtra("group_id" , groupID);
+        startActivity(intent);
     }
-
 
     public void deleteMembers(View view) {
         int sizeOfSelectedAccountIdList = accountAdapter.getSelectedAccountIDList().size();
@@ -155,6 +158,6 @@ public class GroupDetailActivity extends AppCompatActivity {
                     }
                 });
     }
-    
+
 }
 
