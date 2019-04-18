@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_userProfile"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="User profile" />
+        <item
+            android:id="@+id/nav_expenseSetting"
+            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:title="Select Categories" />
+
+        <item
+            android:icon="@drawable/ic_notifications_black_24dp"
+            android:id="@+id/nav_notification"
+            android:title="Notification"
+            app:actionLayout="@layout/switch_item_2"
+            app:showAsAction="always" />
+
+        <item
+            android:id="@+id/nav_graph"
+            android:icon="@drawable/invest"
+            android:title="@string/title_graph"/>
+
+    </group>
+
+
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+
+        </menu>
+    </item>
+
+
+
+    <item android:title="Contact Information">
+
+        <menu>
+            <item
+                android:id="@+id/nav_feedback"
+                android:icon="@drawable/ic_feedback_black_24dp"
+                android:title="Feedback" />
+            <item
+                android:id="@+id/nav_phoneNumber"
+                android:icon="@drawable/ic_contact_phone_black_24dp"
+                android:title="About Walletdroid"/>
+        </menu>
+    </item>
+
+
+
+</menu>

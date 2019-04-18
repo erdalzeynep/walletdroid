@@ -75,14 +75,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * Facebook signin
-     * @param view
-     */
-    public void goToFacebookSignIn(View view){
-        Intent intent = new Intent(this, FacebookLoginActivity.class);
-        startActivity(intent);
-    }
 
     public void resetPasswordViaEmail(View view) {
         String email = ((EditText) findViewById(R.id.txt_login_email)).getText().toString();

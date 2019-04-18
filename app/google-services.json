@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "718366885828-2lv8osetkt60udhn133i02o24h50i4c2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sda5.walletdroid",
+            "certificate_hash": "fbec3892ec12f7b861f13a2cb7b1439c6db99d1b"
+          }
+        },
+        {
           "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
           "client_type": 3
         }
