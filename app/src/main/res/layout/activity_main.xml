@@ -24,7 +24,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:hint="Enter password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btn_login_login"
@@ -43,8 +43,37 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:text="sign up"
-        android:onClick="goToSignUpPage"/>
+        android:onClick="goToSignUpPage"
+        android:text="sign up" />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:text="@string/sign_in_using_google_or_facebook"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
+
+    <Button
+        android:id="@+id/buttonFacebookLogin1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="@color/com_facebook_button_background_color"
+        android:onClick="goToFacebookSignIn"
+        android:text="Facebook"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>
