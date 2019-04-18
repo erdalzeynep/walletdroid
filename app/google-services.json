@@ -23,6 +23,54 @@
           }
         },
         {
+<<<<<<< HEAD
+=======
+          "client_id": "718366885828-6q7gmn9effo505b30t985gsrugem1o63.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sda5.walletdroid",
+            "certificate_hash": "e10e975073c78ce5475166216df7d7c18917ddff"
+          }
+        },
+        {
+          "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiCNoN-c4fBCEuU1oXGRA7FCb_y5RoABU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718366885828:android:f43e24c6a69a4b70",
+        "android_client_info": {
+          "package_name": "io.sudutech.walletdroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "718366885828-9vjo49a54k9kil8crnii28seffgtsgkb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.sudutech.walletdroid",
+            "certificate_hash": "105272ee2e204ce8555ab7e8b46c1625fe04a252"
+          }
+        },
+        {
+>>>>>>> master
           "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
           "client_type": 3
         }

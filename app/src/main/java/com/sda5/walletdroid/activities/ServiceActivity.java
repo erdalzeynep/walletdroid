@@ -72,6 +72,7 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -225,6 +226,11 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
     public void signOut(View view) {
         mAuth.signOut();
         finish();
-        startActivity(getIntent());
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    public void createNewGroup(View view) {
+        Intent intent = new Intent(this, CreateNewGroupActivity.class);
+        startActivity(intent);
     }
 }

@@ -1,21 +1,25 @@
-package com.sda5.walletdroid.model;
+package com.sda5.walletdroid.models;
+
+import java.util.UUID;
 
 public class Category {
-    private int id;
+    private String id;
     private String title;
     private int maxBudget;
 
+    public Category() { }
 
-    public Category(String title, int maxBudjet) {
+    public Category(String title, int maxBudget) {
         this.title = title;
-        this.maxBudget = maxBudjet;
+        this.maxBudget = maxBudget;
+        this.id = UUID.randomUUID().toString();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

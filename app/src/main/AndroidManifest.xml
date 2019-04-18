@@ -18,6 +18,16 @@
         android:theme="@style/AppTheme">
 
 
+        <activity android:name=".activities.AddNewGroupMemberActivity"></activity>
+        <activity android:name=".activities.GroupDetailActivity" />
+        <activity android:name=".activities.CreateNewGroupActivity" />
+
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:label="@string/title_activity_signup" />
+        <activity
+            android:name=".activities.ServiceActivity"
+            android:label="@string/title_activity_service" />
 
         <activity android:name=".activities.MainActivity">
             <intent-filter>
@@ -26,10 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".activities.SignupActivity"
-            android:label="@string/title_activity_signup" />
 
         <activity
             android:name=".activities.ServiceActivity"

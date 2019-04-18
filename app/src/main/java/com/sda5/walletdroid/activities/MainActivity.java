@@ -11,23 +11,33 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sda5.walletdroid.R;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-
     private SignInButton mSignInButton;
+    private EditText etEmail;
+    private EditText etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        etEmail = findViewById(R.id.txt_login_email);
+        etPassword = findViewById(R.id.txt_login_password);
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Intent i = new Intent(this, ServiceActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } else {
+            // User is signed out
+        }
         setContentView(R.layout.activity_main);
-
-
 
         //for google sign in
         mSignInButton = findViewById(R.id.sign_in_button);
@@ -37,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SigninGoogle.class));
             }
         });
-
-
     }
 
     /**
@@ -47,22 +55,24 @@ public class MainActivity extends AppCompatActivity {
      */
     public void login(View view) {
 
-        EditText email = findViewById(R.id.txt_login_email);
-        EditText password = findViewById(R.id.txt_login_password);
+        // Check if user fills all fields.
+        if(etEmail.getText().toString().trim().isEmpty() || etPassword.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        } else {
+            mAuth.signInWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                startActivity(new Intent(MainActivity.this, ServiceActivity.class));
 
-        mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(new Intent(MainActivity.this, ServiceActivity.class));
-
-                        } else {
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
 
@@ -71,14 +81,15 @@ public class MainActivity extends AppCompatActivity {
      * @param
      */
     public void goToSignUpPage(View view) {
-        Intent intent = new Intent(this, SignupActivity.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 
 
     public void resetPasswordViaEmail(View view) {
-        String email = ((EditText) findViewById(R.id.txt_login_email)).getText().toString();
-        if (!email.equals("")) {
+        String email = etEmail.getText().toString();
+        // Check if there email is empty or not
+        if (!email.trim().isEmpty()) {
             mAuth.sendPasswordResetEmail(email)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
