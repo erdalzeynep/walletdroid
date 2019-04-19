@@ -15,12 +15,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
@@ -33,8 +38,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 public class AddExpenseActicity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private ArrayList<Group> groups = new ArrayList<>();
 
     private Spinner sprCategory;
     private Spinner sprGroup;
@@ -50,6 +60,7 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
     private LocalDate selectedDate;
     private Category selectedCategory;
     private ArrayList<Account> expenseUsers;
+    private ArrayList<String> expenseUsersId;
 
     // Firestore database stuff
     private FirebaseFirestore db;
@@ -57,6 +68,11 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
     private CollectionReference groupCollectionRef;
     private CollectionReference accountCollectionRef;
     private DocumentReference docRef;
+
+    private String accountId;
+    String currentUserId;
+    private FirebaseAuth mAuth;
+
 
 
     @Override
@@ -71,8 +87,14 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
         accountCollectionRef = db.collection("Accounts");
 
 
+
+
         etTitle = findViewById(R.id.txt_addExpense_expenseTitle);
         etAmount = findViewById(R.id.txt_addExpense_expenseAmount);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUserId = mAuth.getCurrentUser().getUid();
+
 
         // Create sample category list for now
         // TODO update this when category is decided by team. it should retrieve data from fire store
@@ -99,59 +121,60 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
         };
 
 
-        // Create sample Group list
-        //TODO update this when Zeynep is done by appUsers. it should retrieve data from firestore
-//        Account a = new Account("Mehdi", "0793095896", "m3hdi.ap@gmail.com");
-//        Account b = new Account("Obaid", "4567890987", "obaid@gmail.com");
-//        Account c = new Account("Manimala", "34568876", "Manimala@gmail.com");
-
-
-        // Create sample Group list
-        //TODO update this when Zeynep is done by Group. it should retrieve data from firestore
-//        ArrayList<Account> grouplist = new ArrayList<>();
-//        grouplist.add(a);
-//        grouplist.add(b);
-//        grouplist.add(c);
-//        Group sampleGroup1 = new Group(1, "Friends", grouplist );
-
-        final ArrayList<Group> groups = new ArrayList<>();
-//        groups.add(sampleGroup1);
 
         // Spinner for groups
 
-        sprGroup = findViewById(R.id.spr_addExpense_group);
-        groupCollectionRef.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(QueryDocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                            Group group = documentSnapshot.toObject(Group.class);
-                            groups.add(group);
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot accountSnapshot = task.getResult();
+                            if (null != accountSnapshot) {
+                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                                if (account.isPresent()) {
+                                    accountId = account.get().getId();
+                                    db.collection("Groups").whereArrayContains("accountIdList", accountId)
+                                            .get()
+                                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                        Group group = documentSnapshot.toObject(Group.class);
+                                                        groups.add(group);
+                                                        System.out.println("check");
+                                                    }
+                                                }
+                                            });
+
+                                } else {
+
+                                }
+                            }
                         }
-
                     }
+                }
+        );
 
-                });
-
+        sprGroup = findViewById(R.id.spr_addExpense_group);
         ArrayAdapter groupAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groups);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprGroup.setAdapter(groupAdapter);
         sprGroup.setOnItemSelectedListener(this);
-
-
-
     }
 
     // Method to be called when user choose a category for the expense
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner sprCategory = (Spinner) parent;
-        Spinner sprGroup = (Spinner) parent;
-        if(sprCategory.getId()==R.id.spr_addExpense_category){
-            selectedCategory = (Category) parent.getItemAtPosition(position);
-        }
+        Spinner sprGroup =    (Spinner) parent;
         if(sprGroup.getId() == R.id.spr_addExpense_group){
             selectedGroup = (Group) parent.getItemAtPosition(position);
+            System.out.println("check");
+        }
+        if(sprCategory.getId()==R.id.spr_addExpense_category){
+            selectedCategory = (Category) parent.getItemAtPosition(position);
+            System.out.println("check");
         }
     }
 
@@ -174,24 +197,37 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
         dialog.show();
     }
 
-    // specify people in group who actually used the expense
-//    public void addExpenseUsers(View view) {
-//        expenseUsers  = new ArrayList<>();
-//        expenseUsersCheck = new ArrayList<>();
-//
-//        if(selectedGroup == null){
-//            Toast.makeText(this, "First select the group", Toast.LENGTH_SHORT).show();
-//        } else {
-//            checkedUsers = new boolean[selectedGroup.getAccountIdList().size()];
-//            AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-//            mBuilder.setTitle("Select users");
-//            String[] stringArrayGroupList = new String[selectedGroup.getAccountIdList().size()];
-//            int i = 0;
-//            for (Account user: selectedGroup.getAccountIdList()){
+//     specify people in group who actually used the expense
+
+    public void addExpenseUsers(View view) {
+        expenseUsers = new ArrayList<>();
+        expenseUsersCheck = new ArrayList<>();
+
+        if (selectedGroup == null) {
+            Toast.makeText(this, "First select the group", Toast.LENGTH_SHORT).show();
+        } else {
+            checkedUsers = new boolean[selectedGroup.getAccountIdList().size()];
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+            mBuilder.setTitle("Select users");
+            String[] stringArrayGroupList = new String[selectedGroup.getAccountIdList().size()];
+            int i = 0;
+            for (String accountId : selectedGroup.getAccountIdList()) {
+                accountCollectionRef.whereEqualTo("id", accountId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        expenseUsers.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
+                        System.out.println("chekc");
+                    }
+                });
+                System.out.println("chekc");
+            }
+
+        }
+    }
 //                stringArrayGroupList [i] = user.getName();
 //                i++;
 //            }
-//
+
 //            mBuilder.setMultiChoiceItems(stringArrayGroupList, checkedUsers, new DialogInterface.OnMultiChoiceClickListener() {
 //                @Override
 //                public void onClick(DialogInterface dialog, int position, boolean isChecked) {
@@ -233,7 +269,7 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
 //            dialog.show();
 //        }
 //    }
-//
+
 //    public void save(View view) {
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
 //        String selectedDateString = selectedDate.format(formatter);
@@ -243,8 +279,8 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
 //                                selectedCategory,
 //                                null, expenseUsers,
 //                                selectedDateString,false);
-//
-//        docRef = expenseCollectionRef.document();
+////
+//        docRef = expenseCollectionRef.document(expense.getId());
 //        docRef
 //                .set(expense)
 //                .addOnSuccessListener(new OnSuccessListener<Void>() {
