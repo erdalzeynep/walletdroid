@@ -2,9 +2,6 @@ package com.sda5.walletdroid.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -18,18 +15,18 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.adapters.AccountAdapter;
-import com.sda5.walletdroid.adapters.GroupAdapter;
-import com.sda5.walletdroid.fragments.GroupFragment;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class GroupDetailActivity extends AppCompatActivity {
     String groupID;

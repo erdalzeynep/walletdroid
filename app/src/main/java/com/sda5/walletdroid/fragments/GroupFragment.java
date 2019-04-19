@@ -1,9 +1,6 @@
 package com.sda5.walletdroid.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +20,10 @@ import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
 import java.util.Optional;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class GroupFragment extends Fragment {
     private GroupAdapter groupAdapter;

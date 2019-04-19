@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sda5.walletdroid">
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,15 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AddNewGroupMemberActivity"></activity>
-        <activity android:name=".activities.GroupDetailActivity" />
-        <activity android:name=".activities.CreateNewGroupActivity" />
-        <activity
-            android:name=".activities.SignUpActivity"
-            android:label="@string/title_activity_signup" />
-        <activity
-            android:name=".activities.ServiceActivity"
-            android:label="@string/title_activity_service" />
+
+
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +25,44 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.AddNewGroupMemberActivity"></activity>
+        <activity android:name=".activities.GroupDetailActivity" />
+        <activity android:name=".activities.CreateNewGroupActivity" />
+
+        <!-- Sign up Activity -->
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:label="@string/title_activity_signup" />
+
+        <!-- Service Activity -->
+        <activity
+            android:name=".activities.ServiceActivity"
+            android:label="@string/title_activity_service"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <!-- Google Sing in Activity -->
+        <activity
+            android:name=".activities.SigninGoogle"
+            android:label="@string/manifest_google_sign_in" />
+
+        <activity
+            android:name=".activities.Graphs.MultiLineChartActivity"
+            android:label="multiLineChart"></activity>
+
+        <activity android:name=".activities.Graphs.ListViewMultiChartActivity" />
+
+        <activity android:name=".activities.Graphs.PieChartActivity" />
+
+
+        <meta-data
+            android:name="com.google.android.gms.ads.1:718366885828:android:f43e24c6a69a4b70"
+            android:value=" ca-app-pub-1803960866730048~9900200003"/>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"/>
+
     </application>
 
 </manifest>
