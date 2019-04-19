@@ -5,69 +5,9 @@
     android:orientation="vertical"
     android:layout_margin="10dp">
 
-    <EditText
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter enxpense title"
-        android:layout_margin="20dp"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter amount"
-        android:layout_margin="20dp"
-        android:inputType="number" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:text="Choose group"/>
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:entries="@array/sample_group_name"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Choose people"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"/>
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="20dp">
-        <TableRow
-            android:layout_gravity="center"
-            android:gravity="center">
-            <CheckBox
-                android:text="Zeynep"/>
-            <CheckBox
-                android:text="Manimala"/>
-            <CheckBox
-                android:text="Mehdi"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_gravity="center"
-            android:gravity="center">
-            <CheckBox
-                android:text="Sanaz"/>
-            <CheckBox
-                android:text="Obaid"/>
-            <CheckBox
-                android:text="Pryanka"/>
-        </TableRow>
-    </TableLayout>
+        android:layout_height="450dp" />
 
     <Button
         android:layout_width="match_parent"

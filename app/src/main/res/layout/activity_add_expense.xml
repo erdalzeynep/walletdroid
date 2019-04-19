@@ -37,68 +37,10 @@
         android:text="Pick a date"
         android:onClick="pickDate"/>
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
-
-        <TableRow
-            android:weightSum="2">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Pick Users"
-                android:gravity="center"
-                />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Pick Group"
-                android:gravity="center"
-                />
-        </TableRow>
-
-        <TableRow
-            android:weightSum="2">
-
-            <Button
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Add people"
-                android:onClick="addExpenseUsers"/>
-
-            <Spinner
-                android:id="@+id/spr_addExpense_group"
-                android:layout_weight="1"
-                />
-
-
-        </TableRow>
-
-    </TableLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save"
-            android:onClick="save"/>
-
         <Button
             android:id="@+id/btnCancel"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel" />
-    </LinearLayout>
+            android:text="Add Expense Users"
+            android:onClick="chooseGroup"/>
 </LinearLayout>

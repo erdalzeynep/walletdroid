@@ -2,10 +2,12 @@ package com.sda5.walletdroid.activities;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -72,6 +74,7 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
     private String accountId;
     String currentUserId;
     private FirebaseAuth mAuth;
+    private String groupId;
 
 
 
@@ -87,8 +90,8 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
         accountCollectionRef = db.collection("Accounts");
 
 
-
-
+        expenseUsersId = getIntent().getStringArrayListExtra("expenseUsersIds");
+        groupId = getIntent().getStringExtra("group_id");
         etTitle = findViewById(R.id.txt_addExpense_expenseTitle);
         etAmount = findViewById(R.id.txt_addExpense_expenseAmount);
 
@@ -156,22 +159,22 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
                 }
         );
 
-        sprGroup = findViewById(R.id.spr_addExpense_group);
-        ArrayAdapter groupAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groups);
-        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sprGroup.setAdapter(groupAdapter);
-        sprGroup.setOnItemSelectedListener(this);
+//        sprGroup = findViewById(R.id.spr_addExpense_group);
+//        ArrayAdapter groupAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groups);
+//        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        sprGroup.setAdapter(groupAdapter);
+//        sprGroup.setOnItemSelectedListener(this);
     }
 
     // Method to be called when user choose a category for the expense
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner sprCategory = (Spinner) parent;
-        Spinner sprGroup =    (Spinner) parent;
-        if(sprGroup.getId() == R.id.spr_addExpense_group){
-            selectedGroup = (Group) parent.getItemAtPosition(position);
-            System.out.println("check");
-        }
+//        Spinner sprGroup =    (Spinner) parent;
+//        if(sprGroup.getId() == R.id.spr_addExpense_group){
+//            selectedGroup = (Group) parent.getItemAtPosition(position);
+//            System.out.println("check");
+//        }
         if(sprCategory.getId()==R.id.spr_addExpense_category){
             selectedCategory = (Category) parent.getItemAtPosition(position);
             System.out.println("check");
@@ -224,76 +227,10 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
 
         }
     }
-//                stringArrayGroupList [i] = user.getName();
-//                i++;
-//            }
 
-//            mBuilder.setMultiChoiceItems(stringArrayGroupList, checkedUsers, new DialogInterface.OnMultiChoiceClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int position, boolean isChecked) {
-//                    if(isChecked){
-//                        if(!expenseUsersCheck.contains(position)){
-//                            expenseUsersCheck.add(position);
-//                        } else{
-//                            expenseUsersCheck.remove(position);
-//                        }
-//                    }
-//                }
-//            });
-//
-//            mBuilder.setCancelable(false);
-//            mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    for(int i = 0; i < expenseUsersCheck.size(); i++){
-//                        expenseUsers.add(selectedGroup.getList().get(expenseUsersCheck.get(i)));
-//                    }
-//                }
-//            });
-//
-//            mBuilder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                }
-//            });
-//
-//            mBuilder.setNeutralButton("Select All", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    expenseUsers = selectedGroup.getList();
-//                }
-//            });
-//
-//            AlertDialog dialog = mBuilder.create();
-//            dialog.show();
-//        }
-//    }
+    public void chooseGroup(View view) {
+        Intent intent = new Intent(this, com.sda5.walletdroid.activities.ChooseGroupForExpense.class);
+        startActivity(intent);
+    }
 
-//    public void save(View view) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
-//        String selectedDateString = selectedDate.format(formatter);
-//
-//        Expense expense = new Expense(etTitle.getText().toString(),
-//                                Double.parseDouble(etAmount.getText().toString()),
-//                                selectedCategory,
-//                                null, expenseUsers,
-//                                selectedDateString,false);
-////
-//        docRef = expenseCollectionRef.document(expense.getId());
-//        docRef
-//                .set(expense)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Toast.makeText(AddExpenseActicity.this, "Done", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(AddExpenseActicity.this, "Error", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
 }
