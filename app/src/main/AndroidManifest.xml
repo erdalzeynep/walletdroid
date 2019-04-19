@@ -18,17 +18,6 @@
         android:theme="@style/AppTheme">
 
 
-        <activity android:name=".activities.AddNewGroupMemberActivity"></activity>
-        <activity android:name=".activities.GroupDetailActivity" />
-        <activity android:name=".activities.CreateNewGroupActivity" />
-
-        <activity
-            android:name=".activities.SignUpActivity"
-            android:label="@string/title_activity_signup" />
-        <activity
-            android:name=".activities.ServiceActivity"
-            android:label="@string/title_activity_service" />
-
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,11 +26,22 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activities.AddNewGroupMemberActivity"></activity>
+        <activity android:name=".activities.GroupDetailActivity" />
+        <activity android:name=".activities.CreateNewGroupActivity" />
+
+        <!-- Sign up Activity -->
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:label="@string/title_activity_signup" />
+
+        <!-- Service Activity -->
         <activity
             android:name=".activities.ServiceActivity"
             android:label="@string/title_activity_service"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <!-- Google Sing in Activity -->
         <activity
             android:name=".activities.SigninGoogle"
             android:label="@string/manifest_google_sign_in" />
@@ -54,6 +54,14 @@
 
         <activity android:name=".activities.Graphs.PieChartActivity" />
 
+
+        <meta-data
+            android:name="com.google.android.gms.ads.1:718366885828:android:f43e24c6a69a4b70"
+            android:value=" ca-app-pub-1803960866730048~9900200003"/>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"/>
 
     </application>
 

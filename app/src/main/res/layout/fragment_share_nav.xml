@@ -4,7 +4,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/com_facebook_tooltip_black_background"
+
     android:paddingLeft="16dp"
     android:paddingTop="60dp"
     android:paddingRight="16dp"
@@ -18,19 +18,20 @@
         android:hint="Email"
         android:paddingTop="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/white"
+        android:textColor="@color/design_default_color_on_secondary"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/giveFriendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/emailShare"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/emailShare"
         android:hint="Friends Email"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/browser_actions_bg_grey"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textStyle="bold" />
 
 
@@ -40,11 +41,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/giveFriendEmail"
         android:hint="Enter Message"
-        android:text="Hello! Your friend would like to share the app Walletdroind with you.Use this link to download it from appp store."
-        android:textColor="@android:color/white"
+        android:text="@string/nav_shareTextFrnd"
+        android:textColor="@color/design_default_color_on_secondary"
         android:textSize="18sp"
         android:textStyle="italic"
-        android:typeface="sans" />
+        android:typeface="sans"
+        android:autoLink="web"/>
 
 
     <Button

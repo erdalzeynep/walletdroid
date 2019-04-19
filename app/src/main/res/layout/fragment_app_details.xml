@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.sda5.walletdroid.activities.SignupActivity">
+    tools:context="com.sda5.walletdroid.activities.SignUpActivity">
 
 
     <TextView
@@ -17,7 +17,6 @@
         android:layout_marginRight="20dp"
         android:gravity="center"
         android:text="Wallet Droid"
-        android:textColor="@color/com_facebook_blue"
         android:textSize="24sp"
         android:textStyle="bold" />
 

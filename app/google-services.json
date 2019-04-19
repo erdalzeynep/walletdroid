@@ -23,8 +23,6 @@
           }
         },
         {
-<<<<<<< HEAD
-=======
           "client_id": "718366885828-6q7gmn9effo505b30t985gsrugem1o63.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -51,7 +49,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-1803960866730048~9900200003"
     },
     {
       "client_info": {
@@ -70,7 +69,6 @@
           }
         },
         {
->>>>>>> master
           "client_id": "718366885828-st95m7rr7sm7k4ulgelr6mrchgj8j7le.apps.googleusercontent.com",
           "client_type": 3
         }

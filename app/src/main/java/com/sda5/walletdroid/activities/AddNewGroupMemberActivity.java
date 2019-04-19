@@ -1,9 +1,6 @@
 package com.sda5.walletdroid.activities;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -24,6 +21,10 @@ import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AddNewGroupMemberActivity extends AppCompatActivity {
     private AccountAdapter accountAdapter;

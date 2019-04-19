@@ -138,10 +138,6 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                 fragment = new GraphFragment();
                 break;
 
-            case R.id.nav_graph:
-                fragment = new GraphFragment();
-
-
             case R.id.nav_feedback:
                 fragment = new Feedbacknav();
                 break;
@@ -151,6 +147,10 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                 break;
             case R.id.nav_share:
                 fragment = new ShareNav();
+                break;
+            case R.id.nav_signOut:
+                signOut(findViewById(R.id.nav_signOut));
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
