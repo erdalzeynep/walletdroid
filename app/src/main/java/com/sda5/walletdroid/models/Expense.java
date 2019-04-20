@@ -59,11 +59,11 @@ public class Expense {
         this.category = category;
     }
 
-    public String getpayerAccountId() {
+    public String getPayerAccountId() {
         return payerAccountId;
     }
 
-    public void setpayerAccountId(String payerAccountId) {
+    public void setPayerAccountId(String payerAccountId) {
         this.payerAccountId = payerAccountId;
     }
 
@@ -83,27 +83,19 @@ public class Expense {
         this.date = date;
     }
 
+    public ArrayList<String> getExpenseUsersIds() {
+        return expenseUsersIds;
+    }
+
+    public void setExpenseUsersIds(ArrayList<String> expenseUsersIds) {
+        this.expenseUsersIds = expenseUsersIds;
+    }
+
     public boolean isRecursive() {
         return isRecursive;
     }
 
     public void setRecursive(boolean recursive) {
-        this.isRecursive = recursive;
-    }
-
-    public String getPayerAccountId() {
-        return payerAccountId;
-    }
-
-    public void setPayerAccountId(String payerAccountId) {
-        this.payerAccountId = payerAccountId;
-    }
-
-    public ArrayList<String> getExpenseUsers() {
-        return expenseUsersIds;
-    }
-
-    public void setExpenseUsers(ArrayList<String> expenseUsers) {
-        this.expenseUsersIds = expenseUsers;
+        isRecursive = recursive;
     }
 }
