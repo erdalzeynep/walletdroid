@@ -28,8 +28,9 @@ import java.util.ArrayList;
 public class AddExpenseUsersActivity extends AppCompatActivity {
 
     private AccountAdapterAddExpense accountAdapterAddExpense;
-    private ArrayList<Account> accounts = new ArrayList<>();
+    private ArrayList<Account> accountsForExpense = new ArrayList<>();
     private ArrayList<String> expenseUsersId = new ArrayList<>();
+    private ArrayList<String> expenseUsersName = new ArrayList<>();
     FirebaseAuth mAuth;
     FirebaseFirestore database;
     String currentUserId;
@@ -51,7 +52,7 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.expense_users_list);
         listView.setScrollingCacheEnabled(false);
 
-        accountAdapterAddExpense = new AccountAdapterAddExpense(getApplicationContext(), accounts, true);
+        accountAdapterAddExpense = new AccountAdapterAddExpense(getApplicationContext(), accountsForExpense, true);
         listView.setAdapter(accountAdapterAddExpense);
 
 
@@ -73,11 +74,9 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
                                         }
                                         for (QueryDocumentSnapshot doc : value) {
                                             Account account = doc.toObject(Account.class);
-                                            if (!account.getUserID().equals(mAuth.getUid())) {
-                                                if (!group.getAccountIdList().contains(account.getId())) {
-                                                    accounts.add(account);
+                                                if (group.getAccountIdList().contains(account.getId())) {
+                                                    accountsForExpense.add(account);
                                                 }
-                                            }
                                         }
                                         accountAdapterAddExpense.notifyDataSetChanged();
                                     }
@@ -88,23 +87,11 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
 
     public void addExpenseUsers(View view) {
         expenseUsersId.addAll(accountAdapterAddExpense.getSelectedExpenseUsersIDList());
-        database.collection("Groups")
-                .document(groupID)
-                .update("accountIdList", group.getAccountIdList())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            accountAdapterAddExpense.notifyDataSetChanged();
-                            Toast.makeText(AddExpenseUsersActivity.this, "Users are added successfully",
-                                    Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(AddExpenseUsersActivity.this, AddExpenseActicity.class);
-                            intent.putExtra("group_id", groupID);
-                            intent.putExtra("expenseUsersIds", expenseUsersId);
-                            startActivity(intent);
-                        }
-                    }
-                });
+        expenseUsersName.addAll(accountAdapterAddExpense.getSelectedExpenseUsersNameList());
+        Intent intent = new Intent(AddExpenseUsersActivity.this, AddExpenseActicity.class);
+        intent.putExtra("group_id", groupID);
+        intent.putStringArrayListExtra("expenseUsersIds", expenseUsersId);
+        intent.putStringArrayListExtra("expenseUsersAccounts", expenseUsersName);
+        startActivity(intent);
     }
 }

@@ -21,7 +21,8 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
     private Context mContext;
     private final List<Account> accounts;
     private final boolean showCheckboxes;
-    private final List<String> selectedExpenseUsersIDListt = new ArrayList<>();
+    private final List<String> selectedExpenseUsersIDList = new ArrayList<>();
+    private final List<String> selectedExpenseUsersNameList = new ArrayList<>();
 
 
     public AccountAdapterAddExpense(Context context, ArrayList<Account> accounts, boolean showCheckboxes) {
@@ -39,7 +40,7 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
         if (listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.list_account_item, parent, false);
 
-        Account account = accounts.get(position);
+        final Account account = accounts.get(position);
 
         TextView textViewAccount = listItem.findViewById(R.id.textview_account_item);
         textViewAccount.setText(account.getOwnerName());
@@ -59,9 +60,11 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 String selectedAccountID = checkBoxAccount.getTag().toString();
                 if (isChecked) {
-                    selectedExpenseUsersIDListt.add(selectedAccountID);
+                    selectedExpenseUsersIDList.add(selectedAccountID);
+                    selectedExpenseUsersNameList.add(account.getOwnerName());
                 } else {
-                    selectedExpenseUsersIDListt.remove(selectedAccountID);
+                    selectedExpenseUsersIDList.remove(selectedAccountID);
+                    selectedExpenseUsersNameList.add(account.getOwnerName());
                 }
             }
         });
@@ -70,6 +73,10 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
     }
 
     public List<String> getSelectedExpenseUsersIDList() {
-        return selectedExpenseUsersIDListt;
+        return selectedExpenseUsersIDList;
+    }
+
+    public List<String> getSelectedExpenseUsersNameList(){
+        return selectedExpenseUsersNameList;
     }
 }

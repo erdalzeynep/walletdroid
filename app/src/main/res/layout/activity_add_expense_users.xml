@@ -8,12 +8,11 @@
     tools:context=".activities.AddExpenseUsersActivity">
 
     <TextView
-        android:id="@+id/textView_user_list"
         android:layout_width="375dp"
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
-        android:text="User List"
+        android:text="Choose Users"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -27,8 +26,8 @@
         android:id="@+id/btn_add_expense_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="OK"
+        android:layout_margin="20dp"
+        android:text="Add Expense Users"
         android:onClick="addExpenseUsers"/>
 
 </LinearLayout>

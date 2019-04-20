@@ -1,13 +1,11 @@
 package com.sda5.walletdroid.activities;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -37,45 +34,37 @@ import com.sda5.walletdroid.models.Expense;
 import com.sda5.walletdroid.models.Group;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
-
-public class AddExpenseActicity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AddExpenseActicity extends AppCompatActivity {
 
     private ArrayList<Group> groups = new ArrayList<>();
 
     private Spinner sprCategory;
-    private Spinner sprGroup;
-    private Button btnAdd;
-    private Group selectedGroup;
+    private Spinner sprBuyer;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-    private boolean[] checkedUsers;
-    private ArrayList<Integer> expenseUsersCheck;
+    private Group selectedGroup;
+
 
     // To save on database
     private EditText etTitle;
     private EditText etAmount;
     private LocalDate selectedDate;
     private Category selectedCategory;
-    private ArrayList<Account> expenseUsers;
-    private ArrayList<String> expenseUsersId;
+    private ArrayList<Account> accountsForBuyer = new ArrayList<>();
+    private ArrayList<String> expenseUsersId = new ArrayList<>();
+    private ArrayList<String> expenseUsersName = new ArrayList<>();
+    private String buyerId;
 
     // Firestore database stuff
-    private FirebaseFirestore db;
-    private CollectionReference expenseCollectionRef;
-    private CollectionReference groupCollectionRef;
-    private CollectionReference accountCollectionRef;
-    private DocumentReference docRef;
+    private FirebaseFirestore database;
 
     private String accountId;
     String currentUserId;
     private FirebaseAuth mAuth;
     private String groupId;
-
 
 
     @Override
@@ -84,19 +73,16 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
         setContentView(R.layout.activity_add_expense);
 
         FirebaseApp.initializeApp(this);
-        db = FirebaseFirestore.getInstance();
-        expenseCollectionRef = db.collection("Expenses");
-        groupCollectionRef = db.collection("Groups");
-        accountCollectionRef = db.collection("Accounts");
-
-
-        expenseUsersId = getIntent().getStringArrayListExtra("expenseUsersIds");
-        groupId = getIntent().getStringExtra("group_id");
-        etTitle = findViewById(R.id.txt_addExpense_expenseTitle);
-        etAmount = findViewById(R.id.txt_addExpense_expenseAmount);
+        database = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
+
+        groupId = getIntent().getStringExtra("group_id");
+        expenseUsersId = getIntent().getStringArrayListExtra("expenseUsersIds");
+        expenseUsersName = getIntent().getStringArrayListExtra("expenseUsersAccounts");
+        etTitle = findViewById(R.id.txt_addExpense_expenseTitle);
+        etAmount = findViewById(R.id.txt_addExpense_expenseAmount);
 
 
         // Create sample category list for now
@@ -104,15 +90,47 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
         ArrayList<Category> catlist = new ArrayList<>();
         catlist.add(new Category("Food", 2000));
         catlist.add(new Category("Clothes", 3000));
-        catlist.add(new Category("Transportation",5000));
+        catlist.add(new Category("Transportation", 5000));
 
         // Create spinner for user to choose the category of expense
         sprCategory = findViewById(R.id.spr_addExpense_category);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, catlist);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sprCategory.setAdapter(adapter);
-        sprCategory.setOnItemSelectedListener(this);
+        ArrayAdapter adapterCategory = new ArrayAdapter(this, android.R.layout.simple_spinner_item, catlist);
+        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sprCategory.setAdapter(adapterCategory);
+        sprCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCategory = (Category) parent.getItemAtPosition(position);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        if (expenseUsersId != null) {
+            sprBuyer = findViewById(R.id.spr_addExpense_buyer);
+            ArrayAdapter adapterBuyer = new ArrayAdapter(this, android.R.layout.simple_spinner_item, expenseUsersName);
+            adapterBuyer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapterBuyer.notifyDataSetChanged();
+            sprBuyer.setAdapter(adapterBuyer);
+            sprBuyer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String buyerSelected = (String) parent.getItemAtPosition(position);
+                    for (int i = 0; i < expenseUsersName.size(); i++) {
+                        if (buyerSelected == expenseUsersName.get(i)) {
+                            buyerId = expenseUsersId.get(i);
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+        }
 
         // Get the date of expense from user
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -122,69 +140,8 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
                 Toast.makeText(AddExpenseActicity.this, selectedDate.toString(), Toast.LENGTH_SHORT).show();
             }
         };
-
-
-
-        // Spinner for groups
-
-        db.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
-                new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot accountSnapshot = task.getResult();
-                            if (null != accountSnapshot) {
-                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
-                                if (account.isPresent()) {
-                                    accountId = account.get().getId();
-                                    db.collection("Groups").whereArrayContains("accountIdList", accountId)
-                                            .get()
-                                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                                        Group group = documentSnapshot.toObject(Group.class);
-                                                        groups.add(group);
-                                                        System.out.println("check");
-                                                    }
-                                                }
-                                            });
-
-                                } else {
-
-                                }
-                            }
-                        }
-                    }
-                }
-        );
-
-//        sprGroup = findViewById(R.id.spr_addExpense_group);
-//        ArrayAdapter groupAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, groups);
-//        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        sprGroup.setAdapter(groupAdapter);
-//        sprGroup.setOnItemSelectedListener(this);
     }
 
-    // Method to be called when user choose a category for the expense
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Spinner sprCategory = (Spinner) parent;
-//        Spinner sprGroup =    (Spinner) parent;
-//        if(sprGroup.getId() == R.id.spr_addExpense_group){
-//            selectedGroup = (Group) parent.getItemAtPosition(position);
-//            System.out.println("check");
-//        }
-        if(sprCategory.getId()==R.id.spr_addExpense_category){
-            selectedCategory = (Category) parent.getItemAtPosition(position);
-            System.out.println("check");
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     public void pickDate(View view) {
         Calendar cal = Calendar.getInstance();
@@ -196,41 +153,29 @@ public class AddExpenseActicity extends AppCompatActivity implements AdapterView
                 android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                 mDateSetListener,
                 year, month, day);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 
-//     specify people in group who actually used the expense
-
-    public void addExpenseUsers(View view) {
-        expenseUsers = new ArrayList<>();
-        expenseUsersCheck = new ArrayList<>();
-
-        if (selectedGroup == null) {
-            Toast.makeText(this, "First select the group", Toast.LENGTH_SHORT).show();
-        } else {
-            checkedUsers = new boolean[selectedGroup.getAccountIdList().size()];
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-            mBuilder.setTitle("Select users");
-            String[] stringArrayGroupList = new String[selectedGroup.getAccountIdList().size()];
-            int i = 0;
-            for (String accountId : selectedGroup.getAccountIdList()) {
-                accountCollectionRef.whereEqualTo("id", accountId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        expenseUsers.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
-                        System.out.println("chekc");
-                    }
-                });
-                System.out.println("chekc");
-            }
-
-        }
-    }
 
     public void chooseGroup(View view) {
         Intent intent = new Intent(this, com.sda5.walletdroid.activities.ChooseGroupForExpense.class);
         startActivity(intent);
     }
 
+    public void saveExpense(View v){
+        if(etTitle.getText().toString().trim().isEmpty() ||
+                etAmount.getText().toString().trim().isEmpty() ||
+                selectedCategory == null ||
+                groupId == null ||
+                selectedDate == null ||
+                expenseUsersId.size() == 0 || expenseUsersId == null ||
+                buyerId == null){
+            Toast.makeText(this, "Please enter all fields first", Toast.LENGTH_SHORT).show();
+        }else{
+            String title = etTitle.getText().toString().trim();
+            double amount = Double.parseDouble(etAmount.getText().toString());
+            String date = selectedDate.toString();
+            Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId, date,expenseUsersId, false);
+        }
+    }
 }
