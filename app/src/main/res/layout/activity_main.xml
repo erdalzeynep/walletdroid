@@ -14,7 +14,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:hint="Enter your email" />
+        android:hint="@string/signInEnterEmailHint" />
 
     <EditText
         android:id="@+id/txt_login_password"
@@ -23,7 +23,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:hint="Enter password"
+        android:hint="@string/signInEnterPasswordHint"
         android:inputType="textPassword" />
 
     <Button
@@ -34,7 +34,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:onClick="login"
-        android:text="Login" />
+        android:text="@string/loginBtnText" />
 
     <Button
         android:id="@+id/btn_login_signup"
@@ -44,7 +44,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:onClick="goToSignUpPage"
-        android:text="sign up" />
+        android:text="@string/signUpBtnText" />
 
 
     <TextView
@@ -52,15 +52,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:text="@string/sign_in_using_google_or_facebook"
+        android:text="@string/sign_in_using_google"
         android:textSize="15sp"
         android:textStyle="bold" />
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
+        android:id="@+id/googleSignInButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:visibility="visible" />
 

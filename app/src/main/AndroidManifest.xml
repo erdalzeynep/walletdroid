@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sda5.walletdroid">
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -21,57 +20,58 @@
         <activity android:name=".activities.ChooseGroupForExpenseActivity" />
         <activity android:name=".activities.AddNewGroupMemberActivity" />
 
+        <!-- Splash Screen -->
+        <activity android:name=".SplashScreen"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-
+       <!-- Main Activity -->
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity android:name=".activities.AddNewGroupMemberActivity"></activity>
 
+        <activity android:name=".activities.AddNewGroupMemberActivity" />
         <activity android:name=".activities.GroupDetailActivity" />
-        <activity android:name=".activities.CreateNewGroupActivity" />
-
-        <!-- Sign up Activity -->
+        <activity android:name=".activities.CreateNewGroupActivity" /> <!-- Sign up Activity -->
         <activity
             android:name=".activities.SignUpActivity"
-            android:label="@string/title_activity_signup" />
-
-        <!-- Service Activity -->
+            android:label="@string/title_activity_signup" /> <!-- Service Activity -->
         <activity
             android:name=".activities.ServiceActivity"
             android:label="@string/title_activity_service"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.AddExpenseActicity"
-            android:label="@string/title_activity_add_expense" />
+            android:label="@string/title_activity_add_expense"
+            />
 
         <!-- Google Sing in Activity -->
         <activity
             android:name=".activities.SigninGoogle"
             android:label="@string/manifest_google_sign_in" />
-
+        <!-- Creating graphs -->
         <activity
             android:name=".activities.Graphs.MultiLineChartActivity"
-            android:label="multiLineChart"></activity>
-
+            android:label="multiLineChart" />
         <activity android:name=".activities.Graphs.ListViewMultiChartActivity" />
-
         <activity android:name=".activities.Graphs.PieChartActivity" />
-
 
         <meta-data
             android:name="com.google.android.gms.ads.1:718366885828:android:f43e24c6a69a4b70"
-            android:value=" ca-app-pub-1803960866730048~9900200003"/>
-
+            android:value=" ca-app-pub-1803960866730048~9900200003" />
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true"/>
-
+            android:value="true" />
     </application>
 
 </manifest>

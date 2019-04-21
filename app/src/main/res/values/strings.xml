@@ -40,7 +40,7 @@
     </string>
 
     <!-- Added by Obaid -->
-    <string name="sign_in_using_google_or_facebook">Sign in using Google or Facebook</string>
+    <string name="sign_in_using_google">Sign in using Google or Facebook</string>
     <string name="manifest_google_sign_in">Google sign in</string>
     <string name="sign_out">Sign Out</string>
     <string name="facebook_status_fmt">Facebook User: %s</string>
@@ -95,6 +95,10 @@
     <string name="nav_shareTextFrnd"> <b>Hello!</b> Your friend would like to share the app Walletdroid with you.
         \n\n Use this link to download it from app store.
     \n\n https://github.com/sda5-walletdroid/walletdroid.</string>
+    <string name="signInEnterEmailHint">Enter your email</string>
+    <string name="signInEnterPasswordHint">Enter password</string>
+    <string name="loginBtnText">Login</string>
+    <string name="signUpBtnText">sign up</string>
 
 
 </resources>

@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -13,8 +16,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sda5.walletdroid.R;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //for google sign in
-        mSignInButton = findViewById(R.id.sign_in_button);
+        mSignInButton = findViewById(R.id.googleSignInButton);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      *
-     * @param view
+     * @param view login
      */
     public void login(View view) {
 
