@@ -3,31 +3,21 @@ package com.sda5.walletdroid.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Category;
@@ -37,7 +27,6 @@ import com.sda5.walletdroid.models.Group;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Optional;
 
 public class AddExpenseActicity extends AppCompatActivity {
 
@@ -67,6 +56,11 @@ public class AddExpenseActicity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String groupId;
 
+    // onRestoreInstanceState
+    static String tempTitle;
+    static String tempAmount;
+    static int sprCategoryDefaultItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +76,7 @@ public class AddExpenseActicity extends AppCompatActivity {
         groupId = getIntent().getStringExtra("group_id");
         expenseUsersId = getIntent().getStringArrayListExtra("expenseUsersIds");
         expenseUsersName = getIntent().getStringArrayListExtra("expenseUsersAccounts");
+
         etTitle = findViewById(R.id.txt_addExpense_expenseTitle);
         etAmount = findViewById(R.id.txt_addExpense_expenseAmount);
 
@@ -93,15 +88,19 @@ public class AddExpenseActicity extends AppCompatActivity {
         catlist.add(new Category("Clothes", 3000));
         catlist.add(new Category("Transportation", 5000));
 
+
+
         // Create spinner for user to choose the category of expense
         sprCategory = findViewById(R.id.spr_addExpense_category);
         ArrayAdapter adapterCategory = new ArrayAdapter(this, android.R.layout.simple_spinner_item, catlist);
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprCategory.setAdapter(adapterCategory);
+        sprCategory.setSelection(sprCategoryDefaultItem);
         sprCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedCategory = (Category) parent.getItemAtPosition(position);
+                sprCategoryDefaultItem = position;
             }
 
             @Override
@@ -158,12 +157,19 @@ public class AddExpenseActicity extends AppCompatActivity {
     }
 
 
-    public void chooseGroup(View view) {
-        Intent intent = new Intent(this, com.sda5.walletdroid.activities.ChooseGroupForExpense.class);
+    public void addExpenseUsers(View view) {
+        if(!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()){
+            tempTitle = etTitle.getText().toString();
+            tempAmount = etAmount.getText().toString();
+        }
+        Intent intent = new Intent(this, ChooseGroupForExpenseActivity.class);
         startActivity(intent);
     }
 
     public void saveExpense(View v){
+        if(selectedDate == null){
+            selectedDate = LocalDate.now();
+        }
         if(etTitle.getText().toString().trim().isEmpty() ||
                 etAmount.getText().toString().trim().isEmpty() ||
                 selectedCategory == null ||
@@ -182,6 +188,9 @@ public class AddExpenseActicity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(AddExpenseActicity.this, "Added successfully", Toast.LENGTH_SHORT).show();
+                    etAmount.setText("");
+                    etTitle.setText("");
+                    sprCategory.setSelection(0);
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -192,4 +201,34 @@ public class AddExpenseActicity extends AppCompatActivity {
                     });
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(!etTitle.getText().toString().trim().isEmpty()||!etAmount.getText().toString().trim().isEmpty()){
+            outState.putString("Title", etTitle.getText().toString().trim());
+            outState.putString("Amount", etAmount.getText().toString().trim());
+            outState.putInt("CategoryPosition", sprCategoryDefaultItem);
+
+            tempTitle = etTitle.getText().toString().trim();
+            tempAmount = etAmount.getText().toString().trim();
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        tempTitle = savedInstanceState.getString("Title");
+        tempAmount = savedInstanceState.getString("Amount");
+        sprCategoryDefaultItem = savedInstanceState.getInt("CategoryPosition");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        etTitle.setText(tempTitle);
+        etAmount.setText(tempAmount);
+    }
 }
+
+

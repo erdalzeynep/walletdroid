@@ -21,7 +21,7 @@ import com.sda5.walletdroid.models.Group;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class ChooseGroupForExpense extends AppCompatActivity {
+public class ChooseGroupForExpenseActivity extends AppCompatActivity {
 
     private GroupAdapterAddExpense groupAdapterAddExpense;
     private ArrayList<Group> groups = new ArrayList<>();

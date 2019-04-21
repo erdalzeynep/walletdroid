@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Expense Users"
-            android:onClick="chooseGroup"/>
+            android:onClick="addExpenseUsers"/>
 
     <Spinner
         android:id="@+id/spr_addExpense_buyer"

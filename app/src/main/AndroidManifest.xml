@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.AddExpenseUsersActivity"></activity>
-        <activity android:name=".activities.ChooseGroupForExpense" />
+        <activity android:name=".activities.ChooseGroupForExpenseActivity" />
         <activity android:name=".activities.AddNewGroupMemberActivity" />
         <activity android:name=".activities.GroupDetailActivity" />
         <activity android:name=".activities.CreateNewGroupActivity" />

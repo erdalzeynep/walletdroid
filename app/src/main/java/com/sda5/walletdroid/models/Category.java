@@ -1,8 +1,9 @@
 package com.sda5.walletdroid.models;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Category {
+public class Category implements Serializable {
     private String id;
     private String title;
     private int maxBudget;

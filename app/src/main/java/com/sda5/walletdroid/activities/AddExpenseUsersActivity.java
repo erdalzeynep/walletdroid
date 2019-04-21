@@ -93,5 +93,6 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
         intent.putStringArrayListExtra("expenseUsersIds", expenseUsersId);
         intent.putStringArrayListExtra("expenseUsersAccounts", expenseUsersName);
         startActivity(intent);
+        finish();
     }
 }
