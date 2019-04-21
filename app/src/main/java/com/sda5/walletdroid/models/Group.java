@@ -56,4 +56,9 @@ public class Group {
     public void setAdminAccountId(String adminAccountId) {
         this.adminAccountId = adminAccountId;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

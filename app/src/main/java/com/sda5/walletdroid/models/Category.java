@@ -1,8 +1,9 @@
 package com.sda5.walletdroid.models;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Category {
+public class Category implements Serializable {
     private String id;
     private String title;
     private int maxBudget;
@@ -37,5 +38,10 @@ public class Category {
 
     public void setMaxBudget(int maxBudget) {
         this.maxBudget = maxBudget;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

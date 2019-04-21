@@ -6,6 +6,8 @@
     <string name="title_query">Query</string>
     <string name="title_settle">Settle</string>
     <string name="title_invest">Invest</string>
+    <string name="title_add_Expense">Invest</string>
+    <string name="title_activity_add_expense">Add Expense</string>
 
 
     <string-array name="sample_group_name">

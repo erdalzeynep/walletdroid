@@ -1,7 +1,6 @@
 package com.sda5.walletdroid.models;
 
-import android.icu.util.LocaleData;
-
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Expense {
@@ -11,16 +10,19 @@ public class Expense {
     private Category category;
     private String payerAccountId;
     private String groupId;
-    private LocaleData date;
+    private String date;
+    private ArrayList<String> expenseUsersIds;
     private boolean isRecursive;
 
-    public Expense(String title, Double amount, Category category, String payerAccountId, String groupId, LocaleData date, boolean isRecursive) {
+
+    public Expense(String title, Double amount, Category category, String payerAccountId, String groupId, String date, ArrayList<String> expenseUsersIds, boolean isRecursive) {
         this.title = title;
         this.amount = amount;
         this.category = category;
         this.payerAccountId = payerAccountId;
         this.groupId = groupId;
         this.date = date;
+        this.expenseUsersIds = expenseUsersIds;
         this.isRecursive = isRecursive;
         this.id = UUID.randomUUID().toString();
     }
@@ -57,11 +59,11 @@ public class Expense {
         this.category = category;
     }
 
-    public String getpayerAccountId() {
+    public String getPayerAccountId() {
         return payerAccountId;
     }
 
-    public void setpayerAccountId(String payerAccountId) {
+    public void setPayerAccountId(String payerAccountId) {
         this.payerAccountId = payerAccountId;
     }
 
@@ -73,12 +75,20 @@ public class Expense {
         this.groupId = groupId;
     }
 
-    public LocaleData getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocaleData date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public ArrayList<String> getExpenseUsersIds() {
+        return expenseUsersIds;
+    }
+
+    public void setExpenseUsersIds(ArrayList<String> expenseUsersIds) {
+        this.expenseUsersIds = expenseUsersIds;
     }
 
     public boolean isRecursive() {
@@ -86,6 +96,6 @@ public class Expense {
     }
 
     public void setRecursive(boolean recursive) {
-        this.isRecursive = recursive;
+        isRecursive = recursive;
     }
 }

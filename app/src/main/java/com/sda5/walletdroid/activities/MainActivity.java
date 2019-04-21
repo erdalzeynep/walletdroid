@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             // User is signed out
         }
 
-
         //for google sign in
         mSignInButton = findViewById(R.id.googleSignInButton);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
