@@ -1,10 +1,7 @@
 package com.sda5.walletdroid.activities;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -13,13 +10,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
-import com.sda5.walletdroid.adapters.GroupAdapter;
 import com.sda5.walletdroid.adapters.GroupAdapterAddExpense;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
 import java.util.Optional;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ChooseGroupForExpenseActivity extends AppCompatActivity {
 

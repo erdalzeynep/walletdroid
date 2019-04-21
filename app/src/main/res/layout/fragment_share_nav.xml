@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:paddingLeft="16dp"
+    android:paddingTop="60dp"
+    android:paddingRight="16dp"
+    android:theme="@style/Base.V21.Theme.AppCompat">
+
+    <TextView
+        android:id="@+id/emailShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:hint="Email"
+        android:paddingTop="10dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/giveFriendEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/emailShare"
+        android:hint="Friends Email"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/textInputFeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/giveFriendEmail"
+        android:hint="Enter Message"
+        android:text="@string/nav_shareTextFrnd"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:typeface="sans"
+        android:autoLink="web"/>
+
+
+    <Button
+        android:id="@+id/buttonShareEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textInputFeed"
+        android:text="Send"
+        android:theme="@style/Base.Widget.AppCompat.Button.Colored" />
+
+
+</RelativeLayout>

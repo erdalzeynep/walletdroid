@@ -25,4 +25,6 @@
         android:icon="@drawable/invest"
         android:title="@string/title_invest"/>
 
+
+
 </menu>

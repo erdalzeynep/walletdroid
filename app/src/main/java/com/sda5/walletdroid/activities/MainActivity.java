@@ -1,30 +1,33 @@
 package com.sda5.walletdroid.activities;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.google.firebase.auth.FirebaseUser;
 import com.sda5.walletdroid.R;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-
+    private SignInButton mSignInButton;
     private EditText etEmail;
     private EditText etPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        etEmail = findViewById(R.id.txt_login_email);
+        etPassword = findViewById(R.id.txt_login_password);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
@@ -35,12 +38,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // User is signed out
         }
-        setContentView(R.layout.activity_main);
 
-        etEmail = findViewById(R.id.txt_login_email);
-        etPassword = findViewById(R.id.txt_login_password);
+        //for google sign in
+        mSignInButton = findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), SigninGoogle.class));
+            }
+        });
     }
 
+    /**
+     *
+     * @param view
+     */
     public void login(View view) {
 
         // Check if user fills all fields.
@@ -63,10 +75,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Sign up activity
+     * @param
+     */
     public void goToSignUpPage(View view) {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
+
 
     public void resetPasswordViaEmail(View view) {
         String email = etEmail.getText().toString();
