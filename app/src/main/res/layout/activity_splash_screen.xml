@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#242729"
+    android:layout_gravity="center"
+    android:id="@+id/lin_lay"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewSplash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wallet Droid"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="30sp"
+        android:textStyle="italic" />
+
+    <ImageView
+        android:id="@+id/splashImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="false"
+        android:background="@drawable/splash_budget"
+        android:cropToPadding="true" />
+</LinearLayout>

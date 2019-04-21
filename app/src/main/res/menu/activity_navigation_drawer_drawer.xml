@@ -21,6 +21,12 @@
             app:actionLayout="@layout/switch_item_2"
             app:showAsAction="always" />
 
+        <item
+            android:icon="@drawable/ic_notifications_black_24dp"
+            android:id="@+id/nav_noOfNotification"
+            android:title=" Unread Notification"
+            app:showAsAction="always"/>
+
 
     </group>
 
