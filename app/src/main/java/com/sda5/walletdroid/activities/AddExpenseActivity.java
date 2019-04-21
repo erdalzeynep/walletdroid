@@ -31,7 +31,7 @@ import java.util.Calendar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AddExpenseActicity extends AppCompatActivity {
+public class AddExpenseActivity extends AppCompatActivity {
 
     private ArrayList<Group> groups = new ArrayList<>();
 
@@ -39,7 +39,6 @@ public class AddExpenseActicity extends AppCompatActivity {
     private Spinner sprBuyer;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Group selectedGroup;
-
 
     // To save on database
     private EditText etTitle;
@@ -140,11 +139,10 @@ public class AddExpenseActicity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 selectedDate = LocalDate.of(year, month, dayOfMonth);
-                Toast.makeText(AddExpenseActicity.this, selectedDate.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddExpenseActivity.this, selectedDate.toString(), Toast.LENGTH_SHORT).show();
             }
         };
     }
-
 
     public void pickDate(View view) {
         Calendar cal = Calendar.getInstance();
@@ -158,7 +156,6 @@ public class AddExpenseActicity extends AppCompatActivity {
                 year, month, day);
         dialog.show();
     }
-
 
     public void addExpenseUsers(View view) {
         if(!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()){
@@ -190,7 +187,7 @@ public class AddExpenseActicity extends AppCompatActivity {
             database.collection("Expenses").document(expense.getId()).set(expense).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Toast.makeText(AddExpenseActicity.this, "Added successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddExpenseActivity.this, "Added successfully", Toast.LENGTH_SHORT).show();
                     etAmount.setText("");
                     etTitle.setText("");
                     sprCategory.setSelection(0);
@@ -199,7 +196,7 @@ public class AddExpenseActicity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(AddExpenseActicity.this, "Sth is wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddExpenseActivity.this, "Sth is wrong", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -233,5 +230,3 @@ public class AddExpenseActicity extends AppCompatActivity {
         etAmount.setText(tempAmount);
     }
 }
-
-

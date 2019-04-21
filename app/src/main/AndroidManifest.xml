@@ -51,7 +51,7 @@
             android:label="@string/title_activity_service"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".activities.AddExpenseActicity"
+            android:name=".activities.AddExpenseActivity"
             android:label="@string/title_activity_add_expense"
             />
 

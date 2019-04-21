@@ -92,7 +92,7 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
     public void addExpenseUsers(View view) {
         expenseUsersId.addAll(accountAdapterAddExpense.getSelectedExpenseUsersIDList());
         expenseUsersName.addAll(accountAdapterAddExpense.getSelectedExpenseUsersNameList());
-        Intent intent = new Intent(AddExpenseUsersActivity.this, AddExpenseActicity.class);
+        Intent intent = new Intent(AddExpenseUsersActivity.this, AddExpenseActivity.class);
         intent.putExtra("group_id", groupID);
         intent.putStringArrayListExtra("expenseUsersIds", expenseUsersId);
         intent.putStringArrayListExtra("expenseUsersAccounts", expenseUsersName);

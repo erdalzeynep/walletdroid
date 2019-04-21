@@ -235,7 +235,7 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
     }
 
     public void addExpense(View v){
-        Intent intent = new Intent(getApplicationContext(), AddExpenseActicity.class);
+        Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
         startActivity(intent);
     }
 }
