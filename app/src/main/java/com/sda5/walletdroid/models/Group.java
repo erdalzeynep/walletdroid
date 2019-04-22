@@ -2,6 +2,7 @@ package com.sda5.walletdroid.models;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class Group {
     private String name;
     private List<String> accountIdList;
     private String adminAccountId;
+    private HashMap<String, Double> balance = new HashMap<>();
 
     public Group(){}
 
@@ -20,6 +22,9 @@ public class Group {
         mAuth = FirebaseAuth.getInstance();
         this.name = name;
         this.accountIdList = list;
+        for(String accountId: list){
+            this.balance.put(accountId, 0.0);
+        }
         this.adminUserId = mAuth.getCurrentUser().getUid();
         this.id = UUID.randomUUID().toString();
         this.adminAccountId = adminAccountId;
@@ -55,6 +60,14 @@ public class Group {
 
     public void setAdminAccountId(String adminAccountId) {
         this.adminAccountId = adminAccountId;
+    }
+
+    public HashMap<String, Double> getBalance() {
+        return balance;
+    }
+
+    public void setBalance(HashMap<String, Double> balance) {
+        this.balance = balance;
     }
 
     @Override
