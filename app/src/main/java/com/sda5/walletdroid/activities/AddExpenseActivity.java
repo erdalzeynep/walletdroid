@@ -2,8 +2,6 @@ package com.sda5.walletdroid.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-//import android.support.annotation.NonNull;
-//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +16,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.models.Category;
 import com.sda5.walletdroid.models.Expense;
@@ -50,6 +50,8 @@ public class AddExpenseActivity extends AppCompatActivity {
     private ArrayList<String> expenseUsersName = new ArrayList<>();
     private String buyerId;
     private HashMap<String, Double> balanceOfExpense;
+    private HashMap<String, Double> oldBalanceOfGroup;
+    private HashMap<String, Double> balanceToUpdate;
     private double usersShare;
     private double buyerShare;
 
@@ -65,6 +67,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     static String tempAmount;
     static int sprCategoryDefaultItem;
 
+    private Boolean done = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +206,23 @@ public class AddExpenseActivity extends AppCompatActivity {
                     balanceOfExpense.put(usersId, usersShare);
                 }
             }
+
+            // Getting existing group balance hashmap from database
+
+            database.collection("Groups").whereEqualTo("id", groupId).limit(1).get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(QueryDocumentSnapshot queryDocumentSnapshot: queryDocumentSnapshots){
+                                Group groupToUpdate = queryDocumentSnapshot.toObject(Group.class);
+                                oldBalanceOfGroup = groupToUpdate.getBalance();
+                                balanceToUpdate = new HashMap<>(oldBalanceOfGroup);
+                                balanceOfExpense.forEach((k, v) -> balanceToUpdate.merge(k, v, (a, b) -> a + b));
+                                //update the balance
+                                database.collection("Groups").document(groupId).update("balance", balanceToUpdate);
+                            }
+                        }
+                    });
 
             // creating expense object
 

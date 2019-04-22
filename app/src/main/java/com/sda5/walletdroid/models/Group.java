@@ -14,7 +14,7 @@ public class Group {
     private String name;
     private List<String> accountIdList;
     private String adminAccountId;
-    private HashMap<String, Double> balance = new HashMap<>();
+    private HashMap<String, Double> balance;
 
     public Group(){}
 
