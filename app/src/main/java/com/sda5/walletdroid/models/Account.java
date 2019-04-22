@@ -24,12 +24,13 @@ public class Account {
         this.phoneNumber = phoneNumber;
         this.monthlyBudget = monthlyBudget;
         this.monthlySave = monthlySave;
+        this.id = UUID.randomUUID().toString();
     }
 
-    public Account(boolean isInternalAccount, String ownerName, String email) {
+    public Account(boolean isInternalAccount, String email) {
         this.isInternalAccount = isInternalAccount;
-        this.ownerName = ownerName;
         this.email = email;
+        this.id = UUID.randomUUID().toString();
     }
 
     public Account( boolean isInternalAccount, String ownerName, String email, String tokenID) {

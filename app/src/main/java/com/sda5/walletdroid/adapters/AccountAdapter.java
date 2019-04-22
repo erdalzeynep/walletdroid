@@ -43,7 +43,13 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         Account account = accounts.get(position);
 
         TextView textViewAccount = listItem.findViewById(R.id.textview_account_item);
-        textViewAccount.setText(account.getOwnerName());
+        if(account.isInternalAccount()){
+            textViewAccount.setText(account.getOwnerName());
+        }
+        else{
+            textViewAccount.setText(account.getEmail()+ "(external)");
+        }
+
         textViewAccount.setTag(account.getId());
 
         final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account_item);
@@ -72,5 +78,10 @@ public class AccountAdapter extends ArrayAdapter<Account> {
 
     public List<String> getSelectedAccountIDList() {
         return selectedAccountIDList;
+    }
+
+
+    public void addSelectedAccountId(String accountId){
+        this.selectedAccountIDList.add(accountId);
     }
 }
