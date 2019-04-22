@@ -21,14 +21,39 @@
         android:layout_height="241dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
 
+    <CheckBox
+        android:id="@+id/cb_external_account_add_member"
+        android:layout_width="297dp"
+        android:layout_height="52dp"
+        android:text="Continue with external person"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/et_external_email_add_member"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:ems="10"
+        android:hint="enter email address"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/button_add_external_add_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:onClick="addExternalMembersToListView"/>
+
+    <ListView
+        android:id="@+id/listView_external_add_member"
+        android:layout_width="match_parent"
+        android:layout_height="120dp" />
+
     <Button
         android:id="@+id/btn_add_member_to_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="OK"
+        android:text="Update"
         android:onClick="addMembersToGroup"/>
-
-
 
 </LinearLayout>

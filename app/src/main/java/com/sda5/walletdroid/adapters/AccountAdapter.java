@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sda5.walletdroid.R;
@@ -61,15 +62,12 @@ public class AccountAdapter extends ArrayAdapter<Account> {
             checkBoxAccount.setVisibility(View.GONE);
         }
 
-        checkBoxAccount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String selectedAccountID = checkBoxAccount.getTag().toString();
-                if (isChecked) {
-                    selectedAccountIDList.add(selectedAccountID);
-                } else {
-                    selectedAccountIDList.remove(selectedAccountID);
-                }
+        checkBoxAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String selectedAccountID = checkBoxAccount.getTag().toString();
+            if (isChecked) {
+                selectedAccountIDList.add(selectedAccountID);
+            } else {
+                selectedAccountIDList.remove(selectedAccountID);
             }
         });
 
