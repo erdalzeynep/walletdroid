@@ -19,7 +19,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sda5.walletdroid.R;
-import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Category;
 import com.sda5.walletdroid.models.Expense;
 import com.sda5.walletdroid.models.Group;
@@ -27,6 +26,7 @@ import com.sda5.walletdroid.models.Group;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,15 +45,17 @@ public class AddExpenseActivity extends AppCompatActivity {
     private EditText etAmount;
     private LocalDate selectedDate;
     private Category selectedCategory;
-    private ArrayList<Account> accountsForBuyer = new ArrayList<>();
+    private ArrayList<String> groupMembersIds = new ArrayList<>();
     private ArrayList<String> expenseUsersId = new ArrayList<>();
     private ArrayList<String> expenseUsersName = new ArrayList<>();
     private String buyerId;
+    private HashMap<String, Double> balanceOfExpense;
+    private double usersShare;
+    private double buyerShare;
 
     // Firestore database stuff
     private FirebaseFirestore database;
 
-    private String accountId;
     String currentUserId;
     private FirebaseAuth mAuth;
     private String groupId;
@@ -76,6 +78,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         currentUserId = mAuth.getCurrentUser().getUid();
 
         groupId = getIntent().getStringExtra("group_id");
+        groupMembersIds = getIntent().getStringArrayListExtra("groupMembersIds");
         expenseUsersId = getIntent().getStringArrayListExtra("expenseUsersIds");
         expenseUsersName = getIntent().getStringArrayListExtra("expenseUsersAccounts");
 
@@ -182,6 +185,27 @@ public class AddExpenseActivity extends AppCompatActivity {
             String title = etTitle.getText().toString().trim();
             double amount = Double.parseDouble(etAmount.getText().toString());
             String date = selectedDate.toString();
+
+            // creating hashmap to update balance in group collection
+            balanceOfExpense = new HashMap<>();
+
+            for (String memberId: groupMembersIds){
+                balanceOfExpense.put(memberId, 0.0);
+            }
+
+            usersShare = - amount / expenseUsersId.size();
+            buyerShare = amount + usersShare;
+
+            for(String usersId : expenseUsersId){
+                if(usersId == buyerId){
+                    balanceOfExpense.put(usersId, buyerShare);
+                }else{
+                    balanceOfExpense.put(usersId, usersShare);
+                }
+            }
+
+            // creating expense object
+
             Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId, date,expenseUsersId, false);
 
             database.collection("Expenses").document(expense.getId()).set(expense).addOnSuccessListener(new OnSuccessListener<Void>() {
