@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,8 +31,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class CreateNewGroupActivity extends AppCompatActivity {
     private AccountAdapter accountAdapter;
     private ArrayList<Account> accounts = new ArrayList<>();
@@ -42,7 +42,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     private EditText editTextExternalAccountEmail;
     private Button buttonAddExternalAccount;
     private ListView listViewExternalAccounts;
-    private HashMap<String,String> externalAccountNameAndEmails = new HashMap<>();
+    private HashMap<String, String> externalAccountNameAndEmails = new HashMap<>();
     private ArrayList<String> externalAccountList = new ArrayList<>();
     private ArrayAdapter<String> externalUserAdapter;
 
@@ -92,19 +92,19 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         });
 
         database.collection("Accounts")
-                .whereEqualTo("internalAccount", true)
-                .addSnapshotListener((value, e) -> {
-                    if (e != null) {
-                        return;
-                    }
-                    for (QueryDocumentSnapshot doc : value) {
-                        Account account = doc.toObject(Account.class);
-                        if (!account.getUserID().equals(mAuth.getUid())) {
-                            accounts.add(account);
+                .whereEqualTo("internalAccount", true).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot accountSnapshot = task.getResult();
+                        for (QueryDocumentSnapshot doc : accountSnapshot) {
+                            Account account = doc.toObject(Account.class);
+                            if (!account.getUserID().equals(mAuth.getUid())) {
+                                accounts.add(account);
+                            }
                         }
+                        accountAdapter.notifyDataSetChanged();
+                        ListViewHelper.setListViewSizeDynamically(accountAdapter, listView);
                     }
-                    accountAdapter.notifyDataSetChanged();
-                    ListViewHelper.setListViewSizeDynamically(accountAdapter, listView);
                 });
     }
 
@@ -153,7 +153,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         Optional<Account> accountOptional = accountSnapshot.toObjects(Account.class).stream().findFirst();
         if (accountOptional.isPresent()) {
             accountAdapter.addSelectedAccountId(accountOptional.get().getId());
-            Toast.makeText(getApplicationContext(), "Email already exists in the App. Name will be"+" "
+            Toast.makeText(getApplicationContext(), "Email already exists in the App. Name will be" + " "
                     + accountOptional.get().getOwnerName(), Toast.LENGTH_LONG).show();
             return Tasks.forResult(null);
         } else {
