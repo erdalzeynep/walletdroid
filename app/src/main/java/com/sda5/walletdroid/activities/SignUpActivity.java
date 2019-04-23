@@ -116,7 +116,7 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Account userAccount = new Account(true, displayName, email, idToken);
                             userAccount.setUserID(mAuth.getCurrentUser().getUid());
-                            database.collection("Accounts").document().set(userAccount);
+                            database.collection("Accounts").document(userAccount.getId()).set(userAccount);
 
                             postSignUpLogin(user.getEmail(), password);
                             startActivity(new Intent(SignUpActivity.this, ServiceActivity.class));

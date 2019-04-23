@@ -16,20 +16,28 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.models.Account;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-//import android.support.annotation.NonNull;
-//import android.support.v7.app.AppCompatActivity;
+import java.util.Optional;
 
-
-public class SigninGoogle extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class SigninGoogle extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
+    private String idToken;
+    private Account userAccount;
+    private String displayName;
+    private String email;
+    private FirebaseFirestore database;
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -48,12 +56,7 @@ public class SigninGoogle extends AppCompatActivity implements GoogleApiClient.O
 
         // Initialize FirebaseAuth
         mFirebaseAuth = FirebaseAuth.getInstance();
-
-        // Assign fields
-        //mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
-
-        // Set click listeners
-        //mSignInButton.setOnClickListener(this);
+        database = FirebaseFirestore.getInstance();
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -65,26 +68,10 @@ public class SigninGoogle extends AppCompatActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        // Initialize FirebaseAuth
-
-        // }
-
-    /*
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                signIn();
-                break;
-        }
-    }*/
-
-
-        // private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-        //}
     }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
@@ -111,7 +98,6 @@ public class SigninGoogle extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGooogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -128,14 +114,48 @@ public class SigninGoogle extends AppCompatActivity implements GoogleApiClient.O
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(SigninGoogle.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
-                            startActivity(new Intent(SigninGoogle.this, ServiceActivity.class));
-                            finish();
+                            final FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                            user.getIdToken(true)
+                                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                                            if (task.isSuccessful()) {
+                                                idToken = task.getResult().getToken();
+                                                displayName = user.getDisplayName();
+                                                email = user.getEmail();
+                                                userAccount = new Account(true, displayName, email, idToken);
+                                                userAccount.setUserID(mFirebaseAuth.getCurrentUser().getUid());
+
+                                                database.collection("Accounts")
+                                                        .whereEqualTo("userID", user.getUid())
+                                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            startActivity(new Intent(SigninGoogle.this, ServiceActivity.class));
+                                                            finish();
+                                                            QuerySnapshot accountSnapshot = task.getResult();
+                                                            if (null != accountSnapshot) {
+                                                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                                                                if (!account.isPresent()) {
+                                                                    database.collection("Accounts")
+                                                                            .document(userAccount.getId())
+                                                                            .set(userAccount);
+                                                                }
+                                                            }
+                                                        }
+
+                                                    }
+                                                });
+
+                                            }
+                                        }
+                                    });
+
                         }
                     }
                 });
     }
 
 }
-
