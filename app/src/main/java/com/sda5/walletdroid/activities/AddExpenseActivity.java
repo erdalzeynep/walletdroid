@@ -37,8 +37,10 @@ public class AddExpenseActivity extends AppCompatActivity {
 
     private Spinner sprCategory;
     private Spinner sprBuyer;
+    private Spinner sprCurrency;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Group selectedGroup;
+    private String selectedCurrency;
 
     // To save on database
     private EditText etTitle;
@@ -54,6 +56,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     private HashMap<String, Double> balanceToUpdate;
     private double usersShare;
     private double buyerShare;
+    private double rate;
 
     // Firestore database stuff
     private FirebaseFirestore database;
@@ -66,6 +69,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     static String tempTitle;
     static String tempAmount;
     static int sprCategoryDefaultItem;
+    static int sprCurrencyDefaultItem;
 
     private Boolean done = false;
 
@@ -88,6 +92,40 @@ public class AddExpenseActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.txt_addExpense_expenseTitle);
         etAmount = findViewById(R.id.txt_addExpense_expenseAmount);
 
+        // Fake Hashmap for rates:
+        HashMap<String, Double> CurMap = new HashMap<>();
+        CurMap.put("SEK", 1.0);
+        CurMap.put("EUR", 0.0951746455);
+        CurMap.put("USD", 0.1070238888);
+        CurMap.put("NOK", 0.9122013895);
+        CurMap.put("GHD", 1000000000.0);
+        CurMap.put("DKK", 0.7105643856);
+
+        // Create spinner for currencies
+        ArrayList<String> currencies = new ArrayList<>();
+        currencies.add("SEK");
+        currencies.add("EUR");
+        currencies.add("USD");
+        currencies.add("NOK");
+        currencies.add("DKK");
+        sprCurrency = findViewById(R.id.sprCurrency);
+        ArrayAdapter<String> adapterCurrency = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currencies);
+        adapterCurrency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sprCurrency.setAdapter(adapterCurrency);
+        sprCurrency.setSelection(sprCurrencyDefaultItem);
+        sprCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCurrency = (String) parent.getItemAtPosition(position);
+                rate = 1 / CurMap.get(selectedCurrency);
+                sprCurrencyDefaultItem = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
 
         // Create sample category list for now
         // TODO update this when category is decided by team. it should retrieve data from fire store
@@ -95,8 +133,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         catlist.add(new Category("Food", 2000));
         catlist.add(new Category("Clothes", 3000));
         catlist.add(new Category("Transportation", 5000));
-
-
 
         // Create spinner for user to choose the category of expense
         sprCategory = findViewById(R.id.spr_addExpense_category);
@@ -186,7 +222,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter all fields first", Toast.LENGTH_SHORT).show();
         }else{
             String title = etTitle.getText().toString().trim();
-            double amount = Double.parseDouble(etAmount.getText().toString());
+            double amount = rate * Double.parseDouble(etAmount.getText().toString());
             String date = selectedDate.toString();
 
             // creating hashmap to update balance in group collection
@@ -228,7 +264,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             // creating expense object
 
             Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId, date,expenseUsersId, false);
-
+            System.out.println("chekc");
             database.collection("Expenses").document(expense.getId()).set(expense).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -236,6 +272,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                     etAmount.setText("");
                     etTitle.setText("");
                     sprCategory.setSelection(0);
+                    sprCurrency.setSelection(0);
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -254,6 +291,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             outState.putString("Title", etTitle.getText().toString().trim());
             outState.putString("Amount", etAmount.getText().toString().trim());
             outState.putInt("CategoryPosition", sprCategoryDefaultItem);
+            outState.putInt("CurrencyPosition", sprCurrencyDefaultItem);
 
             tempTitle = etTitle.getText().toString().trim();
             tempAmount = etAmount.getText().toString().trim();
@@ -266,6 +304,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         tempTitle = savedInstanceState.getString("Title");
         tempAmount = savedInstanceState.getString("Amount");
         sprCategoryDefaultItem = savedInstanceState.getInt("CategoryPosition");
+        sprCurrencyDefaultItem = savedInstanceState.getInt("CurrencyPosition");
     }
 
     @Override
