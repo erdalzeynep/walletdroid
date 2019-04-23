@@ -218,6 +218,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                                 oldBalanceOfGroup = groupToUpdate.getBalance();
                                 balanceToUpdate = new HashMap<>(oldBalanceOfGroup);
                                 balanceOfExpense.forEach((k, v) -> balanceToUpdate.merge(k, v, (a, b) -> a + b));
+                                System.out.println("check");
                                 //update the balance
                                 database.collection("Groups").document(groupId).update("balance", balanceToUpdate);
                             }
