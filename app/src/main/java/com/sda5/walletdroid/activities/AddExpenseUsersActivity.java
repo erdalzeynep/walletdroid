@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AddExpenseUsersActivity extends AppCompatActivity {
 
     private AccountAdapterAddExpense accountAdapterAddExpense;
+    private ArrayList<String> groupMembersIds = new ArrayList<>();
     private ArrayList<Account> accountsForExpense = new ArrayList<>();
     private ArrayList<String> expenseUsersId = new ArrayList<>();
     private ArrayList<String> expenseUsersName = new ArrayList<>();
@@ -67,6 +68,7 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         DocumentSnapshot groupSnapshot = task.getResult();
                         group = groupSnapshot.toObject(Group.class);
+                        groupMembersIds = (ArrayList<String>) group.getAccountIdList();
 
                         database.collection("Accounts")
                                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -94,6 +96,7 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
         expenseUsersName.addAll(accountAdapterAddExpense.getSelectedExpenseUsersNameList());
         Intent intent = new Intent(AddExpenseUsersActivity.this, AddExpenseActivity.class);
         intent.putExtra("group_id", groupID);
+        intent.putStringArrayListExtra("groupMembersIds", groupMembersIds);
         intent.putStringArrayListExtra("expenseUsersIds", expenseUsersId);
         intent.putStringArrayListExtra("expenseUsersAccounts", expenseUsersName);
         startActivity(intent);
