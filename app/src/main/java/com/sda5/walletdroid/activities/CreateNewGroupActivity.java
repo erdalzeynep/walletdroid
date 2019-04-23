@@ -23,6 +23,7 @@ import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,10 +38,12 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     private String accountId;
     private CheckBox checkBoxExternalAccount;
+    private EditText editTextExternalAccountName;
     private EditText editTextExternalAccountEmail;
     private Button buttonAddExternalAccount;
     private ListView listViewExternalAccounts;
-    private ArrayList<String> externalAccountItems = new ArrayList<>();
+    private HashMap<String,String> externalAccountNameAndEmails = new HashMap<>();
+    private ArrayList<String> externalAccountList = new ArrayList<>();
     private ArrayAdapter<String> externalUserAdapter;
 
     @Override
@@ -58,37 +61,35 @@ public class CreateNewGroupActivity extends AppCompatActivity {
 
         externalUserAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
-                externalAccountItems);
+                externalAccountList);
 
         accountAdapter = new AccountAdapter(getApplicationContext(), accounts, true);
         listView.setAdapter(accountAdapter);
 
-        ListViewHelper.setListViewSizeDynamically(accountAdapter, listView);
-
         checkBoxExternalAccount = findViewById(R.id.checkBox_external_account);
+        editTextExternalAccountName = findViewById(R.id.editText_external_account_name);
         editTextExternalAccountEmail = findViewById(R.id.editText_external_account_email);
         buttonAddExternalAccount = findViewById(R.id.button_add_external_account);
         listViewExternalAccounts = findViewById(R.id.listView_external_accounts);
 
-        editTextExternalAccountEmail.setVisibility(View.INVISIBLE);
-        buttonAddExternalAccount.setVisibility(View.INVISIBLE);
-        listViewExternalAccounts.setVisibility(View.INVISIBLE);
+        editTextExternalAccountName.setVisibility(View.GONE);
+        editTextExternalAccountEmail.setVisibility(View.GONE);
+        buttonAddExternalAccount.setVisibility(View.GONE);
+        listViewExternalAccounts.setVisibility(View.GONE);
 
         checkBoxExternalAccount.setOnClickListener(v -> {
             if (checkBoxExternalAccount.isChecked()) {
+                editTextExternalAccountName.setVisibility(View.VISIBLE);
                 editTextExternalAccountEmail.setVisibility(View.VISIBLE);
                 buttonAddExternalAccount.setVisibility(View.VISIBLE);
-                listViewExternalAccounts.setVisibility(View.VISIBLE);
                 listViewExternalAccounts.setAdapter(externalUserAdapter);
-            }
 
-            else{
-                editTextExternalAccountEmail.setVisibility(View.INVISIBLE);
-                buttonAddExternalAccount.setVisibility(View.INVISIBLE);
-                listViewExternalAccounts.setVisibility(View.INVISIBLE);
+            } else {
+                editTextExternalAccountEmail.setVisibility(View.GONE);
+                buttonAddExternalAccount.setVisibility(View.GONE);
+                listViewExternalAccounts.setVisibility(View.GONE);
             }
         });
-
 
         database.collection("Accounts")
                 .whereEqualTo("internalAccount", true)
@@ -103,6 +104,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                         }
                     }
                     accountAdapter.notifyDataSetChanged();
+                    ListViewHelper.setListViewSizeDynamically(accountAdapter, listView);
                 });
     }
 
@@ -115,8 +117,9 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                 .onSuccessTask(this::addCurrentUsersAccountToList);
 
         List<Task<Void>> externalAccountRetrieverTasks = new ArrayList<>();
-        for (final String email : externalAccountItems) {
-            Task<Void> externalAccountRetrieverTask = getExternalAccountRetrieverTask(email);
+        for (final String email : externalAccountNameAndEmails.keySet()) {
+            String ownerName = externalAccountNameAndEmails.get(email);
+            Task<Void> externalAccountRetrieverTask = getExternalAccountRetrieverTask(ownerName, email);
             externalAccountRetrieverTasks.add(externalAccountRetrieverTask);
         }
 
@@ -140,28 +143,30 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         return Tasks.forException(new Exception("User's account doesn't exist"));
     }
 
-    private Task<Void> getExternalAccountRetrieverTask(String email) {
+    private Task<Void> getExternalAccountRetrieverTask(String ownerName, String email) {
         return database.collection("Accounts")
                 .whereEqualTo("email", email).get()
-                .onSuccessTask(task -> getOrCreateExternalAccount(email, task));
+                .onSuccessTask(task -> getOrCreateExternalAccount(ownerName, email, task));
     }
 
-    private Task<Void> getOrCreateExternalAccount(String email, QuerySnapshot accountSnapshot) {
-            Optional<Account> accountOptional = accountSnapshot.toObjects(Account.class).stream().findFirst();
-            if (accountOptional.isPresent()) {
-                accountAdapter.addSelectedAccountId(accountOptional.get().getId());
-                return Tasks.forResult(null);
-            } else {
-                final Account externalAccount = new Account(false, email);
-                return database.collection("Accounts")
-                        .document(externalAccount.getId())
-                        .set(externalAccount)
-                        .addOnCompleteListener(task11 -> {
-                            if (task11.isSuccessful()) {
-                                accountAdapter.addSelectedAccountId(externalAccount.getId());
-                            }
-                        });
-            }
+    private Task<Void> getOrCreateExternalAccount(String ownerName, String email, QuerySnapshot accountSnapshot) {
+        Optional<Account> accountOptional = accountSnapshot.toObjects(Account.class).stream().findFirst();
+        if (accountOptional.isPresent()) {
+            accountAdapter.addSelectedAccountId(accountOptional.get().getId());
+            Toast.makeText(getApplicationContext(), "Email already exists in the App. Name will be"+" "
+                    + accountOptional.get().getOwnerName(), Toast.LENGTH_LONG).show();
+            return Tasks.forResult(null);
+        } else {
+            final Account externalAccount = new Account(false, ownerName, email);
+            return database.collection("Accounts")
+                    .document(externalAccount.getId())
+                    .set(externalAccount)
+                    .addOnCompleteListener(task11 -> {
+                        if (task11.isSuccessful()) {
+                            accountAdapter.addSelectedAccountId(externalAccount.getId());
+                        }
+                    });
+        }
     }
 
     private void goToGroupPage(Void aVoid) {
@@ -181,12 +186,13 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     }
 
     public void addExternalAccount(View view) {
+        listViewExternalAccounts.setVisibility(View.VISIBLE);
+        String externalAccountName = editTextExternalAccountName.getText().toString();
         String externalAccountEmail = editTextExternalAccountEmail.getText().toString();
-        externalAccountItems.add(externalAccountEmail);
+        externalAccountNameAndEmails.put(externalAccountEmail, externalAccountName);
+        externalAccountList.add("Name:  " + externalAccountName + "   " + "Email:  " + externalAccountEmail);
         externalUserAdapter.notifyDataSetChanged();
+        editTextExternalAccountName.setText("");
         editTextExternalAccountEmail.setText("");
-        ListViewHelper.setListViewSizeDynamically(externalUserAdapter, listViewExternalAccounts);
-
-
     }
 }

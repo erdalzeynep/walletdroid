@@ -50,6 +50,14 @@
         android:textSize="18sp" />
 
     <EditText
+        android:id="@+id/editText_external_account_name"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:ems="10"
+        android:hint="enter name"
+        android:inputType="textPersonName" />
+
+    <EditText
         android:id="@+id/editText_external_account_email"
         android:layout_width="match_parent"
         android:layout_height="72dp"

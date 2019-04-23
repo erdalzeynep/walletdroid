@@ -27,8 +27,9 @@ public class Account {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Account(boolean isInternalAccount, String email) {
+    public Account(boolean isInternalAccount,String ownerName, String email) {
         this.isInternalAccount = isInternalAccount;
+        this.ownerName = ownerName;
         this.email = email;
         this.id = UUID.randomUUID().toString();
     }

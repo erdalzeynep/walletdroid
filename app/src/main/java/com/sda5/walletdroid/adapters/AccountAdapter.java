@@ -1,6 +1,8 @@
 package com.sda5.walletdroid.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,18 +45,20 @@ public class AccountAdapter extends ArrayAdapter<Account> {
 
         Account account = accounts.get(position);
 
+        final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account_item);
+        checkBoxAccount.setTag(account.getId());
+
         TextView textViewAccount = listItem.findViewById(R.id.textview_account_item);
         if(account.isInternalAccount()){
             textViewAccount.setText(account.getOwnerName());
         }
         else{
-            textViewAccount.setText(account.getEmail()+ "(external)");
+            textViewAccount.setText("Name: "+account.getOwnerName()+"\n"+"Email:"+account.getEmail());
+            textViewAccount.setTypeface(null, Typeface.ITALIC);
         }
 
         textViewAccount.setTag(account.getId());
 
-        final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account_item);
-        checkBoxAccount.setTag(account.getId());
 
         if (showCheckboxes) {
             checkBoxAccount.setVisibility(View.VISIBLE);
@@ -62,12 +66,15 @@ public class AccountAdapter extends ArrayAdapter<Account> {
             checkBoxAccount.setVisibility(View.GONE);
         }
 
+        View finalListItem = listItem;
         checkBoxAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String selectedAccountID = checkBoxAccount.getTag().toString();
             if (isChecked) {
                 selectedAccountIDList.add(selectedAccountID);
+                finalListItem.setBackgroundColor(Color.parseColor("#FFFFE0"));
             } else {
                 selectedAccountIDList.remove(selectedAccountID);
+                finalListItem.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
         });
 
