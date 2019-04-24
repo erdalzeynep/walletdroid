@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,6 +26,7 @@ import com.sda5.walletdroid.models.Category;
 import com.sda5.walletdroid.models.Expense;
 import com.sda5.walletdroid.models.Group;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,10 +43,14 @@ public class AddExpenseActivity extends AppCompatActivity {
     private Spinner sprBuyer;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Group selectedGroup;
+    private Button btnPickDate;
 
     // To save on database
     private EditText etTitle;
     private EditText etAmount;
+    private Button addExpenseUsers;
+    private Spinner addExpenseSpinner;
+    private CheckBox checkBoxGroupExpense;
     private LocalDate selectedDate;
     private Category selectedCategory;
     private ArrayList<String> groupMembersIds = new ArrayList<>();
@@ -65,7 +73,9 @@ public class AddExpenseActivity extends AppCompatActivity {
     // onRestoreInstanceState
     static String tempTitle;
     static String tempAmount;
+    static LocalDate tempDate;
     static int sprCategoryDefaultItem;
+    static boolean isGroupExpenseChecked;
 
     private Boolean done = false;
 
@@ -73,8 +83,35 @@ public class AddExpenseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
+        btnPickDate = findViewById(R.id.btnPickDate);
 
-        FirebaseApp.initializeApp(this);
+        addExpenseUsers = findViewById(R.id.btn_add_expense_users);
+        addExpenseSpinner = findViewById(R.id.spr_addExpense_users);
+        checkBoxGroupExpense = findViewById(R.id.checkBox_group_expense);
+
+        addExpenseUsers.setVisibility(View.GONE);
+        addExpenseSpinner.setVisibility(View.GONE);
+
+        checkBoxGroupExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    isGroupExpenseChecked = true;
+                    addExpenseUsers.setVisibility(View.VISIBLE);
+                    addExpenseSpinner.setVisibility(View.VISIBLE);
+
+                }
+                else {
+                    isGroupExpenseChecked = false;
+                    addExpenseUsers.setVisibility(View.GONE);
+                    addExpenseSpinner.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+
+                FirebaseApp.initializeApp(this);
         database = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
@@ -97,7 +134,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         catlist.add(new Category("Transportation", 5000));
 
 
-
         // Create spinner for user to choose the category of expense
         sprCategory = findViewById(R.id.spr_addExpense_category);
         ArrayAdapter adapterCategory = new ArrayAdapter(this, android.R.layout.simple_spinner_item, catlist);
@@ -118,7 +154,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         });
 
         if (expenseUsersId != null) {
-            sprBuyer = findViewById(R.id.spr_addExpense_buyer);
+            sprBuyer = findViewById(R.id.spr_addExpense_users);
             ArrayAdapter adapterBuyer = new ArrayAdapter(this, android.R.layout.simple_spinner_item, expenseUsersName);
             adapterBuyer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             adapterBuyer.notifyDataSetChanged();
@@ -145,7 +181,8 @@ public class AddExpenseActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 selectedDate = LocalDate.of(year, month, dayOfMonth);
-                Toast.makeText(AddExpenseActivity.this, selectedDate.toString(), Toast.LENGTH_SHORT).show();
+                String s = " " + dayOfMonth + " - " + month + " - " + year;
+                btnPickDate.setText(s);
             }
         };
     }
@@ -164,7 +201,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     }
 
     public void addExpenseUsers(View view) {
-        if(!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()){
+        if (!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()) {
             tempTitle = etTitle.getText().toString();
             tempAmount = etAmount.getText().toString();
         }
@@ -172,19 +209,25 @@ public class AddExpenseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void saveExpense(View v){
-        if(selectedDate == null){
+    public void saveExpense(View v) {
+        if (selectedDate == null) {
             selectedDate = LocalDate.now();
+        } else{
+            System.out.println("check");
         }
-        if(etTitle.getText().toString().trim().isEmpty() ||
+
+        if(isGroupExpenseChecked){
+
+        }
+        if (etTitle.getText().toString().trim().isEmpty() ||
                 etAmount.getText().toString().trim().isEmpty() ||
                 selectedCategory == null ||
                 groupId == null ||
                 selectedDate == null ||
                 expenseUsersId.size() == 0 || expenseUsersId == null ||
-                buyerId == null){
+                buyerId == null) {
             Toast.makeText(this, "Please enter all fields first", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             String title = etTitle.getText().toString().trim();
             double amount = Double.parseDouble(etAmount.getText().toString());
             String date = selectedDate.toString();
@@ -192,17 +235,17 @@ public class AddExpenseActivity extends AppCompatActivity {
             // creating hashmap to update balance in group collection
             balanceOfExpense = new HashMap<>();
 
-            for (String memberId: groupMembersIds){
+            for (String memberId : groupMembersIds) {
                 balanceOfExpense.put(memberId, 0.0);
             }
 
-            usersShare = - amount / expenseUsersId.size();
+            usersShare = -amount / expenseUsersId.size();
             buyerShare = amount + usersShare;
 
-            for(String usersId : expenseUsersId){
-                if(usersId == buyerId){
+            for (String usersId : expenseUsersId) {
+                if (usersId == buyerId) {
                     balanceOfExpense.put(usersId, buyerShare);
-                }else{
+                } else {
                     balanceOfExpense.put(usersId, usersShare);
                 }
             }
@@ -213,7 +256,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(QueryDocumentSnapshot queryDocumentSnapshot: queryDocumentSnapshots){
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 Group groupToUpdate = queryDocumentSnapshot.toObject(Group.class);
                                 oldBalanceOfGroup = groupToUpdate.getBalance();
                                 balanceToUpdate = new HashMap<>(oldBalanceOfGroup);
@@ -227,7 +270,7 @@ public class AddExpenseActivity extends AppCompatActivity {
 
             // creating expense object
 
-            Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId, date,expenseUsersId, false);
+            Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId, date, expenseUsersId, false);
 
             database.collection("Expenses").document(expense.getId()).set(expense).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -250,13 +293,15 @@ public class AddExpenseActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(!etTitle.getText().toString().trim().isEmpty()||!etAmount.getText().toString().trim().isEmpty()){
+        if (!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()) {
             outState.putString("Title", etTitle.getText().toString().trim());
             outState.putString("Amount", etAmount.getText().toString().trim());
             outState.putInt("CategoryPosition", sprCategoryDefaultItem);
 
+
             tempTitle = etTitle.getText().toString().trim();
             tempAmount = etAmount.getText().toString().trim();
+            tempDate = selectedDate;
         }
     }
 
@@ -273,5 +318,9 @@ public class AddExpenseActivity extends AppCompatActivity {
         super.onResume();
         etTitle.setText(tempTitle);
         etAmount.setText(tempAmount);
+        selectedDate = tempDate;
+        if(isGroupExpenseChecked){
+            checkBoxGroupExpense.setChecked(true);
+        }
     }
 }
