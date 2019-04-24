@@ -15,6 +15,8 @@ public class Expense {
     private ArrayList<String> expenseAccountIds;
     private boolean isRecursive;
 
+    public Expense() {
+    }
 
     public Expense(String title, Double amount, Category category, String payerAccountId, String groupId, String date,
                    Long dateMillisec, ArrayList<String> expenseAccountIds, boolean isRecursive) {
