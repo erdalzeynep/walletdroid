@@ -27,25 +27,31 @@
         android:id="@+id/spr_addExpense_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-       />
+        android:layout_marginTop="30dp" />
 
     <Button
+        android:id="@+id/btnPickDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Pick a date"
-        android:onClick="pickDate"/>
+        android:onClick="pickDate"
+        android:text="Pick a date" />
 
-        <Button
-            android:id="@+id/btnCancel"
+    <CheckBox
+        android:id="@+id/checkBox_group_expense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Group expense?" />
+
+    <Button
+            android:id="@+id/btn_add_expense_users"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Expense Users"
             android:onClick="addExpenseUsers"/>
 
     <Spinner
-        android:id="@+id/spr_addExpense_buyer"
+        android:id="@+id/spr_addExpense_users"
         android:layout_width="match_parent"
         android:layout_height="40dp"/>
 
@@ -54,4 +60,5 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:onClick="saveExpense"/>
+
 </LinearLayout>
