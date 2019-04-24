@@ -70,8 +70,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     static String tempAmount;
     static int sprCategoryDefaultItem;
     static int sprCurrencyDefaultItem;
-
-    private Boolean done = false;
+    HashMap<String, Double> CurMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,15 +91,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.txt_addExpense_expenseTitle);
         etAmount = findViewById(R.id.txt_addExpense_expenseAmount);
 
-        // Fake Hashmap for rates:
-        HashMap<String, Double> CurMap = new HashMap<>();
-        CurMap.put("SEK", 1.0);
-        CurMap.put("EUR", 0.0951746455);
-        CurMap.put("USD", 0.1070238888);
-        CurMap.put("NOK", 0.9122013895);
-        CurMap.put("GHD", 1000000000.0);
-        CurMap.put("DKK", 0.7105643856);
-
         // Create spinner for currencies
         ArrayList<String> currencies = new ArrayList<>();
         currencies.add("SEK");
@@ -108,6 +98,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         currencies.add("USD");
         currencies.add("NOK");
         currencies.add("DKK");
+
         sprCurrency = findViewById(R.id.sprCurrency);
         ArrayAdapter<String> adapterCurrency = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currencies);
         adapterCurrency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -117,7 +108,6 @@ public class AddExpenseActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedCurrency = (String) parent.getItemAtPosition(position);
-                rate = 1 / CurMap.get(selectedCurrency);
                 sprCurrencyDefaultItem = position;
             }
 
@@ -217,10 +207,15 @@ public class AddExpenseActivity extends AppCompatActivity {
                 selectedCategory == null ||
                 groupId == null ||
                 selectedDate == null ||
-                expenseUsersId.size() == 0 || expenseUsersId == null ||
+                expenseUsersId.size() == 0 ||
                 buyerId == null){
             Toast.makeText(this, "Please enter all fields first", Toast.LENGTH_SHORT).show();
         }else{
+            // Fetch data from API for getting rate for different currencies.
+            exchangeRatesMap exchangeRatesMap = new exchangeRatesMap();
+            CurMap = exchangeRatesMap.getCurrMap();
+            rate = 1 / CurMap.get(selectedCurrency);
+
             String title = etTitle.getText().toString().trim();
             double amount = rate * Double.parseDouble(etAmount.getText().toString());
             String date = selectedDate.toString();
@@ -254,7 +249,6 @@ public class AddExpenseActivity extends AppCompatActivity {
                                 oldBalanceOfGroup = groupToUpdate.getBalance();
                                 balanceToUpdate = new HashMap<>(oldBalanceOfGroup);
                                 balanceOfExpense.forEach((k, v) -> balanceToUpdate.merge(k, v, (a, b) -> a + b));
-                                System.out.println("check");
                                 //update the balance
                                 database.collection("Groups").document(groupId).update("balance", balanceToUpdate);
                             }
@@ -264,7 +258,6 @@ public class AddExpenseActivity extends AppCompatActivity {
             // creating expense object
 
             Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId, date,expenseUsersId, false);
-            System.out.println("chekc");
             database.collection("Expenses").document(expense.getId()).set(expense).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
