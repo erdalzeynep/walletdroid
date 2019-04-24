@@ -4,53 +4,36 @@
     android:layout_height="fill_parent"
     >
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="10dp">
 
     <TextView
-        android:id="@+id/lbl_group_name"
-        android:layout_width="388dp"
-        android:layout_height="63dp"
+        android:id="@+id/textView_user_list"
+        android:layout_width="375dp"
+        android:layout_height="70dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
-        android:text="Group Name"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/et_group_name"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:hint="Enter group name" />
-
-    <TextView
-        android:id="@+id/lbl_select_people"
-        android:layout_width="388dp"
-        android:layout_height="69dp"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:gravity="center_horizontal|left|center_vertical"
-        android:text="Select people"
-        android:textSize="24sp"
+        android:text="User List"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <ListView
         android:id="@+id/account_list"
-        android:layout_width="match_parent"
-        android:layout_height="203dp" />
+        android:layout_width="374dp"
+        android:layout_height="241dp"
+        android:layout_gravity="clip_vertical|center_horizontal" />
 
     <CheckBox
-        android:id="@+id/checkBox_external_account"
+        android:id="@+id/cb_external_account_add_member"
         android:layout_width="297dp"
         android:layout_height="52dp"
         android:text="Continue with external person"
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/editText_external_account_name"
+        android:id="@+id/et_external_name_add_member"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:ems="10"
@@ -58,7 +41,7 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editText_external_account_email"
+        android:id="@+id/et_external_email_add_member"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:ems="10"
@@ -66,24 +49,24 @@
         android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/button_add_external_account"
+        android:id="@+id/button_add_external_add_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add"
-        android:onClick="addExternalAccount"/>
+        android:onClick="addExternalMembersToListView"/>
 
     <ListView
-        android:id="@+id/listView_external_accounts"
+        android:id="@+id/listView_external_add_member"
         android:layout_width="match_parent"
         android:layout_height="120dp" />
 
     <Button
-        android:id="@+id/btn_create_group"
+        android:id="@+id/btn_add_member_to_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="saveNewGroup"
-        android:text="Create Group" />
-
+        android:layout_margin="5dp"
+        android:text="Update"
+        android:onClick="addMembersToGroup"/>
 
 </LinearLayout>
 </ScrollView>

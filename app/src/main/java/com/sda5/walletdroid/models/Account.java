@@ -25,15 +25,13 @@ public class Account {
         this.monthlyBudget = monthlyBudget;
         this.monthlySave = monthlySave;
         this.id = UUID.randomUUID().toString();
-
     }
 
-    public Account(boolean isInternalAccount, String ownerName, String email) {
+    public Account(boolean isInternalAccount,String ownerName, String email) {
         this.isInternalAccount = isInternalAccount;
         this.ownerName = ownerName;
         this.email = email;
         this.id = UUID.randomUUID().toString();
-
     }
 
     public Account( boolean isInternalAccount, String ownerName, String email, String tokenID) {
