@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Category;
 import com.sda5.walletdroid.models.Expense;
 import com.sda5.walletdroid.models.Group;
@@ -238,23 +239,45 @@ public class AddExpenseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void saveExpense(View v) {
+    public void checkExpeseForPersonal(View view){
+        if (!isGroupExpenseChecked){
+            database.collection("Accounts").whereEqualTo("userID", currentUserId).limit(1).get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(QueryDocumentSnapshot queryDocumentSnapshot: queryDocumentSnapshots){
+                                Account currentAccount = queryDocumentSnapshot.toObject(Account.class);
+                                expenseUsersId = new ArrayList<>();
+                                expenseUsersId.add(currentAccount.getId());
+                                buyerId = currentAccount.getId();
+                            }
+                            saveExpense();
+                        }
+                    });
+
+        } else {
+            if(groupId!= null){
+                saveExpense();
+            } else {
+                Toast.makeText(this, "There is no Group assigned", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    public void saveExpense() {
         if (selectedDate == null) {
             selectedDate = LocalDate.now();
-        } else {
-            System.out.println("check");
         }
-
 
         if (etTitle.getText().toString().trim().isEmpty() ||
                 etAmount.getText().toString().trim().isEmpty() ||
                 selectedCategory == null ||
-                groupId == null ||
                 selectedDate == null ||
                 expenseUsersId.size() == 0 ||
                 buyerId == null){
             Toast.makeText(this, "Please enter all fields first", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             // Fetch data from API for getting rate for different currencies.
             exchangeRatesMap exchangeRatesMap = new exchangeRatesMap();
             CurMap = exchangeRatesMap.getCurrMap();
@@ -265,39 +288,41 @@ public class AddExpenseActivity extends AppCompatActivity {
             dateMillisec = selectedDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
             // creating hashmap to update balance in group collection
-            balanceOfExpense = new HashMap<>();
+            if (groupId != null){
+                balanceOfExpense = new HashMap<>();
 
-            for (String memberId : groupMembersIds) {
-                balanceOfExpense.put(memberId, 0.0);
-            }
-
-            usersShare = -amount / expenseUsersId.size();
-            buyerShare = amount + usersShare;
-
-            for (String usersId : expenseUsersId) {
-                if (usersId == buyerId) {
-                    balanceOfExpense.put(usersId, buyerShare);
-                } else {
-                    balanceOfExpense.put(usersId, usersShare);
+                for (String memberId : groupMembersIds) {
+                    balanceOfExpense.put(memberId, 0.0);
                 }
+
+                usersShare = -amount / expenseUsersId.size();
+                buyerShare = amount + usersShare;
+
+                for (String usersId : expenseUsersId) {
+                    if (usersId == buyerId) {
+                        balanceOfExpense.put(usersId, buyerShare);
+                    } else {
+                        balanceOfExpense.put(usersId, usersShare);
+                    }
+                }
+
+                // Getting existing group balance hashmap from database
+                database.collection("Groups").whereEqualTo("id", groupId).limit(1).get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                    Group groupToUpdate = queryDocumentSnapshot.toObject(Group.class);
+                                    oldBalanceOfGroup = groupToUpdate.getBalance();
+                                    balanceToUpdate = new HashMap<>(oldBalanceOfGroup);
+                                    balanceOfExpense.forEach((k, v) -> balanceToUpdate.merge(k, v, (a, b) -> a + b));
+                                    //update the balance
+                                    database.collection("Groups").document(groupId).update("balance", balanceToUpdate);
+                                }
+                            }
+                        });
             }
 
-            // Getting existing group balance hashmap from database
-
-            database.collection("Groups").whereEqualTo("id", groupId).limit(1).get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                Group groupToUpdate = queryDocumentSnapshot.toObject(Group.class);
-                                oldBalanceOfGroup = groupToUpdate.getBalance();
-                                balanceToUpdate = new HashMap<>(oldBalanceOfGroup);
-                                balanceOfExpense.forEach((k, v) -> balanceToUpdate.merge(k, v, (a, b) -> a + b));
-                                //update the balance
-                                database.collection("Groups").document(groupId).update("balance", balanceToUpdate);
-                            }
-                        }
-                    });
 
             // creating expense object
             Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId,
