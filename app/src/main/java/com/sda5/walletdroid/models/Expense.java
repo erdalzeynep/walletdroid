@@ -11,18 +11,21 @@ public class Expense {
     private String payerAccountId;
     private String groupId;
     private String date;
-    private ArrayList<String> expenseUsersIds;
+    private Long dateMillisec;
+    private ArrayList<String> expenseAccountIds;
     private boolean isRecursive;
 
 
-    public Expense(String title, Double amount, Category category, String payerAccountId, String groupId, String date, ArrayList<String> expenseUsersIds, boolean isRecursive) {
+    public Expense(String title, Double amount, Category category, String payerAccountId, String groupId, String date,
+                   Long dateMillisec, ArrayList<String> expenseAccountIds, boolean isRecursive) {
         this.title = title;
         this.amount = amount;
         this.category = category;
         this.payerAccountId = payerAccountId;
         this.groupId = groupId;
         this.date = date;
-        this.expenseUsersIds = expenseUsersIds;
+        this.dateMillisec = dateMillisec;
+        this.expenseAccountIds = expenseAccountIds;
         this.isRecursive = isRecursive;
         this.id = UUID.randomUUID().toString();
     }
@@ -83,12 +86,12 @@ public class Expense {
         this.date = date;
     }
 
-    public ArrayList<String> getExpenseUsersIds() {
-        return expenseUsersIds;
+    public ArrayList<String> getExpenseAccountIds() {
+        return expenseAccountIds;
     }
 
-    public void setExpenseUsersIds(ArrayList<String> expenseUsersIds) {
-        this.expenseUsersIds = expenseUsersIds;
+    public void setExpenseAccountIds(ArrayList<String> expenseAccountIds) {
+        this.expenseAccountIds = expenseAccountIds;
     }
 
     public boolean isRecursive() {
@@ -97,5 +100,13 @@ public class Expense {
 
     public void setRecursive(boolean recursive) {
         isRecursive = recursive;
+    }
+
+    public Long getDateMillisec() {
+        return dateMillisec;
+    }
+
+    public void setDateMillisec(Long dateMillisec) {
+        this.dateMillisec = dateMillisec;
     }
 }

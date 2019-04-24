@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
@@ -26,14 +29,11 @@ import com.sda5.walletdroid.models.Category;
 import com.sda5.walletdroid.models.Expense;
 import com.sda5.walletdroid.models.Group;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class AddExpenseActivity extends AppCompatActivity {
 
@@ -52,6 +52,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     private Spinner addExpenseSpinner;
     private CheckBox checkBoxGroupExpense;
     private LocalDate selectedDate;
+    private Long dateMillisec;
     private Category selectedCategory;
     private ArrayList<String> groupMembersIds = new ArrayList<>();
     private ArrayList<String> expenseUsersId = new ArrayList<>();
@@ -95,13 +96,12 @@ public class AddExpenseActivity extends AppCompatActivity {
         checkBoxGroupExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     isGroupExpenseChecked = true;
                     addExpenseUsers.setVisibility(View.VISIBLE);
                     addExpenseSpinner.setVisibility(View.VISIBLE);
 
-                }
-                else {
+                } else {
                     isGroupExpenseChecked = false;
                     addExpenseUsers.setVisibility(View.GONE);
                     addExpenseSpinner.setVisibility(View.GONE);
@@ -111,7 +111,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         });
 
 
-                FirebaseApp.initializeApp(this);
+        FirebaseApp.initializeApp(this);
         database = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
@@ -180,8 +180,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                selectedDate = LocalDate.of(year, month, dayOfMonth);
-                String s = " " + dayOfMonth + " - " + month + " - " + year;
+                selectedDate = LocalDate.of(year, month+1, dayOfMonth);
+                String s = " " + dayOfMonth + " - " + (month +1)+ " - " + year;
                 btnPickDate.setText(s);
             }
         };
@@ -212,13 +212,11 @@ public class AddExpenseActivity extends AppCompatActivity {
     public void saveExpense(View v) {
         if (selectedDate == null) {
             selectedDate = LocalDate.now();
-        } else{
+        } else {
             System.out.println("check");
         }
 
-        if(isGroupExpenseChecked){
 
-        }
         if (etTitle.getText().toString().trim().isEmpty() ||
                 etAmount.getText().toString().trim().isEmpty() ||
                 selectedCategory == null ||
@@ -231,6 +229,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             String title = etTitle.getText().toString().trim();
             double amount = Double.parseDouble(etAmount.getText().toString());
             String date = selectedDate.toString();
+            dateMillisec = selectedDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
             // creating hashmap to update balance in group collection
             balanceOfExpense = new HashMap<>();
@@ -270,7 +269,8 @@ public class AddExpenseActivity extends AppCompatActivity {
 
             // creating expense object
 
-            Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId, date, expenseUsersId, false);
+            Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId,
+                    date, dateMillisec, expenseUsersId, false);
 
             database.collection("Expenses").document(expense.getId()).set(expense).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -319,7 +319,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         etTitle.setText(tempTitle);
         etAmount.setText(tempAmount);
         selectedDate = tempDate;
-        if(isGroupExpenseChecked){
+        if (isGroupExpenseChecked) {
             checkBoxGroupExpense.setChecked(true);
         }
     }
