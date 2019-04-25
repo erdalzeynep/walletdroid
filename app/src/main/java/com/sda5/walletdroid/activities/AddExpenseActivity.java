@@ -256,33 +256,29 @@ public class AddExpenseActivity extends AppCompatActivity {
                         }
                     });
 
+
         } else {
             if(groupId!= null){
                 saveExpense();
             } else {
                 Toast.makeText(this, "There is no Group assigned", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
     public void saveExpense() {
         if (selectedDate == null) {
             selectedDate = LocalDate.now();
-        } else {
-            System.out.println("check");
         }
-
 
         if (etTitle.getText().toString().trim().isEmpty() ||
                 etAmount.getText().toString().trim().isEmpty() ||
                 selectedCategory == null ||
-                groupId == null ||
                 selectedDate == null ||
                 expenseUsersId.size() == 0 ||
                 buyerId == null){
             Toast.makeText(this, "Please enter all fields first", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             // Fetch data from API for getting rate for different currencies.
             exchangeRatesMap exchangeRatesMap = new exchangeRatesMap();
             CurMap = exchangeRatesMap.getCurrMap();
@@ -293,39 +289,41 @@ public class AddExpenseActivity extends AppCompatActivity {
             dateMillisec = selectedDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
             // creating hashmap to update balance in group collection
-            balanceOfExpense = new HashMap<>();
+            if (groupId != null){
+                balanceOfExpense = new HashMap<>();
 
-            for (String memberId : groupMembersIds) {
-                balanceOfExpense.put(memberId, 0.0);
-            }
-
-            usersShare = -amount / expenseUsersId.size();
-            buyerShare = amount + usersShare;
-
-            for (String usersId : expenseUsersId) {
-                if (usersId == buyerId) {
-                    balanceOfExpense.put(usersId, buyerShare);
-                } else {
-                    balanceOfExpense.put(usersId, usersShare);
+                for (String memberId : groupMembersIds) {
+                    balanceOfExpense.put(memberId, 0.0);
                 }
+
+                usersShare = -amount / expenseUsersId.size();
+                buyerShare = amount + usersShare;
+
+                for (String usersId : expenseUsersId) {
+                    if (usersId == buyerId) {
+                        balanceOfExpense.put(usersId, buyerShare);
+                    } else {
+                        balanceOfExpense.put(usersId, usersShare);
+                    }
+                }
+
+                // Getting existing group balance hashmap from database
+                database.collection("Groups").whereEqualTo("id", groupId).limit(1).get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                    Group groupToUpdate = queryDocumentSnapshot.toObject(Group.class);
+                                    oldBalanceOfGroup = groupToUpdate.getBalance();
+                                    balanceToUpdate = new HashMap<>(oldBalanceOfGroup);
+                                    balanceOfExpense.forEach((k, v) -> balanceToUpdate.merge(k, v, (a, b) -> a + b));
+                                    //update the balance
+                                    database.collection("Groups").document(groupId).update("balance", balanceToUpdate);
+                                }
+                            }
+                        });
             }
 
-            // Getting existing group balance hashmap from database
-
-            database.collection("Groups").whereEqualTo("id", groupId).limit(1).get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                Group groupToUpdate = queryDocumentSnapshot.toObject(Group.class);
-                                oldBalanceOfGroup = groupToUpdate.getBalance();
-                                balanceToUpdate = new HashMap<>(oldBalanceOfGroup);
-                                balanceOfExpense.forEach((k, v) -> balanceToUpdate.merge(k, v, (a, b) -> a + b));
-                                //update the balance
-                                database.collection("Groups").document(groupId).update("balance", balanceToUpdate);
-                            }
-                        }
-                    });
 
             // creating expense object
             Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId,
