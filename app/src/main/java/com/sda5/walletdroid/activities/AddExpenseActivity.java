@@ -251,9 +251,11 @@ public class AddExpenseActivity extends AppCompatActivity {
                                 expenseUsersId.add(currentAccount.getId());
                                 buyerId = currentAccount.getId();
                             }
+                            groupId = null;
                             saveExpense();
                         }
                     });
+
 
         } else {
             if(groupId!= null){
@@ -261,7 +263,6 @@ public class AddExpenseActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "There is no Group assigned", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
