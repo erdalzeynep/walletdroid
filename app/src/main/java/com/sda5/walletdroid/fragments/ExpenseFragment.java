@@ -69,7 +69,6 @@ public class ExpenseFragment extends Fragment {
                     }
                 }
         );
-
         return v;
     }
 }

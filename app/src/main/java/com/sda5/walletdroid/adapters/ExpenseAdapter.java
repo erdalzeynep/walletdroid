@@ -34,7 +34,6 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
         this.expenses = expenses;
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -53,36 +52,6 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
         tvExpenseAmount.setText(Double.toString(Math.round(expense.getAmount() * 10) / 10.0));
         tvExpenseDate.setTypeface(null, Typeface.ITALIC);
 
-//        textViewAccount.setTag(account.getId());
-//
-//
-//        if (showCheckboxes) {
-//            checkBoxAccount.setVisibility(View.VISIBLE);
-//        } else {
-//            checkBoxAccount.setVisibility(View.GONE);
-//        }
-//
-//        View finalListItem = listItem;
-//        checkBoxAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            String selectedAccountID = checkBoxAccount.getTag().toString();
-//            if (isChecked) {
-//                selectedAccountIDList.add(selectedAccountID);
-//                finalListItem.setBackgroundColor(Color.parseColor("#FFFFE0"));
-//            } else {
-//                selectedAccountIDList.remove(selectedAccountID);
-//                finalListItem.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//            }
-//        });
-
         return listItem;
     }
-
-//    public List<String> getSelectedAccountIDList() {
-//        return selectedAccountIDList;
-//    }
-//
-//
-//    public void addSelectedAccountId(String accountId){
-//        this.selectedAccountIDList.add(accountId);
-//    }
 }
