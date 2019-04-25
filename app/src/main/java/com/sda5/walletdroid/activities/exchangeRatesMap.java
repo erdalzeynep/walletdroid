@@ -1,25 +1,13 @@
 package com.sda5.walletdroid.activities;
 
-import android.os.AsyncTask;
 import android.util.Log;
-
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 
 public class exchangeRatesMap {
@@ -60,12 +48,6 @@ public class exchangeRatesMap {
 
                     CurMap.putAll(hashmap);
                     System.out.println("check");
-//                    for (String t : CurMap.keySet()) {
-//                        String key = t.toString();
-//                        String value = CurrMap.get(t).toString();
-//                        System.out.println(key + "  " + value);
-//                    }
-
                 }
 
             } catch (IOException e) {
@@ -73,27 +55,10 @@ public class exchangeRatesMap {
             }
             httpsURLConnection.disconnect();
         }
-
-
     }
-
-//    @Override
-//    protected Long doInBackground(URL... urls) {
-//
-//        return null;
-//    }
-
-//    @Override
-//    protected void onPostExecute(Long aLong) {
-//        super.onPostExecute(aLong);
-//
-//    }
 
     public HashMap<String, Double> getCurrMap() {
         this.currMap();
         return CurMap;
     }
 }
-
-
-
