@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Category;
 import com.sda5.walletdroid.models.Expense;
 import com.sda5.walletdroid.models.Group;
@@ -238,7 +239,34 @@ public class AddExpenseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void saveExpense(View v) {
+    public void checkExpeseForPersonal(View view){
+        if (!isGroupExpenseChecked){
+            database.collection("Accounts").whereEqualTo("userID", currentUserId).limit(1).get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(QueryDocumentSnapshot queryDocumentSnapshot: queryDocumentSnapshots){
+                                Account currentAccount = queryDocumentSnapshot.toObject(Account.class);
+                                expenseUsersId = new ArrayList<>();
+                                expenseUsersId.add(currentAccount.getId());
+                                buyerId = currentAccount.getId();
+                            }
+                            groupId = null;
+                            saveExpense();
+                        }
+                    });
+
+        } else {
+            if(groupId!= null){
+                saveExpense();
+            } else {
+                Toast.makeText(this, "There is no Group assigned", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    public void saveExpense() {
         if (selectedDate == null) {
             selectedDate = LocalDate.now();
         } else {
