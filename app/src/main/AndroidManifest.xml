@@ -38,7 +38,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.AddNewGroupMemberActivity"></activity>
 
         <activity android:name=".activities.AddNewGroupMemberActivity" />
         <activity android:name=".activities.GroupDetailActivity" />
