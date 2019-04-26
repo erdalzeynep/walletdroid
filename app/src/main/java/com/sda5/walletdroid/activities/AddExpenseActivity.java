@@ -56,7 +56,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     private CheckBox checkBoxGroupExpense;
     private LocalDate selectedDate;
     private Long dateMillisec;
-    private Category selectedCategory;
+    private String selectedCategory;
     private ArrayList<String> groupMembersIds = new ArrayList<>();
     private ArrayList<String> expenseUsersId = new ArrayList<>();
     private ArrayList<String> expenseUsersName = new ArrayList<>();
@@ -159,10 +159,16 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         // Create sample category list for now
         // TODO update this when category is decided by team. it should retrieve data from fire store
-        ArrayList<Category> catlist = new ArrayList<>();
-        catlist.add(new Category("Food", 2000));
-        catlist.add(new Category("Clothes", 3000));
-        catlist.add(new Category("Transportation", 5000));
+        ArrayList<String> catlist = new ArrayList<>();
+        catlist.add("Grocery");
+        catlist.add("Clothes");
+        catlist.add("Transportation");
+        catlist.add("Recurring");
+        catlist.add("Eat out");
+        catlist.add("Utility");
+        catlist.add("Clothes");
+        catlist.add("Membership");
+        catlist.add("Other");
 
         // Create spinner for user to choose the category of expense
         sprCategory = findViewById(R.id.spr_addExpense_category);
@@ -173,7 +179,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         sprCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCategory = (Category) parent.getItemAtPosition(position);
+                selectedCategory = (String) parent.getItemAtPosition(position);
                 sprCategoryDefaultItem = position;
             }
 
@@ -346,6 +352,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                         }
                     });
         }
+        finish();
     }
 
     @Override
