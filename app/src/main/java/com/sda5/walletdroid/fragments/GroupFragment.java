@@ -41,11 +41,11 @@ public class GroupFragment extends Fragment {
         database = FirebaseFirestore.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
 
-        ListView listView = v.findViewById(R.id.group_list);
-        listView.setScrollingCacheEnabled(false);
+       // ListView listView = v.findViewById(R.id.group_list);
+        //listView.setScrollingCacheEnabled(false);
 
-        groupAdapter = new GroupAdapter(v.getContext(), groups);
-        listView.setAdapter(groupAdapter);
+        //groupAdapter = new GroupAdapter(v.getContext(), groups);
+        //listView.setAdapter(groupAdapter);
 
         database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 task -> {
