@@ -55,7 +55,7 @@ public class ExpenseFragment extends Fragment {
                             if (account.isPresent()) {
                                 accountId = account.get().getId();
                                 database.collection("Expenses")
-                                        .whereArrayContains("expenseUsersIds", accountId)
+                                        .whereArrayContains("expenseAccountIds", accountId)
                                         .get()
                                         .addOnSuccessListener(queryDocumentSnapshots -> {
                                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
