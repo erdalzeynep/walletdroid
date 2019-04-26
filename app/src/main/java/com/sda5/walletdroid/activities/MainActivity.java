@@ -22,7 +22,7 @@ import com.sda5.walletdroid.R;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private SignInButton mSignInButton;
+    private com.shobhitpuri.custombuttons.GoogleSignInButton mSignInButton;
     private EditText etEmail;
     private EditText etPassword;
 
