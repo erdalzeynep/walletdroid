@@ -7,7 +7,7 @@ public class Expense {
     private String id;
     private String title;
     private Double amount;
-    private Category category;
+    private String category;
     private String payerAccountId;
     private String groupId;
     private String date;
@@ -18,7 +18,7 @@ public class Expense {
     public Expense() {
     }
 
-    public Expense(String title, Double amount, Category category, String payerAccountId, String groupId, String date,
+    public Expense(String title, Double amount, String category, String payerAccountId, String groupId, String date,
                    Long dateMillisec, ArrayList<String> expenseAccountIds, boolean isRecursive) {
         this.title = title;
         this.amount = amount;
@@ -56,11 +56,11 @@ public class Expense {
         this.amount = amount;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
