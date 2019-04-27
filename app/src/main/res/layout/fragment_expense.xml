@@ -20,10 +20,23 @@
         android:layout_height="382dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add expense"
-        android:onClick="addExpense"/>
+        android:weightSum="2">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add expense"
+            android:onClick="addExpense"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Search"
+            android:onClick="goToQuery"/>
+    </LinearLayout>
+
 
 </LinearLayout>
