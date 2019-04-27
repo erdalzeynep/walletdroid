@@ -15,21 +15,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".activities.AddExpenseUsersActivity"></activity>
+        <activity android:name=".activities.QueryActivity"></activity>
+        <activity android:name=".activities.AddExpenseUsersActivity" />
         <activity android:name=".activities.ChooseGroupForExpenseActivity" />
-        <activity android:name=".activities.AddNewGroupMemberActivity" />
-
-        <!-- Splash Screen -->
-        <activity android:name=".SplashScreen"
+        <activity android:name=".activities.AddNewGroupMemberActivity" /> <!-- Splash Screen -->
+        <activity
+            android:name=".SplashScreen"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-       <!-- Main Activity -->
+        </activity> <!-- Main Activity -->
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,8 +35,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
         <activity android:name=".activities.AddNewGroupMemberActivity" />
         <activity android:name=".activities.GroupDetailActivity" />
         <activity android:name=".activities.CreateNewGroupActivity" /> <!-- Sign up Activity -->
@@ -49,17 +45,13 @@
         <activity
             android:name=".activities.ServiceActivity"
             android:label="@string/title_activity_service"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.AddExpenseActivity"
-            android:label="@string/title_activity_add_expense"
-            />
-
-        <!-- Google Sing in Activity -->
+            android:label="@string/title_activity_add_expense" /> <!-- Google Sing in Activity -->
         <activity
             android:name=".activities.SigninGoogle"
-            android:label="@string/manifest_google_sign_in" />
-        <!-- Creating graphs -->
+            android:label="@string/manifest_google_sign_in" /> <!-- Creating graphs -->
         <activity
             android:name=".activities.Graphs.MultiLineChartActivity"
             android:label="multiLineChart" />
