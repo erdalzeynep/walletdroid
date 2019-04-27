@@ -81,7 +81,13 @@ public class QueryActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 fromDate = LocalDate.of(year, month+1, dayOfMonth);
                 String s = " " + dayOfMonth + " - " + (month +1)+ " - " + year;
-                btnDateFrom.setText(s);
+                if(fromDate.compareTo(LocalDate.now()) > 0){
+                    Toast.makeText(QueryActivity.this, "The Start date must be past", Toast.LENGTH_SHORT).show();
+                    fromDate = null;
+                } else {
+                    btnDateFrom.setText(s);
+                }
+
             }
         };
 
