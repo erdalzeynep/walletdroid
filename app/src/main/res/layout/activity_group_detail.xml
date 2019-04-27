@@ -22,7 +22,7 @@
         android:layout_gravity="clip_vertical|center_horizontal" />
 
     <Button
-        android:id="@+id/btn_group_expenses"
+        android:id="@+id/btn_settle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"

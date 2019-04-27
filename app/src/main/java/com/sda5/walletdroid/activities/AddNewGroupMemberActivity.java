@@ -29,6 +29,7 @@ import com.sda5.walletdroid.models.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class AddNewGroupMemberActivity extends AppCompatActivity {
@@ -38,7 +39,6 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
     private FirebaseFirestore database;
     private String groupID;
     private Group group;
-    private CheckBox checkBoxExternalAccount;
     private EditText editTextExternalAccountName;
     private EditText editTextExternalAccountEmail;
     private Button buttonAddExternalAccount;
@@ -68,7 +68,7 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
         accountAdapter = new AccountAdapter(getApplicationContext(), accounts, true);
         listView.setAdapter(accountAdapter);
 
-        checkBoxExternalAccount = findViewById(R.id.cb_external_account_add_member);
+        CheckBox checkBoxExternalAccount = findViewById(R.id.cb_external_account_add_member);
         editTextExternalAccountName = findViewById(R.id.et_external_name_add_member);
         editTextExternalAccountEmail = findViewById(R.id.et_external_email_add_member);
         buttonAddExternalAccount = findViewById(R.id.button_add_external_add_member);
@@ -158,12 +158,20 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
     }
 
     private Task<Void> persistGroup(Task<Void> voidTask) {
+        Map<String, Double> groupBalance = group.getBalance();
         group.getAccountIdList().addAll(accountAdapter.getSelectedAccountIDList());
+        for (String accountID : accountAdapter.getSelectedAccountIDList()) {
+            groupBalance.put(accountID, 0.0);
+        }
+
         return database.collection("Groups")
                 .document(groupID)
                 .update("accountIdList", group.getAccountIdList())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        database.collection("Groups")
+                                .document(groupID)
+                                .update("balance", groupBalance);
                         accountAdapter.notifyDataSetChanged();
                         Toast.makeText(AddNewGroupMemberActivity.this, "Members are added successfully",
                                 Toast.LENGTH_SHORT).show();
