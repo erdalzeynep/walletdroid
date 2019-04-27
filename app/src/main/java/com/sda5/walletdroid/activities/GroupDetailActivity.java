@@ -30,9 +30,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GroupDetailActivity extends AppCompatActivity {
-    String groupID;
-    FirebaseFirestore dataBase;
-    FirebaseAuth auth;
+    private String groupID;
+    private FirebaseFirestore dataBase;
+    private FirebaseAuth auth;
     private String currentUserId;
     private String accountId;
     private AccountAdapterGroupDetail accountAdapter;
@@ -79,7 +79,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                             Optional<Group> groupOptional = value.toObjects(Group.class).stream().findAny();
                             if (groupOptional.isPresent()) {
                                 group = groupOptional.get();
-                                accountAdapter = new AccountAdapterGroupDetail(getApplicationContext(), accounts, isGroupAdmin());
+                                accountAdapter = new AccountAdapterGroupDetail(getApplicationContext(),group, accounts, isGroupAdmin());
                                 listView.setAdapter(accountAdapter);
 
                                 if (!group.getAdminUserId().equals(currentUserId)) {
