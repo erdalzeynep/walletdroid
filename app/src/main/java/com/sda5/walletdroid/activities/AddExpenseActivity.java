@@ -243,6 +243,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         }
         Intent intent = new Intent(this, ChooseGroupForExpenseActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void checkExpeseForPersonal(View view){
@@ -339,10 +340,16 @@ public class AddExpenseActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(AddExpenseActivity.this, "Added successfully", Toast.LENGTH_SHORT).show();
-                    etAmount.setText("");
-                    etTitle.setText("");
                     sprCategory.setSelection(0);
                     sprCurrency.setSelection(0);
+                    sprCategoryDefaultItem = 0;
+                    sprCurrencyDefaultItem = 0;
+                    tempDate = LocalDate.now();
+                    tempAmount = "";
+                    tempTitle = "";
+                    etTitle.setText(tempTitle);
+                    etAmount.setText(tempAmount);
+                    checkBoxGroupExpense.setChecked(false);
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -352,7 +359,6 @@ public class AddExpenseActivity extends AppCompatActivity {
                         }
                     });
         }
-        finish();
     }
 
     @Override

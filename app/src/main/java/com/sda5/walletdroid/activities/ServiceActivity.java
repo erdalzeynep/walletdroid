@@ -238,4 +238,10 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
         Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
         startActivity(intent);
     }
+
+    public void goToQuery(View view){
+        Intent intent = new Intent(getApplicationContext(), com.sda5.walletdroid.activities.QueryActivity.class);
+        startActivity(intent);
+
+    }
 }
