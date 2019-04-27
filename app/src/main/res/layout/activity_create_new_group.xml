@@ -9,11 +9,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/lbl_group_name"
-        android:layout_width="388dp"
+        android:layout_width="match_parent"
         android:layout_height="63dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
@@ -29,7 +29,7 @@
 
     <TextView
         android:id="@+id/lbl_select_people"
-        android:layout_width="388dp"
+        android:layout_width="match_parent"
         android:layout_height="69dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"

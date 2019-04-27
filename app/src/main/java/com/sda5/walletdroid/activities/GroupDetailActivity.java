@@ -12,35 +12,33 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
-import com.sda5.walletdroid.adapters.AccountAdapter;
+import com.sda5.walletdroid.adapters.AccountAdapterGroupDetail;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class GroupDetailActivity extends AppCompatActivity {
-    String groupID;
-    FirebaseFirestore dataBase;
-    FirebaseAuth auth;
+    private String groupID;
+    private FirebaseFirestore database;
     private String currentUserId;
     private String accountId;
-    private AccountAdapter accountAdapter;
+    private AccountAdapterGroupDetail accountAdapter;
     private Group group;
     private ArrayList<Account> accounts = new ArrayList<>();
     private Button btnAddMember;
     private Button btnDeleteMember;
     private Button btnDeleteGroup;
     private Button btnLeaveGroup;
+    private Button btnSettle;
 
 
     @Override
@@ -48,8 +46,8 @@ public class GroupDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_detail);
 
-        dataBase = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+        database = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
 
         Intent intent = getIntent();
@@ -64,41 +62,39 @@ public class GroupDetailActivity extends AppCompatActivity {
         btnDeleteMember = findViewById(R.id.btn_delete_member);
         btnDeleteGroup = findViewById(R.id.btn_delete_group);
         btnLeaveGroup = findViewById(R.id.btn_leave_group);
+        btnSettle = findViewById(R.id.btn_settle);
 
-        dataBase.collection("Groups")
+        database.collection("Groups")
                 .whereEqualTo("id", groupID)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            return;
-                        }
-                        if (null != value) {
-                            Optional<Group> groupOptional = value.toObjects(Group.class).stream().findAny();
-                            if (groupOptional.isPresent()) {
-                                group = groupOptional.get();
-                                accountAdapter = new AccountAdapter(getApplicationContext(), accounts, isGroupAdmin());
-                                listView.setAdapter(accountAdapter);
+                .addSnapshotListener((value, e) -> {
+                    if (e != null) {
+                        return;
+                    }
+                    if (null != value) {
+                        Optional<Group> groupOptional = value.toObjects(Group.class).stream().findAny();
+                        if (groupOptional.isPresent()) {
+                            group = groupOptional.get();
+                            accountAdapter = new AccountAdapterGroupDetail(getApplicationContext(), group, accounts, isGroupAdmin());
+                            listView.setAdapter(accountAdapter);
 
-                                if (!group.getAdminUserId().equals(currentUserId)) {
-                                    btnAddMember.setVisibility(View.GONE);
-                                    btnDeleteMember.setVisibility(View.GONE);
-                                    btnDeleteGroup.setVisibility(View.GONE);
-                                } else {
-                                    btnLeaveGroup.setVisibility(View.GONE);
-                                }
-                                CollectionReference accountRef = dataBase.collection("Accounts");
-                                for (String accountId : group.getAccountIdList()) {
-                                    accountRef.whereEqualTo("id", accountId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                            accounts.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
-                                            accountAdapter.notifyDataSetChanged();
-                                        }
-                                    });
+                            if (!group.getAdminUserId().equals(currentUserId)) {
+                                btnSettle.setVisibility(View.GONE);
+                                btnAddMember.setVisibility(View.GONE);
+                                btnDeleteMember.setVisibility(View.GONE);
+                                btnDeleteGroup.setVisibility(View.GONE);
+                            } else {
+                                btnLeaveGroup.setVisibility(View.GONE);
+                            }
+                            CollectionReference accountRef = database.collection("Accounts");
+                            for (String accountId : group.getAccountIdList()) {
+                                accountRef
+                                        .whereEqualTo("id", accountId)
+                                        .get()
+                                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                                    accounts.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
+                                    accountAdapter.notifyDataSetChanged();
+                                });
 
-                                }
                             }
                         }
                     }
@@ -106,17 +102,14 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         /***Goes Account collection and finds current user's account id*/
 
-        dataBase.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
-                new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot accountSnapshot = task.getResult();
-                            if (null != accountSnapshot) {
-                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
-                                if (account.isPresent()) {
-                                    accountId = account.get().getId();
-                                }
+        database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
+                task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot accountSnapshot = task.getResult();
+                        if (null != accountSnapshot) {
+                            Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                            if (account.isPresent()) {
+                                accountId = account.get().getId();
                             }
                         }
                     }
@@ -129,16 +122,12 @@ public class GroupDetailActivity extends AppCompatActivity {
 
     public void leaveGroup(View view) {
         group.getAccountIdList().remove(accountId);
-        dataBase.collection("Groups").document(groupID)
+        database.collection("Groups").document(groupID)
                 .update("accountIdList", group.getAccountIdList())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(GroupDetailActivity.this, "You left the group",
-                                Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
-                    }
-
+                .addOnCompleteListener(task -> {
+                    Toast.makeText(GroupDetailActivity.this, "You left the group",
+                            Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
                 });
     }
 
@@ -155,29 +144,32 @@ public class GroupDetailActivity extends AppCompatActivity {
             group.getAccountIdList().remove(accountAdapter.getSelectedAccountIDList().get(i));
         }
 
-        dataBase.collection("Groups").document(groupID)
+        database.collection("Groups").document(groupID)
                 .update("accountIdList", group.getAccountIdList())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        finish();
-                        startActivity(getIntent());
-                    }
+                .addOnCompleteListener(task -> {
+                    finish();
+                    startActivity(getIntent());
                 });
     }
 
     public void deleteGroup(View view) {
-        dataBase.collection("Groups")
+        database.collection("Groups")
                 .document(groupID)
                 .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        Toast.makeText(GroupDetailActivity.this, "Group is deleted successfully",
-                                Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
-                    }
+                .addOnCompleteListener(task -> {
+                    Toast.makeText(GroupDetailActivity.this,
+                            "Group is deleted successfully",
+                            Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
                 });
+    }
+
+    public void settleTheGroupExpenses(View view) {
+
+        HashMap<String, Double> groupBalance = group.getBalance();
+        groupBalance.forEach((key, value) -> groupBalance.put(key, 0.0));
+        database.collection("Groups").document(groupID).update("balance", groupBalance);
+        finish();
+        startActivity(getIntent());
     }
 }
