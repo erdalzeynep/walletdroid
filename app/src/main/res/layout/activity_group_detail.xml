@@ -22,6 +22,14 @@
         android:layout_gravity="clip_vertical|center_horizontal" />
 
     <Button
+        android:id="@+id/btn_group_expenses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Settle"
+        android:onClick="settleTheGroupExpenses"/>
+
+    <Button
         android:id="@+id/btn_leave_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

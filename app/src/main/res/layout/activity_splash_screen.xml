@@ -12,18 +12,19 @@
         android:id="@+id/textViewSplash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wallet Droid"
         android:elegantTextHeight="true"
-        android:fontFamily="times"
-        android:textColor="@color/ewhite"
-        android:textSize="60sp"
-        android:textStyle="bold"/>
+        android:fontFamily="sans-serif"
+        android:text="WalletDroid"
+        android:textAllCaps="false"
+        android:textColor="#E8F1EF"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/splashImage"
-        android:layout_width="350dp"
-        android:layout_height="500dp"
+        android:layout_width="181dp"
+        android:layout_height="252dp"
         android:adjustViewBounds="false"
-        android:background="@drawable/wallet1"
+        android:background="@drawable/wallet3"
         android:cropToPadding="true" />
 </LinearLayout>

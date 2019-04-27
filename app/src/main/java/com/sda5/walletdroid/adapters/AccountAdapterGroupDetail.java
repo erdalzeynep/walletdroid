@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.models.Account;
@@ -18,17 +19,15 @@ import com.sda5.walletdroid.models.Account;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-public class AccountAdapter extends ArrayAdapter<Account> {
+public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
     private Context mContext;
     private final List<Account> accounts;
     private final boolean showCheckboxes;
     private final List<String> selectedAccountIDList = new ArrayList<>();
 
 
-    public AccountAdapter(Context context, ArrayList<Account> accounts, boolean showCheckboxes) {
+    public AccountAdapterGroupDetail(Context context, ArrayList<Account> accounts, boolean showCheckboxes) {
         super(context, 0, accounts);
         mContext = context;
         this.accounts = accounts;
@@ -41,20 +40,22 @@ public class AccountAdapter extends ArrayAdapter<Account> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.list_account_item, parent, false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.list_account_item_group_detail, parent, false);
 
 
         Account account = accounts.get(position);
 
-        final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account_item);
+        TextView debt = listItem.findViewById(R.id.textview_account_debt_gd);
+        debt.setText("-50 SEK");
+
+        final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account_item_gd);
         checkBoxAccount.setTag(account.getId());
 
-        TextView textViewAccount = listItem.findViewById(R.id.textview_account_item);
-        if(account.isInternalAccount()){
+        TextView textViewAccount = listItem.findViewById(R.id.textview_account_item_gd);
+        if (account.isInternalAccount()) {
             textViewAccount.setText(account.getOwnerName());
-        }
-        else{
-            textViewAccount.setText("Name: "+account.getOwnerName()+"\n"+"Email:"+account.getEmail());
+        } else {
+            textViewAccount.setText("Name: " + account.getOwnerName() + "\n" + "Email:" + account.getEmail());
             textViewAccount.setTypeface(null, Typeface.ITALIC);
         }
 
@@ -87,7 +88,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
     }
 
 
-    public void addSelectedAccountId(String accountId){
+    public void addSelectedAccountId(String accountId) {
         this.selectedAccountIDList.add(accountId);
     }
 }

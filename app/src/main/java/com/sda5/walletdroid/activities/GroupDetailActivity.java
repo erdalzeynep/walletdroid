@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.adapters.AccountAdapter;
+import com.sda5.walletdroid.adapters.AccountAdapterGroupDetail;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
@@ -34,7 +35,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     FirebaseAuth auth;
     private String currentUserId;
     private String accountId;
-    private AccountAdapter accountAdapter;
+    private AccountAdapterGroupDetail accountAdapter;
     private Group group;
     private ArrayList<Account> accounts = new ArrayList<>();
     private Button btnAddMember;
@@ -78,7 +79,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                             Optional<Group> groupOptional = value.toObjects(Group.class).stream().findAny();
                             if (groupOptional.isPresent()) {
                                 group = groupOptional.get();
-                                accountAdapter = new AccountAdapter(getApplicationContext(), accounts, isGroupAdmin());
+                                accountAdapter = new AccountAdapterGroupDetail(getApplicationContext(), accounts, isGroupAdmin());
                                 listView.setAdapter(accountAdapter);
 
                                 if (!group.getAdminUserId().equals(currentUserId)) {
@@ -179,5 +180,8 @@ public class GroupDetailActivity extends AppCompatActivity {
                         startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
                     }
                 });
+    }
+
+    public void settleTheGroupExpenses(View view) {
     }
 }
