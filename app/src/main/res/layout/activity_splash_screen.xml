@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/textViewSplash"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="254dp"
         android:elegantTextHeight="true"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/splashImage"
-        android:layout_width="268dp"
-        android:layout_height="268dp"
+        android:layout_width="174dp"
+        android:layout_height="189dp"
         android:adjustViewBounds="false"
         android:background="@drawable/wallet3"
         android:cropToPadding="true" />
