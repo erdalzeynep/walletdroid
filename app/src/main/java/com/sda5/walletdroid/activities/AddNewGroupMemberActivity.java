@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
     private EditText editTextExternalAccountEmail;
     private Button buttonAddExternalAccount;
     private ListView listViewExternalAccounts;
-    private HashMap<String,String> externalAccountNameAndEmails = new HashMap<>();
+    private HashMap<String, String> externalAccountNameAndEmails = new HashMap<>();
     private ArrayList<String> externalAccountList = new ArrayList<>();
     private ArrayAdapter<String> externalUserAdapter;
 
@@ -78,13 +79,18 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
         buttonAddExternalAccount.setVisibility(View.GONE);
         listViewExternalAccounts.setVisibility(View.GONE);
 
-        checkBoxExternalAccount.setOnClickListener(v -> {
-            if (checkBoxExternalAccount.isChecked()) {
+        checkBoxExternalAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
                 editTextExternalAccountName.setVisibility(View.VISIBLE);
                 editTextExternalAccountEmail.setVisibility(View.VISIBLE);
                 buttonAddExternalAccount.setVisibility(View.VISIBLE);
                 listViewExternalAccounts.setVisibility(View.VISIBLE);
                 listViewExternalAccounts.setAdapter(externalUserAdapter);
+            } else {
+                editTextExternalAccountName.setVisibility(View.GONE);
+                editTextExternalAccountEmail.setVisibility(View.GONE);
+                buttonAddExternalAccount.setVisibility(View.GONE);
+                listViewExternalAccounts.setVisibility(View.GONE);
             }
         });
 
@@ -107,7 +113,6 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
                                     }
                                 }
                                 accountAdapter.notifyDataSetChanged();
-                                ListViewHelper.setListViewSizeDynamically(accountAdapter, listView);
                             });
                 });
     }
@@ -136,7 +141,7 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
         Optional<Account> accountOptional = accountSnapshot.toObjects(Account.class).stream().findFirst();
         if (accountOptional.isPresent()) {
             accountAdapter.addSelectedAccountId(accountOptional.get().getId());
-            Toast.makeText(getApplicationContext(), "Email already exists in the App. Name will be"+" "
+            Toast.makeText(getApplicationContext(), "Email already exists in the App. Name will be" + " "
                     + accountOptional.get().getOwnerName(), Toast.LENGTH_LONG).show();
             return Tasks.forResult(null);
         } else {
