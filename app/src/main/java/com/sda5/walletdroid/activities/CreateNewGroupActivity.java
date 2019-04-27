@@ -103,7 +103,6 @@ public class CreateNewGroupActivity extends AppCompatActivity {
                             }
                         }
                         accountAdapter.notifyDataSetChanged();
-                        ListViewHelper.setListViewSizeDynamically(accountAdapter, listView);
                     }
                 });
     }

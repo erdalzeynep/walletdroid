@@ -47,29 +47,24 @@ public class GroupFragment extends Fragment {
         groupAdapter = new GroupAdapter(v.getContext(), groups);
         listView.setAdapter(groupAdapter);
 
-        database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
-                task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot accountSnapshot = task.getResult();
-                        if (null != accountSnapshot) {
-                            Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
-                            if (account.isPresent()) {
-                                accountId = account.get().getId();
-                                database.collection("Groups")
-                                        .whereArrayContains("accountIdList", accountId)
-                                        .get()
-                                        .addOnSuccessListener(queryDocumentSnapshots -> {
-                                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                                Group group = documentSnapshot.toObject(Group.class);
-                                                groups.add(group);
-                                            }
-                                            groupAdapter.notifyDataSetChanged();
-                                        });
+        database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(task->{
+            if (task.isSuccessful()) {
+                QuerySnapshot accountSnapshot = task.getResult();
+                if (null != accountSnapshot) {
+                    Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                    if (account.isPresent()) {
+                        accountId = account.get().getId();
+                        database.collection("Groups").whereArrayContains("accountIdList", accountId).get().addOnSuccessListener(queryDocumentSnapshots->{
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                Group group = documentSnapshot.toObject(Group.class);
+                                groups.add(group);
                             }
-                        }
+                            groupAdapter.notifyDataSetChanged();
+                        });
                     }
                 }
-        );
+            }
+        });
 
         return v;
     }

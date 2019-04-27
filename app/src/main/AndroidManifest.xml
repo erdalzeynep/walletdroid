@@ -40,7 +40,8 @@
         <activity android:name=".activities.CreateNewGroupActivity" /> <!-- Sign up Activity -->
         <activity
             android:name=".activities.SignUpActivity"
-            android:label="@string/title_activity_signup" /> <!-- Service Activity -->
+            android:label="@string/title_activity_signup"
+            android:theme="@style/AppTheme.NoActionBar"/> <!-- Service Activity -->
         <activity
             android:name=".activities.ServiceActivity"
             android:label="@string/title_activity_service"
