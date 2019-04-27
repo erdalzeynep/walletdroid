@@ -46,6 +46,18 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
         final TextView tvExpenseTitle = listItem.findViewById(R.id.text_view_expense_title_item);
         final TextView tvExpenseDate = listItem.findViewById(R.id.text_view_expense_date_item);
         final TextView tvExpenseAmount = listItem.findViewById(R.id.text_view_expense_amount_item);
+        final TextView tvExpenseColourTag = listItem.findViewById(R.id.expense_colourTag);
+
+
+        if(expense.getCategory().equalsIgnoreCase("grocery")) tvExpenseColourTag.setBackgroundColor(Color.RED);
+        if(expense.getCategory().equalsIgnoreCase("Clothes")) tvExpenseColourTag.setBackgroundColor(Color.BLUE);
+        if(expense.getCategory().equalsIgnoreCase("Transportation")) tvExpenseColourTag.setBackgroundColor(Color.YELLOW);
+        if(expense.getCategory().equalsIgnoreCase("Eat out")) tvExpenseColourTag.setBackgroundColor(Color.LTGRAY);
+        if(expense.getCategory().equalsIgnoreCase("Recurring")) tvExpenseColourTag.setBackgroundColor(Color.GREEN);
+        if(expense.getCategory().equalsIgnoreCase("Utility")) tvExpenseColourTag.setBackgroundColor(Color.DKGRAY);
+        if(expense.getCategory().equalsIgnoreCase("Membership")) tvExpenseColourTag.setBackgroundColor(Color.CYAN);
+        if(expense.getCategory().equalsIgnoreCase("Other")) tvExpenseColourTag.setBackgroundColor(Color.MAGENTA);
+
 
         tvExpenseTitle.setText(expense.getTitle());
         tvExpenseDate.setText(expense.getDate());

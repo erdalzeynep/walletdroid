@@ -116,7 +116,6 @@ public class QueryActivity extends AppCompatActivity {
         catlist.add("Recurring");
         catlist.add("Eat out");
         catlist.add("Utility");
-        catlist.add("Clothes");
         catlist.add("Membership");
         catlist.add("Other");
 
