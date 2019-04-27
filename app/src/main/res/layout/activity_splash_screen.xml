@@ -11,19 +11,20 @@
     <TextView
         android:id="@+id/textViewSplash"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:elegantTextHeight="true"
-        android:fontFamily="sans-serif"
-        android:text="WalletDroid"
-        android:textAllCaps="false"
-        android:textColor="#E8F1EF"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:padding="60dp"
+        android:text="Wallet Droid"
+        android:textColor="@color/ewhite"
         android:textSize="50sp"
         android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/splashImage"
-        android:layout_width="181dp"
-        android:layout_height="252dp"
+        android:layout_width="268dp"
+        android:layout_height="268dp"
         android:adjustViewBounds="false"
         android:background="@drawable/wallet3"
         android:cropToPadding="true" />
