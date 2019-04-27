@@ -20,6 +20,7 @@ import com.sda5.walletdroid.models.Group;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -31,6 +32,7 @@ public class ExpenseFragment extends Fragment {
     private FirebaseAuth mAuth;
     private String accountId;
     String currentUserId;
+    Integer i;
 
     @Nullable
     @Override
@@ -39,6 +41,7 @@ public class ExpenseFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
+        i = 0;
 
         ListView listView = v.findViewById(R.id.expense_list);
         listView.setScrollingCacheEnabled(false);
@@ -46,6 +49,7 @@ public class ExpenseFragment extends Fragment {
         expenseAdapter = new ExpenseAdapter(v.getContext(), expenses);
         listView.setAdapter(expenseAdapter);
 
+        expenses.clear();
         database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 task -> {
                     if (task.isSuccessful()) {
@@ -70,5 +74,15 @@ public class ExpenseFragment extends Fragment {
                 }
         );
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (i != 0 ){
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(this).attach(this).commit();
+        }
+        i = 1;
     }
 }

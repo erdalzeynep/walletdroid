@@ -18,7 +18,6 @@
     <string name="title_expense">Expense</string>
 
 
-
     <string-array name="sample_group_name">
         <item> Roomate</item>
         <item> Colleague</item>

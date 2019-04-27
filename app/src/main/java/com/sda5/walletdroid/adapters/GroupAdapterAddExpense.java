@@ -1,6 +1,7 @@
 
 package com.sda5.walletdroid.adapters;
 
+        import android.app.Activity;
         import android.content.Context;
         import android.content.Intent;
 //        import android.support.annotation.NonNull;
@@ -54,6 +55,7 @@ public class GroupAdapterAddExpense extends ArrayAdapter {
                 Intent intent = new Intent(getContext(), AddExpenseUsersActivity.class);
                 intent.putExtra("group_id", groupId);
                 getContext().startActivity(intent);
+                ((Activity)view.getContext()).finish();
             }
         });
         return listItem;
