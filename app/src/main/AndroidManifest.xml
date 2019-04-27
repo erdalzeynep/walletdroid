@@ -15,7 +15,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.QueryActivity"></activity>
+        <activity android:name=".activities.Graphs.MyPieChartActivityTest"></activity>
+        <activity android:name=".activities.Graphs.MyPieChartActivity" />
+        <activity android:name=".activities.Graphs.MyGraphTestActivity" />
+        <activity android:name=".activities.Graphs.MyBarGraph" />
+        <activity android:name=".activities.Graphs.MyLineGraph" />
+        <activity android:name=".Notifications.NotificationActivity">
+            <intent-filter>
+                <action android:name="com.sda5.walletdroid.TargetNotification" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.AddExpenseUsersActivity" />
         <activity android:name=".activities.ChooseGroupForExpenseActivity" />
         <activity android:name=".activities.AddNewGroupMemberActivity" /> <!-- Splash Screen -->
@@ -35,13 +46,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.AddNewGroupMemberActivity" />
         <activity android:name=".activities.GroupDetailActivity" />
         <activity android:name=".activities.CreateNewGroupActivity" /> <!-- Sign up Activity -->
         <activity
             android:name=".activities.SignUpActivity"
             android:label="@string/title_activity_signup"
-            android:theme="@style/AppTheme.NoActionBar"/> <!-- Service Activity -->
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- Service Activity -->
         <activity
             android:name=".activities.ServiceActivity"
             android:label="@string/title_activity_service"
@@ -52,11 +62,6 @@
         <activity
             android:name=".activities.SigninGoogle"
             android:label="@string/manifest_google_sign_in" /> <!-- Creating graphs -->
-        <activity
-            android:name=".activities.Graphs.MultiLineChartActivity"
-            android:label="multiLineChart" />
-        <activity android:name=".activities.Graphs.ListViewMultiChartActivity" />
-        <activity android:name=".activities.Graphs.PieChartActivity" />
 
         <meta-data
             android:name="com.google.android.gms.ads.1:718366885828:android:f43e24c6a69a4b70"
@@ -64,6 +69,12 @@
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true" />
+
+        <service android:name=".Notifications.FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

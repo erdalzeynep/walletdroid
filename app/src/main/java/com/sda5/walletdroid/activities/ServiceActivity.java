@@ -6,13 +6,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.sda5.walletdroid.Notifications.NotificationFragment;
 import com.sda5.walletdroid.R;
-import com.sda5.walletdroid.activities.Graphs.ListViewMultiChartActivity;
-import com.sda5.walletdroid.activities.Graphs.MultiLineChartActivity;
-import com.sda5.walletdroid.activities.Graphs.PieChartActivity;
+import com.sda5.walletdroid.activities.Graphs.MyBarGraph;
+import com.sda5.walletdroid.activities.Graphs.MyGraphTestActivity;
+import com.sda5.walletdroid.activities.Graphs.MyPieChartActivityTest;
 import com.sda5.walletdroid.fragments.ExpenseFragment;
 import com.sda5.walletdroid.fragments.GroupFragment;
 import com.sda5.walletdroid.fragments.InvestFragment;
@@ -23,14 +32,6 @@ import com.sda5.walletdroid.fragments.fragments_navigation.Feedbacknav;
 import com.sda5.walletdroid.fragments.fragments_navigation.GraphFragment;
 import com.sda5.walletdroid.fragments.fragments_navigation.ShareNav;
 import com.sda5.walletdroid.fragments.fragments_navigation.userprofile;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
 //import android.widget.Toolbar;
 
@@ -134,6 +135,10 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_userProfile:
                 fragment = new userprofile();
                 break;
+            case R.id.nav_noOfNotification:
+                fragment = new NotificationFragment();
+                break;
+
             case R.id.nav_expenseSetting:
                 fragment = new GraphFragment();
                 break;
@@ -172,14 +177,17 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
     }
 
 
+
+
+
     /**
-     * Method to invoke multi line Chart
+     * Method to invoke BarChartActivity
      * @param v
      */
-    public void getLineChart(View v) {
+    public void getMyBarGraph(View v) {
         switch(v.getId()) {
-            case R.id.buttonLineChart:
-                Intent myIntent = new Intent(getApplicationContext(), MultiLineChartActivity.class);
+            case R.id.buttonGraphMyBar:
+                Intent myIntent = new Intent(getApplicationContext(), MyBarGraph.class);
                 //myIntent.SerciceActivity.class, PieChartActivity.class);
                 // for ex: your package name can be "com.example"
                 // your activity name will be "com.example.Contact_Developer"
@@ -189,13 +197,13 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
     }
 
     /**
-     * Method to invoke Graph as List
+     * Method to invoke BarChartActivity
      * @param v
      */
-    public void getGraphList(View v) {
+    public void getMyTestGraph(View v) {
         switch(v.getId()) {
-            case R.id.buttonGraphList:
-                Intent myIntent = new Intent(getApplicationContext(), ListViewMultiChartActivity.class);
+            case R.id.buttonGraphMyTestGraph:
+                Intent myIntent = new Intent(getApplicationContext(), MyGraphTestActivity.class);
                 //myIntent.SerciceActivity.class, PieChartActivity.class);
                 // for ex: your package name can be "com.example"
                 // your activity name will be "com.example.Contact_Developer"
@@ -203,15 +211,16 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                 break;
         }
     }
+
 
     /**
-     * Method to invoke PieChartActivity
+     * Method to invoke BarChartActivity
      * @param v
      */
-    public void getPieChart(View v) {
+    public void getMyPieChartIntent(View v) {
         switch(v.getId()) {
-            case R.id.buttonPieChart:
-                Intent myIntent = new Intent(getApplicationContext(), PieChartActivity.class);
+            case R.id.buttonGraphMyPieChartIntent:
+                Intent myIntent = new Intent(getApplicationContext(), MyPieChartActivityTest.class);
                 //myIntent.SerciceActivity.class, PieChartActivity.class);
                 // for ex: your package name can be "com.example"
                 // your activity name will be "com.example.Contact_Developer"
@@ -219,8 +228,6 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                 break;
         }
     }
-
-
 
 
     public void signOut(View view) {

@@ -1,68 +1,71 @@
-
 package com.sda5.walletdroid.activities.Graphs;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.WindowManager;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
 
-import com.sda5.walletdroid.R;
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.sda5.walletdroid.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
-import androidx.core.content.ContextCompat;
-
-//import androidx.core.content.ContextCompat;
-
-public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeListener,
+public class MyLineGraph extends DemoBase implements
         OnChartGestureListener, OnChartValueSelectedListener {
 
     private LineChart chart;
-    private SeekBar seekBarX, seekBarY;
-    private TextView tvX, tvY;
+
+    public HashMap<String, Integer> expenseMaps = new HashMap<>();
+
+    public static final String TAG = "My Line Graph";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_linechart);
+        setContentView(R.layout.activity_my_line_graph);
 
-        setTitle("MultiLineChartActivity");
+        setTitle("My Line Chart Activity");
 
-        tvX = findViewById(R.id.tvXMax);
-        tvY = findViewById(R.id.tvYMax);
-
-        seekBarX = findViewById(R.id.seekBar1);
-        seekBarX.setOnSeekBarChangeListener(this);
-
-        seekBarY = findViewById(R.id.seekBar2);
-        seekBarY.setOnSeekBarChangeListener(this);
-
-        chart = findViewById(R.id.chart1);
+        chart = findViewById(R.id.chart2);
         chart.setOnChartValueSelectedListener(this);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawLabels(true);
+        // Look-up table
+        final String[] weekdays = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+
+        // Set the value formatter
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(weekdays));
 
         chart.setDrawGridBackground(false);
         chart.getDescription().setEnabled(false);
@@ -84,61 +87,99 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
         // if disabled, scaling can be done on x- and y-axis separately
         chart.setPinchZoom(false);
 
-        seekBarX.setProgress(20);
-        seekBarY.setProgress(100);
-
         Legend l = chart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
+
+        // Get  HashMap from the incoming intent
+        Intent intent = getIntent();
+        expenseMaps = (HashMap<String, Integer>)intent.getSerializableExtra("map");
+
+        /*expenseMaps.put("Food",32);
+        expenseMaps.put("Transport",55);
+        expenseMaps.put("Clothes",77);
+        expenseMaps.put("Books",120);
+        expenseMaps.put("Car",200);
+        expenseMaps.put("Trips",10);
+        expenseMaps.put("Children",77);
+        expenseMaps.put("Others",150);*/
+
+
+        //generateDataLine();
+        getRemoteData(expenseMaps);
     }
 
-    private final int[] colors = new int[] {
+    private final int[] colors = new int[]{
             ColorTemplate.VORDIPLOM_COLORS[0],
             ColorTemplate.VORDIPLOM_COLORS[1],
             ColorTemplate.VORDIPLOM_COLORS[2]
     };
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        chart.resetTracking();
+    /**
+     * @param expenseRemote
+     */
+    private void getRemoteData(HashMap<String, Integer> expenseRemote) {
 
-        progress = seekBarX.getProgress();
+        //Getting Set of keys Categories/months
+        Set<String> keySet = expenseRemote.keySet();
+        // Transfer data to an array
+        String[] labelsExpense = keySet.toArray(new String[0]);
 
-        tvX.setText(String.valueOf(seekBarX.getProgress()));
-        tvY.setText(String.valueOf(seekBarY.getProgress()));
 
-        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        // Getting values from HashMap
+        Collection<Integer> values = expenseRemote.values();
 
-        for (int z = 0; z < 3; z++) {
+        // Convert data to an array
+        Integer[] test = values.toArray(new Integer[0]);
 
-            ArrayList<Entry> values = new ArrayList<>();
+        // Array list for storing data
+        ArrayList<Entry> valuesExpense = new ArrayList<>();
 
-            for (int i = 0; i < progress; i++) {
-                double val = (Math.random() * seekBarY.getProgress()) + 3;
-                values.add(new Entry(i, (float) val));
-            }
 
-            LineDataSet d = new LineDataSet(values, "DataSet " + (z + 1));
-            d.setLineWidth(2.5f);
-            d.setCircleRadius(4f);
+        int lengthTest = test.length;
 
-            int color = colors[z % colors.length];
-            d.setColor(color);
-            d.setCircleColor(color);
-            dataSets.add(d);
+        Log.d(TAG, "LENGTH OF INTEGER ARRAY " + lengthTest);
+        System.out.println("LENGTH OF INTEGER ARRAY " + lengthTest);
+
+        for (int i = 0; i < test.length; i++) {
+            valuesExpense.add(new Entry(i,test[i]));
+
         }
 
-        // make the first DataSet dashed
-        ((LineDataSet) dataSets.get(0)).enableDashedLine(10, 10, 0);
-        ((LineDataSet) dataSets.get(0)).setColors(ColorTemplate.VORDIPLOM_COLORS);
-        ((LineDataSet) dataSets.get(0)).setCircleColors(ColorTemplate.VORDIPLOM_COLORS);
+        LineDataSet d4 = new LineDataSet(valuesExpense, "New DataSet, (1)");
+        d4.setLineWidth(2.5f);
+        d4.setCircleRadius(4.5f);
+        d4.setHighLightColor(Color.rgb(244, 117, 117));
+        d4.setDrawValues(false);
 
-        LineData data = new LineData(dataSets);
+        /*// Getting set of values from hashmap
+        Collection<Integer> values = expenseRemote.values();
+        ArrayList<Entry> valuesExpense = new ArrayList<>();
+
+        for (int i = 0; i < 12; i++) {
+            valuesExpense.add(new Entry(i, (int) (Math.random() * 65) + 40));
+        }
+        LineDataSet d5 = new LineDataSet(valuesExpense, "New DataSet, (1)");
+        d5.setLineWidth(2.5f);
+        d5.setCircleRadius(4.5f);
+        d5.setHighLightColor(Color.rgb(244, 117, 117));
+        d5.setDrawValues(false);*/
+
+
+        ArrayList<ILineDataSet> sets = new ArrayList<>();
+        sets.add(d4);
+        // sets.add(d2);
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense));
+        xAxis.setTextSize(13);
+        LineData data = new LineData(sets);
         chart.setData(data);
         chart.invalidate();
+
+
     }
 
     @Override
@@ -152,12 +193,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.viewGithub: {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/MultiLineChartActivity.java"));
-                startActivity(i);
-                break;
-            }
+
             case R.id.actionToggleValues: {
                 List<ILineDataSet> sets = chart.getData()
                         .getDataSets();
@@ -189,7 +225,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(chart.getData() != null) {
+                if (chart.getData() != null) {
                     chart.getData().setHighlightEnabled(!chart.getData().isHighlightEnabled());
                     chart.invalidate();
                 }
@@ -234,7 +270,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.CUBIC_BEZIER);
+                            : LineDataSet.Mode.CUBIC_BEZIER);
                 }
                 chart.invalidate();
                 break;
@@ -248,7 +284,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.STEPPED
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.STEPPED);
+                            : LineDataSet.Mode.STEPPED);
                 }
                 chart.invalidate();
                 break;
@@ -262,7 +298,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.HORIZONTAL_BEZIER
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.HORIZONTAL_BEZIER);
+                            : LineDataSet.Mode.HORIZONTAL_BEZIER);
                 }
                 chart.invalidate();
                 break;
@@ -306,7 +342,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
         Log.i("Gesture", "END, lastGesture: " + lastPerformedGesture);
 
         // un-highlight values after the gesture is finished and no single-tap
-        if(lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
+        if (lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
             chart.highlightValues(null); // or highlightTouch(null) for callback to onNothingSelected(...)
     }
 
@@ -348,11 +384,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
     }
 
     @Override
-    public void onNothingSelected() {}
+    public void onNothingSelected() {
+    }
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
 }

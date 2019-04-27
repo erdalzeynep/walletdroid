@@ -1,4 +1,3 @@
-
 package com.sda5.walletdroid.activities.Graphs;
 
 import android.Manifest;
@@ -16,9 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -37,34 +35,23 @@ import com.sda5.walletdroid.R;
 
 import java.util.ArrayList;
 
-import androidx.core.content.ContextCompat;
-
-public class PieChartActivity extends DemoBase implements OnSeekBarChangeListener,
-        OnChartValueSelectedListener {
+public class MyPieChartActivity extends DemoBase implements OnChartValueSelectedListener {
 
     private PieChart chart;
-    private SeekBar seekBarX, seekBarY;
-    private TextView tvX, tvY;
+
+    private ArrayList<String> catPie = new ArrayList<>();
+    private ArrayList<Integer> valuePie = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_piechart);
+        setContentView(R.layout.activity_my_pie_chart);
 
         setTitle("PieChartActivity");
 
-        tvX = findViewById(R.id.tvXMax);
-        tvY = findViewById(R.id.tvYMax);
-
-        seekBarX = findViewById(R.id.seekBar1);
-        seekBarY = findViewById(R.id.seekBar2);
-
-        seekBarX.setOnSeekBarChangeListener(this);
-        seekBarY.setOnSeekBarChangeListener(this);
-
-        chart = findViewById(R.id.chart1);
+        chart = findViewById(R.id.chartpie);
         chart.setUsePercentValues(true);
         chart.getDescription().setEnabled(false);
         chart.setExtraOffsets(5, 10, 5, 5);
@@ -96,9 +83,6 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         // add a selection listener
         chart.setOnChartValueSelectedListener(this);
 
-        seekBarX.setProgress(4);
-        seekBarY.setProgress(10);
-
         chart.animateY(1400, Easing.EaseInOutQuad);
         // chart.spin(2000, 0, 360);
 
@@ -112,30 +96,49 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         l.setYOffset(0f);
 
         // entry label styling
-        chart.setEntryLabelColor(Color.WHITE);
+        chart.setEntryLabelColor(Color.BLACK);
         chart.setEntryLabelTypeface(tfRegular);
         chart.setEntryLabelTextSize(12f);
+
+
+        // Get data from incoming intent
+        Intent intent = getIntent();
+        catPie = (ArrayList<String>)intent.getSerializableExtra("listCat");
+        valuePie = (ArrayList<Integer>)intent.getSerializableExtra("listValue");
+
+
+
+        generateDataPie(valuePie,catPie);
+
+
     }
 
+    /**
+     * generates a random ChartData object with just one DataSet
+     *
+     * @return Pie data
+     */
+    private void generateDataPie(ArrayList<Integer> remoteExpensePie, ArrayList<String> remoteCategoryPie) {
 
-    private void setData(int count, float range) {
+        // Transfer data to an array
+        String[] labelsExpense = remoteCategoryPie.toArray(new String[0]);
+
+        // Convert data to an array
+        Integer[] test = remoteExpensePie.toArray(new Integer[0]);
+
         ArrayList<PieEntry> entries = new ArrayList<>();
 
-        // NOTE: The order of the entries when being added to the entries array determines their position around the center of
-        // the chart.
-        for (int i = 0; i < count ; i++) {
-            entries.add(new PieEntry((float) ((Math.random() * range) + range / 5),
-                    parties[i % parties.length],
-                    getResources().getDrawable(R.drawable.star)));
+        for (int i = 0; i < labelsExpense.length; i++) {
+            entries.add(new PieEntry((float) (test[i]), labelsExpense[i]));
         }
 
-        PieDataSet dataSet = new PieDataSet(entries, "Expenses");
+        PieDataSet dPie = new PieDataSet(entries, "Expense Details");
 
-        dataSet.setDrawIcons(false);
+        dPie.setDrawIcons(false);
 
-        dataSet.setSliceSpace(3f);
-        dataSet.setIconsOffset(new MPPointF(0, 40));
-        dataSet.setSelectionShift(5f);
+        dPie.setSliceSpace(3f);
+        dPie.setIconsOffset(new MPPointF(0, 40));
+        dPie.setSelectionShift(5f);
 
         // add a lot of colors
 
@@ -158,10 +161,9 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
 
         colors.add(ColorTemplate.getHoloBlue());
 
-        dataSet.setColors(colors);
-        //dataSet.setSelectionShift(0f);
+        dPie.setColors(colors);
 
-        PieData data = new PieData(dataSet);
+        PieData data = new PieData(dPie);
         data.setValueFormatter(new PercentFormatter(chart));
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.WHITE);
@@ -279,14 +281,6 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         return true;
     }
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-        tvX.setText(String.valueOf(seekBarX.getProgress()));
-        tvY.setText(String.valueOf(seekBarY.getProgress()));
-
-        setData(seekBarX.getProgress(), seekBarY.getProgress());
-    }
 
     @Override
     protected void saveToGallery() {
@@ -320,9 +314,5 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         Log.i("PieChart", "nothing selected");
     }
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
 
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
 }

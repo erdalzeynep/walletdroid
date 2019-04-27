@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginTop="50dp">
+    android:orientation="horizontal"
+    android:layout_marginTop="50dp"
+    android:background="@color/design_default_color_on_secondary">
+
 
     <Button
-
-        android:id="@+id/buttonPieChart"
-        android:layout_width="match_parent"
+        android:id="@+id/buttonGraphMyBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:onClick="getPieChart"
-        android:text="Pie Chart" />
+        android:text="Bar graph"
+        android:onClick="getMyBarGraph"
+        android:background="@drawable/btndesigngraph"
+        />
 
     <Button
-        android:id="@+id/buttonLineChart"
-        android:layout_width="match_parent"
+        android:id="@+id/buttonGraphMyTestGraph"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Line Chart"
-        android:onClick="getLineChart"/>
+        android:text="line Graph"
+        android:onClick="getMyTestGraph"
+        android:background="@drawable/btndesigngraph"
+        android:layout_toRightOf="@+id/buttonGraphMyPieChartIntent"
+        />
+
+
 
     <Button
-        android:id="@+id/buttonGraphList"
-        android:layout_width="match_parent"
+        android:id="@+id/buttonGraphMyPieChartIntent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="List View"
-        android:onClick="getGraphList"/>
+        android:text="Pie Chart"
+        android:onClick="getMyPieChartIntent"
+        android:background="@drawable/btndesigngraph"
+        android:layout_toRightOf="@+id/buttonGraphMyBar"/>
 
-</LinearLayout>
+</RelativeLayout>

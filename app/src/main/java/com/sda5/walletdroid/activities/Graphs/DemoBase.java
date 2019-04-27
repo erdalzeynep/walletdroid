@@ -8,14 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.sda5.walletdroid.R;
-import com.github.mikephil.charting.charts.Chart;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.github.mikephil.charting.charts.Chart;
+import com.google.android.material.snackbar.Snackbar;
+import com.sda5.walletdroid.R;
 
 //import android.support.v7.app.AppCompatActivity;
 
@@ -31,10 +31,7 @@ public abstract class DemoBase extends AppCompatActivity implements ActivityComp
     };
 
     protected final String[] parties = new String[] {
-            "Transport", "Food", "Clothes", "House Rent", "Mobile Bill", "Party F", "Party G", "Party H",
-            "Party I", "Party J", "Party K", "Party L", "Party M", "Party N", "Party O", "Party P",
-            "Party Q", "Party R", "Party S", "Party T", "Party U", "Party V", "Party W", "Party X",
-            "Party Y", "Party Z"
+            "Transport", "Food", "Clothes", "House Rent", "Mobile Bill", "Party F", "Party G", "Party"
     };
 
     private static final int PERMISSION_STORAGE = 0;
