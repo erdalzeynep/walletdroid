@@ -15,14 +15,32 @@
         android:textSize="24sp"
         android:textStyle="bold"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+        <Spinner
+            android:id="@+id/query_category"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            />
+        <Spinner
+            android:id="@+id/query_month"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/buttonPieChart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:onClick="runQueryForParticularExpense"
-        android:text="For Particular Category" />
+        android:onClick="runQuery"
+        android:text="OK" />
 
 
 </LinearLayout>

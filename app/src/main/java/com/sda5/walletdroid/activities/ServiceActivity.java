@@ -40,34 +40,29 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
     public NavigationView navigationView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            = item -> {
+                Fragment fragment = null;
+
+                switch (item.getItemId()) {
+                    case R.id.navigation_group:
+                        fragment = new GroupFragment();
+                        break;
+                    case R.id.navigation_expense:
+                        fragment = new ExpenseFragment();
+                        break;
+                    case R.id.navigation_graph:
+                        fragment = new GraphFragment();
+                        break;
+                    case R.id.navigation_settle:
+                        fragment = new SettleFragment();
+                        break;
+                    case R.id.navigation_stock:
+                        fragment = new InvestFragment();
 
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment = null;
-
-            switch (item.getItemId()) {
-                case R.id.navigation_group:
-                    fragment = new GroupFragment();
-                    break;
-                case R.id.navigation_expense:
-                    fragment = new ExpenseFragment();
-                    break;
-                case R.id.navigation_query:
-                    fragment = new QueyFragment();
-                    break;
-                case R.id.navigation_settle:
-                    fragment = new SettleFragment();
-                    break;
-                case R.id.navigation_stock:
-                    fragment = new InvestFragment();
-
-
-            }
-            return loadFragment(fragment);
-        }
-    };
+                }
+                return loadFragment(fragment);
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,51 +171,54 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
      * Method to invoke multi line Chart
      * @param v
      */
-    public void getLineChart(View v) {
-        switch(v.getId()) {
-            case R.id.buttonLineChart:
-                Intent myIntent = new Intent(getApplicationContext(), MultiLineChartActivity.class);
-                //myIntent.SerciceActivity.class, PieChartActivity.class);
-                // for ex: your package name can be "com.example"
-                // your activity name will be "com.example.Contact_Developer"
-                startActivity(myIntent);
-                break;
-        }
-    }
+//    public void getLineChart(View v) {
+//        switch(v.getId()) {
+//            case R.id.buttonLineChart:
+//                Intent myIntent = new Intent(getApplicationContext(), MultiLineChartActivity.class);
+//                //myIntent.SerciceActivity.class, PieChartActivity.class);
+//                // for ex: your package name can be "com.example"
+//                // your activity name will be "com.example.Contact_Developer"
+//                startActivity(myIntent);
+//                break;
+//        }
+//    }
 
     /**
      * Method to invoke Graph as List
      * @param v
      */
-    public void getGraphList(View v) {
-        switch(v.getId()) {
-            case R.id.buttonGraphList:
-                Intent myIntent = new Intent(getApplicationContext(), ListViewMultiChartActivity.class);
-                //myIntent.SerciceActivity.class, PieChartActivity.class);
-                // for ex: your package name can be "com.example"
-                // your activity name will be "com.example.Contact_Developer"
-                startActivity(myIntent);
-                break;
-        }
-    }
+//    public void getGraphList(View v) {
+//        switch(v.getId()) {
+//            case R.id.buttonGraphList:
+//                Intent myIntent = new Intent(getApplicationContext(), ListViewMultiChartActivity.class);
+//                //myIntent.SerciceActivity.class, PieChartActivity.class);
+//                // for ex: your package name can be "com.example"
+//                // your activity name will be "com.example.Contact_Developer"
+//                startActivity(myIntent);
+//                break;
+//        }
+//    }
 
     /**
      * Method to invoke PieChartActivity
      * @param v
      */
-    public void getPieChart(View v) {
-        switch(v.getId()) {
-            case R.id.buttonPieChart:
-                Intent myIntent = new Intent(getApplicationContext(), PieChartActivity.class);
-                //myIntent.SerciceActivity.class, PieChartActivity.class);
-                // for ex: your package name can be "com.example"
-                // your activity name will be "com.example.Contact_Developer"
-                startActivity(myIntent);
-                break;
-        }
+//    public void getPieChart(View v) {
+//        switch(v.getId()) {
+//            case R.id.buttonPieChart:
+//                Intent myIntent = new Intent(getApplicationContext(), PieChartActivity.class);
+//                //myIntent.SerciceActivity.class, PieChartActivity.class);
+//                // for ex: your package name can be "com.example"
+//                // your activity name will be "com.example.Contact_Developer"
+//                startActivity(myIntent);
+//                break;
+//        }
+//    }
+
+    public void runQueryForParticularExpense(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), SeeExpenseGraphForParticularCategory.class);
+        startActivity(myIntent);
     }
-
-
 
 
     public void signOut(View view) {
