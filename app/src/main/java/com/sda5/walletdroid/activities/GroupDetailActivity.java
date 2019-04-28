@@ -154,22 +154,22 @@ public class GroupDetailActivity extends AppCompatActivity {
 
         List<String> accountIDsToBeDeleted = accountAdapter.getSelectedAccountIDList();
         for (String accountId : accountIDsToBeDeleted) {
+            accounts.remove(accountId);
+            accountAdapter.notifyDataSetChanged();
             group.getAccountIdList().remove(accountId);
-            groupBalance.remove(accountIDsToBeDeleted);
+            groupBalance.remove(accountId);
         }
 
         Map<String, Object> updateFields = new HashMap<>();
         updateFields.put("accountIdList" , group.getAccountIdList());
         updateFields.put("balance", groupBalance);
 
-
         database.collection("Groups").document(groupID)
                 .update(updateFields)
                 .addOnCompleteListener(task -> {
-                    finish();
+                   finish();
                     startActivity(getIntent());
                 });
-
     }
 
     public void deleteGroup(View view) {

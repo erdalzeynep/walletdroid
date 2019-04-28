@@ -58,15 +58,20 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
         Account account = accounts.get(position);
         TextView debt = listItem.findViewById(R.id.textview_account_debt_gd);
         String accountID = account.getId();
-        String accountBalance = group.getBalance().get(accountID).toString();
-        debt.setText(accountBalance);
 
-        if (accountBalance.contains("-")) {
-            debt.setTextColor(Color.RED);
-        } else {
-            debt.setTextColor(Color.GREEN);
+
+        if (accountID != null) {
+            Double balance = group.getBalance().get(accountID);
+            if (null != balance) {
+                String accountBalance = balance.toString();
+                debt.setText(accountBalance);
+                if (accountBalance.contains("-")) {
+                    debt.setTextColor(Color.RED);
+                } else {
+                    debt.setTextColor(Color.GREEN);
+                }
+            }
         }
-
 
         TextView textViewAccount = listItem.findViewById(R.id.textview_account_item_gd);
         if (account.isInternalAccount()) {
