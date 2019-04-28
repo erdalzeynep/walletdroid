@@ -3,6 +3,7 @@ package com.sda5.walletdroid.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,21 +38,19 @@ public class QueryActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListenerTo;
     private ArrayList<Expense> expenses = new ArrayList<>();
     private ArrayList<Expense> tempExpenses = new ArrayList<>();
-    FirebaseFirestore database;
-    private FirebaseAuth mAuth;
+    private FirebaseFirestore database;
     private String accountId;
-    String currentUserId;
+    private String currentUserId;
     private Button btnDateFrom;
     private Button btnDateTo;
+    private Button btnGoToQuery;
     private LocalDate fromDate;
     private LocalDate toDate;
-    private Spinner sprCategory;
-    private Spinner sprTimePeriod;
     private String selectedCategory;
     private String selectedTimePeriodString;
-    private RadioButton rbPayHistory;
     private RadioButton rbAllHistory;
-    boolean allHistoryChecked;
+    private ArrayList<String> catlist = new ArrayList<>();
+    private ArrayList<Double> categoriesSumAmount = new ArrayList<>();
 
 
     @Override
@@ -59,19 +58,21 @@ public class QueryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
 
         btnDateFrom = findViewById(R.id.btn_query_from);
         btnDateFrom.setEnabled(false);
-//        btnDateFrom.setVisibility(View.GONE);
         btnDateTo = findViewById(R.id.btn_query_to);
         btnDateTo.setEnabled(false);
 
+        btnGoToQuery = findViewById(R.id.btn_query_goToPieChart);
+        btnGoToQuery.setEnabled(false);
+
         rbAllHistory = findViewById(R.id.all_history_radioButton);
         rbAllHistory.setChecked(true);
-        rbPayHistory = findViewById(R.id.pay_history_radioButton);
+        RadioButton rbPayHistory = findViewById(R.id.pay_history_radioButton);
 
 
 
@@ -108,7 +109,6 @@ public class QueryActivity extends AppCompatActivity {
             }
         };
 
-        ArrayList<String> catlist = new ArrayList<>();
         catlist.add("All Categories");
         catlist.add("Grocery");
         catlist.add("Clothes");
@@ -120,7 +120,7 @@ public class QueryActivity extends AppCompatActivity {
         catlist.add("Other");
 
         // Create spinner for user to choose the category of query
-        sprCategory = findViewById(R.id.spr_query_category);
+        Spinner sprCategory = findViewById(R.id.spr_query_category);
         ArrayAdapter adapterCategory = new ArrayAdapter(this, android.R.layout.simple_spinner_item, catlist);
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprCategory.setAdapter(adapterCategory);
@@ -145,7 +145,7 @@ public class QueryActivity extends AppCompatActivity {
         timeList.add("Custom");
 
         // Create spinner for user to choose the time period of query
-        sprTimePeriod = findViewById(R.id.spr_query_time);
+        Spinner sprTimePeriod = findViewById(R.id.spr_query_time);
         ArrayAdapter adapterTimePeriod = new ArrayAdapter(this, android.R.layout.simple_spinner_item, timeList);
         adapterTimePeriod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprTimePeriod.setAdapter(adapterTimePeriod);
@@ -176,6 +176,8 @@ public class QueryActivity extends AppCompatActivity {
         listView.setAdapter(expenseAdapter);
 
         expenses.clear();
+        resetArray(categoriesSumAmount, catlist.size());
+        btnGoToQuery.setEnabled(false);
         database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 task -> {
                     if (task.isSuccessful()) {
@@ -192,7 +194,20 @@ public class QueryActivity extends AppCompatActivity {
                                                 Expense expense = documentSnapshot.toObject(Expense.class);
                                                 expenses.add(expense);
                                             }
+                                            for(Expense e: expenses){
+                                                String c = e.getCategory();
+                                                Double a = e.getAmount();
+                                                for(int i = 0; i < catlist.size(); i++){
+                                                    if (catlist.get(i).equalsIgnoreCase(c)){
+                                                        Double newAmount = categoriesSumAmount.get(i) + a;
+                                                        categoriesSumAmount.set(i, newAmount);
+                                                    }
+                                                }
+                                            }
                                             expenseAdapter.notifyDataSetChanged();
+                                            if(expenses.size() != 0){
+                                                btnGoToQuery.setEnabled(true);
+                                            }
                                         });
                             }
                         }
@@ -265,6 +280,8 @@ public class QueryActivity extends AppCompatActivity {
 
         expenses.clear();
         tempExpenses.clear();
+        resetArray(categoriesSumAmount, catlist.size());
+        btnGoToQuery.setEnabled(false);
         database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 task -> {
                     if (task.isSuccessful()) {
@@ -284,7 +301,20 @@ public class QueryActivity extends AppCompatActivity {
                                                 tempExpenses.add(expense);
                                             }
                                             expenses.addAll(arrayBasedCategory(tempExpenses,category));
+                                            for(Expense e: expenses){
+                                                String c = e.getCategory();
+                                                Double a = e.getAmount();
+                                                for(int i = 0; i < catlist.size(); i++){
+                                                    if (catlist.get(i).equalsIgnoreCase(c)){
+                                                        Double newAmount = categoriesSumAmount.get(i) + a;
+                                                        categoriesSumAmount.set(i, newAmount);
+                                                    }
+                                                }
+                                            }
                                             expenseAdapter.notifyDataSetChanged();
+                                            if(expenses.size() != 0){
+                                                btnGoToQuery.setEnabled(true);
+                                            }
                                         });
 
                             }
@@ -303,6 +333,9 @@ public class QueryActivity extends AppCompatActivity {
 
         expenses.clear();
         tempExpenses.clear();
+        expenses.clear();
+        resetArray(categoriesSumAmount, catlist.size());
+        btnGoToQuery.setEnabled(false);
         database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 task -> {
                     if (task.isSuccessful()) {
@@ -322,7 +355,20 @@ public class QueryActivity extends AppCompatActivity {
                                                 tempExpenses.add(expense);
                                             }
                                             expenses.addAll(arrayBasedCategory(tempExpenses,category));
+                                            for(Expense e: expenses){
+                                                String c = e.getCategory();
+                                                Double a = e.getAmount();
+                                                for(int i = 0; i < catlist.size(); i++){
+                                                    if (catlist.get(i).equalsIgnoreCase(c)){
+                                                        Double newAmount = categoriesSumAmount.get(i) + a;
+                                                        categoriesSumAmount.set(i, newAmount);
+                                                    }
+                                                }
+                                            }
                                             expenseAdapter.notifyDataSetChanged();
+                                            if(expenses.size() != 0){
+                                                btnGoToQuery.setEnabled(true);
+                                            }
                                         });
                             }
                         }
@@ -341,5 +387,20 @@ public class QueryActivity extends AppCompatActivity {
             }
             return result;
         } else return expenseList;
+    }
+
+    public void gotToPieChart(View view){
+        if (expenses.size() == 0) btnGoToQuery.setEnabled(false);
+        Intent intent = new Intent(getApplicationContext(), com.sda5.walletdroid.activities.AddExpenseActivity.class);
+        intent.putStringArrayListExtra("categories", catlist);
+        intent.putExtra("categoriesSumAmount", categoriesSumAmount);
+//        startActivity(intent);
+    }
+
+    public void resetArray(ArrayList<Double> list, int size){
+        list.clear();
+        for(int i = 0; i < size; i ++){
+            list.add(0.0);
+        }
     }
 }
