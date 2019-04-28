@@ -12,9 +12,9 @@
         android:title="@string/title_expnese" />
 
     <item
-        android:id="@+id/navigation_query"
-        android:icon="@drawable/query"
-        android:title="@string/title_query" />
+        android:id="@+id/navigation_graph"
+        android:icon="@drawable/graph"
+        android:title="Graph" />
     <item
         android:id="@+id/navigation_settle"
         android:icon="@drawable/settle"

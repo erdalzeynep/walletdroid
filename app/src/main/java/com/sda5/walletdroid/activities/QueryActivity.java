@@ -29,7 +29,6 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Optional;
 
 public class QueryActivity extends AppCompatActivity {
@@ -39,23 +38,19 @@ public class QueryActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListenerTo;
     private ArrayList<Expense> expenses = new ArrayList<>();
     private ArrayList<Expense> tempExpenses = new ArrayList<>();
-    FirebaseFirestore database;
-    private FirebaseAuth mAuth;
+    private FirebaseFirestore database;
     private String accountId;
-    String currentUserId;
+    private String currentUserId;
     private Button btnDateFrom;
     private Button btnDateTo;
     private Button btnGoToQuery;
     private LocalDate fromDate;
     private LocalDate toDate;
-    private Spinner sprCategory;
-    private Spinner sprTimePeriod;
     private String selectedCategory;
     private String selectedTimePeriodString;
-    private RadioButton rbPayHistory;
     private RadioButton rbAllHistory;
-    ArrayList<String> catlist = new ArrayList<>();
-    ArrayList<Double> categoriesSumAmount = new ArrayList<>();
+    private ArrayList<String> catlist = new ArrayList<>();
+    private ArrayList<Double> categoriesSumAmount = new ArrayList<>();
 
 
     @Override
@@ -63,7 +58,7 @@ public class QueryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
 
@@ -77,7 +72,7 @@ public class QueryActivity extends AppCompatActivity {
 
         rbAllHistory = findViewById(R.id.all_history_radioButton);
         rbAllHistory.setChecked(true);
-        rbPayHistory = findViewById(R.id.pay_history_radioButton);
+        RadioButton rbPayHistory = findViewById(R.id.pay_history_radioButton);
 
 
 
@@ -125,7 +120,7 @@ public class QueryActivity extends AppCompatActivity {
         catlist.add("Other");
 
         // Create spinner for user to choose the category of query
-        sprCategory = findViewById(R.id.spr_query_category);
+        Spinner sprCategory = findViewById(R.id.spr_query_category);
         ArrayAdapter adapterCategory = new ArrayAdapter(this, android.R.layout.simple_spinner_item, catlist);
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprCategory.setAdapter(adapterCategory);
@@ -139,7 +134,6 @@ public class QueryActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -150,7 +144,7 @@ public class QueryActivity extends AppCompatActivity {
         timeList.add("Custom");
 
         // Create spinner for user to choose the time period of query
-        sprTimePeriod = findViewById(R.id.spr_query_time);
+        Spinner sprTimePeriod = findViewById(R.id.spr_query_time);
         ArrayAdapter adapterTimePeriod = new ArrayAdapter(this, android.R.layout.simple_spinner_item, timeList);
         adapterTimePeriod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprTimePeriod.setAdapter(adapterTimePeriod);
@@ -247,7 +241,6 @@ public class QueryActivity extends AppCompatActivity {
     }
 
     public void search(View view) {
-        String whichArrayToCheck;
 
         if(selectedTimePeriodString.equalsIgnoreCase("Last Month")){
             toDate = LocalDate.now();
