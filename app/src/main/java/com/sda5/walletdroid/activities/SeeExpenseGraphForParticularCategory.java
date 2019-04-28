@@ -20,6 +20,7 @@ import com.sda5.walletdroid.models.Expense;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,6 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
         catlist.add("Membership");
         catlist.add("Other");
 
-        // Create spinner for user to choose the category of query
         sprCategory = findViewById(R.id.query_category);
         ArrayAdapter adapterCategory = new ArrayAdapter(this, android.R.layout.simple_spinner_item, catlist);
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -77,17 +77,24 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
             }
         });
 
+        ArrayList<String> timePeriodString = new ArrayList<>();
+
+        timePeriodString.add("Select Time");
+        timePeriodString.add("Last Month");
+        timePeriodString.add("Last Three Months");
+        timePeriodString.add("Last Six Months");
+        timePeriodString.add("Last One Year");
+
         Map<String, Integer> timePeriod = new HashMap<>();
 
-        timePeriod.put("Last One Year", 12);
-        timePeriod.put("Last Six Months", 6);
-        timePeriod.put("Last Three Months", 3);
-        timePeriod.put("Last Month", 1);
-        timePeriod.put("Select time", -1);
+        timePeriod.put(timePeriodString.get(0), null);
+        timePeriod.put(timePeriodString.get(1), 1);
+        timePeriod.put(timePeriodString.get(2), 3);
+        timePeriod.put(timePeriodString.get(3), 6);
+        timePeriod.put(timePeriodString.get(4), 12);
 
-        // Create spinner for user to choose the time period of query
         sprTimePeriod = findViewById(R.id.query_month);
-        ArrayAdapter adapterTimePeriod = new ArrayAdapter(this, android.R.layout.simple_spinner_item, timePeriod.keySet().toArray());
+        ArrayAdapter adapterTimePeriod = new ArrayAdapter(this, android.R.layout.simple_spinner_item, timePeriodString);
         adapterTimePeriod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprTimePeriod.setAdapter(adapterTimePeriod);
         sprTimePeriod.setSelection(0);
@@ -97,6 +104,7 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
                 selectedTimePeriod = (String) parent.getItemAtPosition(position);
                 selectedTimePeriodInteger = timePeriod.get(selectedTimePeriod);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -134,12 +142,11 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
                                         int expenseMonth = LocalDate.parse(expense.getDate(), formatter).getMonth().getValue();
                                         int expenseYear = LocalDate.parse(expense.getDate(), formatter).getYear();
                                         String key = expenseYear + "-" + expenseMonth;
-
                                         Double totalAmountForMonth = totalExpenseMapByMonth.getOrDefault(key, 0.0);
                                         totalAmountForMonth += expense.getAmount();
                                         totalExpenseMapByMonth.put(key, totalAmountForMonth);
                                     }
-
+                                    // Graph method can be called from this line with totalExpenseMapByMonth Map.
                                     System.out.println("______________________" + totalExpenseMapByMonth.entrySet().toString());
                                 });
                             }
@@ -150,51 +157,13 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
     }
 
     public StartEndDate getStartEndDate(Integer howManyMonths) {
-        Integer startMonth;
-        Integer startYear;
-        Integer todaysMonth;
-        Integer todaysYear;
-        long startDate;
 
-        LocalDate todaysDateLocaleDate = LocalDate.now();
-        long todaysDateLong = todaysDateLocaleDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        todaysMonth = todaysDateLocaleDate.getMonth().getValue();
-        todaysYear = todaysDateLocaleDate.getYear();
-        startYear = todaysYear;
+        LocalDate toDate = LocalDate.now();
+        LocalDate fromDate = toDate.minus(howManyMonths, ChronoUnit.MONTHS);
 
-        if (howManyMonths == todaysMonth) {
-            startMonth = 12;
-
-        } else if (howManyMonths < todaysMonth) {
-            startMonth = todaysMonth - howManyMonths;
-        } else {
-            while (howManyMonths > todaysMonth) {
-                todaysMonth += 12;
-                startYear -= 1;
-            }
-            startMonth = todaysMonth - howManyMonths + 1;
-        }
-
-        startDate = LocalDate.of(startYear, startMonth, 1)
-                .atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-
-        StartEndDate startEndDate = new StartEndDate(startDate, todaysDateLong);
-
-        return startEndDate;
-    }
-
-    public StartEndDate getStartEndDateForOneMonth(int month, int year) {
-
-        long startDateLong;
-        long endDateLong;
-
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
-
-        startDateLong = startDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        endDateLong = endDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-
-        return new StartEndDate(startDateLong, endDateLong);
-
+        System.out.println("FROM=========="+fromDate.toString()+"TO=============="+toDate.toString());
+        long fromDateLong = fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        long toDateLong = toDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return new StartEndDate(fromDateLong, toDateLong);
     }
 }
