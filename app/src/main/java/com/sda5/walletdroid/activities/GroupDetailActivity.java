@@ -7,9 +7,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,10 +20,9 @@ import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class GroupDetailActivity extends AppCompatActivity {
     private String groupID;
@@ -91,9 +89,9 @@ public class GroupDetailActivity extends AppCompatActivity {
                                         .whereEqualTo("id", accountId)
                                         .get()
                                         .addOnSuccessListener(queryDocumentSnapshots -> {
-                                    accounts.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
-                                    accountAdapter.notifyDataSetChanged();
-                                });
+                                            accounts.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
+                                            accountAdapter.notifyDataSetChanged();
+                                        });
 
                             }
                         }
@@ -114,6 +112,8 @@ public class GroupDetailActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
     }
 
     private boolean isGroupAdmin() {
@@ -121,14 +121,22 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     public void leaveGroup(View view) {
-        group.getAccountIdList().remove(accountId);
-        database.collection("Groups").document(groupID)
-                .update("accountIdList", group.getAccountIdList())
-                .addOnCompleteListener(task -> {
-                    Toast.makeText(GroupDetailActivity.this, "You left the group",
-                            Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
-                });
+        HashMap<String, Double> groupBalance = group.getBalance();
+        Double balanceForCurrentUser = groupBalance.get(accountId);
+        if (balanceForCurrentUser != 0) {
+            Toast.makeText(GroupDetailActivity.this, "You are not allowed to leave group since you have a balance. ",
+                    Toast.LENGTH_SHORT).show();
+
+        } else {
+            group.getAccountIdList().remove(accountId);
+            database.collection("Groups").document(groupID)
+                    .update("accountIdList", group.getAccountIdList())
+                    .addOnCompleteListener(task -> {
+                        Toast.makeText(GroupDetailActivity.this, "You left the group",
+                                Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
+                    });
+        }
     }
 
 
@@ -139,17 +147,29 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     public void deleteMembers(View view) {
-        int sizeOfSelectedAccountIdList = accountAdapter.getSelectedAccountIDList().size();
-        for (int i = 0; i < sizeOfSelectedAccountIdList; i++) {
-            group.getAccountIdList().remove(accountAdapter.getSelectedAccountIDList().get(i));
+        Map<String, Double> groupBalance = group.getBalance();
+        for (String accountID : accountAdapter.getSelectedAccountIDList()) {
+                groupBalance.remove(accountID);
         }
 
+        List<String> accountIDsToBeDeleted = accountAdapter.getSelectedAccountIDList();
+        for (String accountId : accountIDsToBeDeleted) {
+            group.getAccountIdList().remove(accountId);
+            groupBalance.remove(accountIDsToBeDeleted);
+        }
+
+        Map<String, Object> updateFields = new HashMap<>();
+        updateFields.put("accountIdList" , group.getAccountIdList());
+        updateFields.put("balance", groupBalance);
+
+
         database.collection("Groups").document(groupID)
-                .update("accountIdList", group.getAccountIdList())
+                .update(updateFields)
                 .addOnCompleteListener(task -> {
                     finish();
                     startActivity(getIntent());
                 });
+
     }
 
     public void deleteGroup(View view) {
@@ -165,7 +185,6 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     public void settleTheGroupExpenses(View view) {
-
         HashMap<String, Double> groupBalance = group.getBalance();
         groupBalance.forEach((key, value) -> groupBalance.put(key, 0.0));
         database.collection("Groups").document(groupID).update("balance", groupBalance);

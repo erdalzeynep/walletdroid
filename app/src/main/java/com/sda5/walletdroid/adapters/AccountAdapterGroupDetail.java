@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.activities.GroupDetailActivity;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +51,6 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
         View listItem = convertView;
         if (listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.list_account_item_group_detail, parent, false);
@@ -59,10 +61,9 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
         String accountBalance = group.getBalance().get(accountID).toString();
         debt.setText(accountBalance);
 
-        if (accountBalance.contains("-")){
+        if (accountBalance.contains("-")) {
             debt.setTextColor(Color.RED);
-        }
-        else{
+        } else {
             debt.setTextColor(Color.GREEN);
         }
 
@@ -86,12 +87,22 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
             checkBoxAccount.setVisibility(View.GONE);
         }
 
+
         View finalListItem = listItem;
         checkBoxAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String selectedAccountID = checkBoxAccount.getTag().toString();
+            HashMap<String, Double> groupBalance = group.getBalance();
+            Double balanceForCurrentUser = groupBalance.get(selectedAccountID);
             if (isChecked) {
-                selectedAccountIDList.add(selectedAccountID);
-                finalListItem.setBackgroundColor(Color.parseColor("#FFFFE0"));
+                if (balanceForCurrentUser == 0) {
+                    selectedAccountIDList.add(selectedAccountID);
+                    finalListItem.setBackgroundColor(Color.parseColor("#FFFFE0"));
+                } else {
+                    Toast.makeText(getContext(), "You are not allowed to delete member since there is a balance.",
+                            Toast.LENGTH_SHORT).show();
+                    checkBoxAccount.setChecked(false);
+
+                }
             } else {
                 selectedAccountIDList.remove(selectedAccountID);
                 finalListItem.setBackgroundColor(Color.parseColor("#FFFFFF"));
