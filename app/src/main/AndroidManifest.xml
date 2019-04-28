@@ -15,9 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.Graphs.MyPieChartActivityTest"></activity>
+
         <activity android:name=".activities.Graphs.MyPieChartActivity" />
-        <activity android:name=".activities.Graphs.MyGraphTestActivity" />
         <activity android:name=".activities.Graphs.MyBarGraph" />
         <activity android:name=".activities.Graphs.MyLineGraph" />
         <activity android:name=".Notifications.NotificationActivity">
@@ -27,6 +26,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.SeeExpenseGraphForParticularCategory"></activity>
+        <activity android:name=".activities.QueryActivity" />
+
         <activity android:name=".activities.AddExpenseUsersActivity" />
         <activity android:name=".activities.ChooseGroupForExpenseActivity" />
         <activity android:name=".activities.AddNewGroupMemberActivity" /> <!-- Splash Screen -->

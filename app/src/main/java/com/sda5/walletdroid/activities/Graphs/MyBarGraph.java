@@ -1,6 +1,7 @@
 package com.sda5.walletdroid.activities.Graphs;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,6 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
@@ -28,6 +28,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sda5.walletdroid.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class MyBarGraph extends DemoBase implements
     private BarChart chart;
 
 
-    private HashMap<Integer, Integer> expenseMaps = new HashMap<>();
+    private HashMap<String, Double> expenseMaps = new HashMap<>();
 
     public static final String TAG = "My Bar Graph";
 
@@ -50,19 +51,6 @@ public class MyBarGraph extends DemoBase implements
 
         setTitle("My Line Chart Activity");
 
-        final ArrayList<String> xLabel = new ArrayList<>();
-        xLabel.add("Food");
-        xLabel.add("Transport");
-        xLabel.add("Books");
-        xLabel.add("Car");
-        xLabel.add("Sports");
-        xLabel.add("Subscriptions");
-        xLabel.add("Eat out");
-        xLabel.add("Aug");
-        xLabel.add("Sep");
-        xLabel.add("Oct");
-        xLabel.add("Nov");
-
         chart = findViewById(R.id.chartMyBar);
         chart.setOnChartValueSelectedListener(this);
 
@@ -70,12 +58,8 @@ public class MyBarGraph extends DemoBase implements
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(true);
-        xAxis.setDrawLabels(true);
-        // Look-up table
-        final String[] weekdays = {"Food", "Transport", "Books", "Car", "Sports", "Subscriptions", "Eatout"};
+        xAxis.setDrawLabels(false);
 
-        // Set the value formatter
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(weekdays));
         //xAxis.mAxisMinimum=0;
         //xAxis.mAxisMaximum=20;
 
@@ -109,7 +93,7 @@ public class MyBarGraph extends DemoBase implements
         chart.setScaleEnabled(true);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        chart.setPinchZoom(false);
+        chart.setPinchZoom(true);
 
         Legend l = chart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -117,16 +101,9 @@ public class MyBarGraph extends DemoBase implements
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
 
-        // Adding values to hashmap
-        expenseMaps.put(32, 1);
-        expenseMaps.put(55, 2);
-        expenseMaps.put(77, 6);
-        expenseMaps.put(120, 8);
-        expenseMaps.put(200, 1);
-        expenseMaps.put(10, 2);
-        expenseMaps.put(77, 6);
-        expenseMaps.put(150, 8);
-
+        // Get  HashMap from the incoming intent
+        Intent intent = getIntent();
+        expenseMaps = (HashMap<String, Double>)intent.getSerializableExtra("map");
 
         //generateDataLine();
         getRemoteData(expenseMaps);
@@ -142,32 +119,34 @@ public class MyBarGraph extends DemoBase implements
     /**
      * @param expenseRemote
      */
-    private void getRemoteData(HashMap<Integer, Integer> expenseRemote) {
+    private void getRemoteData(HashMap<String, Double> expenseRemote) {
 
-        //Getting Set of keys
-        final Set<Integer> keySet = expenseRemote.keySet();
+        //Getting Set of keys Categories/months
+        Set<String> keySet = expenseRemote.keySet();
         // Transfer data to an array
-        final Integer[] test = keySet.toArray(new Integer[0]);
-        // Entry data for creating graph
-        final ArrayList<BarEntry> keySetData = new ArrayList<>();
+        String[] labelsExpense = keySet.toArray(new String[0]);
 
-        int lengthTest = test.length;
+        // Getting values from HashMap
+        Collection<Double> values = expenseRemote.values();
 
-        Log.d(TAG, "LENGTH OF INTEGER ARRAY " + lengthTest);
-        System.out.println("LENGTH OF INTEGER ARRAY " + lengthTest);
+        // Convert data to an array
+        Double[] test = values.toArray(new Double[0]);
+
+        // Array list for storing data
+        ArrayList<BarEntry> valuesExpense = new ArrayList<>();
 
         for (int i = 0; i < test.length; i++) {
-            keySetData.add(new BarEntry(i,test[i],months[i]));
+            valuesExpense.add(new BarEntry(i,test[i].intValue(),labelsExpense[i]));
 
         }
 
-
-
-        BarDataSet d4 = new BarDataSet(keySetData, "Expenses ");
+        BarDataSet d4 = new BarDataSet(valuesExpense, "Expenses ");
         d4.setColors(ColorTemplate.VORDIPLOM_COLORS);
         d4.setHighLightAlpha(255);
 
-
+        //XAxis xAxis = chart.getXAxis();
+        //xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense));
+        //xAxis.setTextSize(13);
 
         BarData data = new BarData(d4);
         data.setBarWidth(0.9f);

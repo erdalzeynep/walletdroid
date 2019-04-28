@@ -40,7 +40,7 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
     private PieChart chart;
 
     private ArrayList<String> catPie = new ArrayList<>();
-    private ArrayList<Integer> valuePie = new ArrayList<>();
+    private ArrayList<Double> valuePie = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,10 +101,12 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
         chart.setEntryLabelTextSize(12f);
 
 
+        chart.setDrawSliceText(false);
+
         // Get data from incoming intent
         Intent intent = getIntent();
-        catPie = (ArrayList<String>)intent.getSerializableExtra("listCat");
-        valuePie = (ArrayList<Integer>)intent.getSerializableExtra("listValue");
+        catPie = (ArrayList<String>)intent.getSerializableExtra("categories");
+        valuePie = (ArrayList<Double>)intent.getSerializableExtra("categoriesSumAmount");
 
 
 
@@ -118,18 +120,19 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
      *
      * @return Pie data
      */
-    private void generateDataPie(ArrayList<Integer> remoteExpensePie, ArrayList<String> remoteCategoryPie) {
+    private void generateDataPie(ArrayList<Double> remoteExpensePie, ArrayList<String> remoteCategoryPie) {
 
+        //ArrayList<Integer> remoteExpensePieInt = new ArrayList<>();
         // Transfer data to an array
         String[] labelsExpense = remoteCategoryPie.toArray(new String[0]);
 
         // Convert data to an array
-        Integer[] test = remoteExpensePie.toArray(new Integer[0]);
+        Double[] test = remoteExpensePie.toArray(new Double[0]);
 
         ArrayList<PieEntry> entries = new ArrayList<>();
 
         for (int i = 0; i < labelsExpense.length; i++) {
-            entries.add(new PieEntry((float) (test[i]), labelsExpense[i]));
+            entries.add(new PieEntry((float) (test[i].intValue()), labelsExpense[i]));
         }
 
         PieDataSet dPie = new PieDataSet(entries, "Expense Details");
@@ -165,10 +168,11 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
 
         PieData data = new PieData(dPie);
         data.setValueFormatter(new PercentFormatter(chart));
-        data.setValueTextSize(11f);
-        data.setValueTextColor(Color.WHITE);
+        data.setValueTextSize(13f);
+        data.setValueTextColor(Color.BLUE);
         data.setValueTypeface(tfLight);
         chart.setData(data);
+
 
         // undo all highlights
         chart.highlightValues(null);

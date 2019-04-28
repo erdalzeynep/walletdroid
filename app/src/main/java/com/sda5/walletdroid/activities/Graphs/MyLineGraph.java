@@ -39,7 +39,7 @@ public class MyLineGraph extends DemoBase implements
 
     private LineChart chart;
 
-    public HashMap<String, Integer> expenseMaps = new HashMap<>();
+    public HashMap<String, Double> expenseMaps = new HashMap<>();
 
     public static final String TAG = "My Line Graph";
 
@@ -61,11 +61,6 @@ public class MyLineGraph extends DemoBase implements
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawLabels(true);
-        // Look-up table
-        final String[] weekdays = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-
-        // Set the value formatter
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(weekdays));
 
         chart.setDrawGridBackground(false);
         chart.getDescription().setEnabled(false);
@@ -95,16 +90,7 @@ public class MyLineGraph extends DemoBase implements
 
         // Get  HashMap from the incoming intent
         Intent intent = getIntent();
-        expenseMaps = (HashMap<String, Integer>)intent.getSerializableExtra("map");
-
-        /*expenseMaps.put("Food",32);
-        expenseMaps.put("Transport",55);
-        expenseMaps.put("Clothes",77);
-        expenseMaps.put("Books",120);
-        expenseMaps.put("Car",200);
-        expenseMaps.put("Trips",10);
-        expenseMaps.put("Children",77);
-        expenseMaps.put("Others",150);*/
+        expenseMaps = (HashMap<String, Double>)intent.getSerializableExtra("map");
 
 
         //generateDataLine();
@@ -121,7 +107,7 @@ public class MyLineGraph extends DemoBase implements
     /**
      * @param expenseRemote
      */
-    private void getRemoteData(HashMap<String, Integer> expenseRemote) {
+    private void getRemoteData(HashMap<String, Double> expenseRemote) {
 
         //Getting Set of keys Categories/months
         Set<String> keySet = expenseRemote.keySet();
@@ -130,10 +116,10 @@ public class MyLineGraph extends DemoBase implements
 
 
         // Getting values from HashMap
-        Collection<Integer> values = expenseRemote.values();
+        Collection<Double> values = expenseRemote.values();
 
         // Convert data to an array
-        Integer[] test = values.toArray(new Integer[0]);
+        Double[] test = values.toArray(new Double[0]);
 
         // Array list for storing data
         ArrayList<Entry> valuesExpense = new ArrayList<>();
@@ -145,7 +131,7 @@ public class MyLineGraph extends DemoBase implements
         System.out.println("LENGTH OF INTEGER ARRAY " + lengthTest);
 
         for (int i = 0; i < test.length; i++) {
-            valuesExpense.add(new Entry(i,test[i]));
+            valuesExpense.add(new Entry(i,test[i].intValue()));
 
         }
 
