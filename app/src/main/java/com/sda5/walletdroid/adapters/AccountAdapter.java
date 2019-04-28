@@ -43,6 +43,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         if (listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.list_account_item, parent, false);
 
+
         Account account = accounts.get(position);
 
         final CheckBox checkBoxAccount = listItem.findViewById(R.id.checkbox_account_item);

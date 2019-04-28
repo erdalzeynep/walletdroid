@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -77,14 +78,15 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         buttonAddExternalAccount.setVisibility(View.GONE);
         listViewExternalAccounts.setVisibility(View.GONE);
 
-        checkBoxExternalAccount.setOnClickListener(v -> {
-            if (checkBoxExternalAccount.isChecked()) {
+        checkBoxExternalAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
                 editTextExternalAccountName.setVisibility(View.VISIBLE);
                 editTextExternalAccountEmail.setVisibility(View.VISIBLE);
                 buttonAddExternalAccount.setVisibility(View.VISIBLE);
+                listViewExternalAccounts.setVisibility(View.VISIBLE);
                 listViewExternalAccounts.setAdapter(externalUserAdapter);
-
             } else {
+                editTextExternalAccountName.setVisibility(View.GONE);
                 editTextExternalAccountEmail.setVisibility(View.GONE);
                 buttonAddExternalAccount.setVisibility(View.GONE);
                 listViewExternalAccounts.setVisibility(View.GONE);

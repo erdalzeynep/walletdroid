@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/textView_user_list"
-        android:layout_width="375dp"
+        android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
@@ -21,13 +21,13 @@
 
     <ListView
         android:id="@+id/account_list"
-        android:layout_width="374dp"
+        android:layout_width="match_parent"
         android:layout_height="241dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
 
     <CheckBox
         android:id="@+id/cb_external_account_add_member"
-        android:layout_width="297dp"
+        android:layout_width="match_parent"
         android:layout_height="52dp"
         android:text="Continue with external person"
         android:textSize="18sp" />
