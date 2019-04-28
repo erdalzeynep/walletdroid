@@ -2,6 +2,7 @@ package com.sda5.walletdroid.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,11 +15,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.models.Account;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -30,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
     String userId;
     String email;
     String idToken;
+    private static final String TAG = "TOKEN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,17 +102,13 @@ public class SignUpActivity extends AppCompatActivity {
                 .setDisplayName(displayName)
                 .build();
 
-        user.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            idToken = task.getResult().getToken();
-                            // Send token to your backend via HTTPS
-                            // ...
-                        } else {
-                            // Handle error -> task.getException();
-                        }
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "getInstanceId failed", task.getException());
+                        return;
                     }
+                    idToken = Objects.requireNonNull(task.getResult()).getToken();
                 });
 
         user.updateProfile(profileUpdates)
