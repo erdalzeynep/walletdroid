@@ -3,6 +3,7 @@ package com.sda5.walletdroid.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +29,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Optional;
 
 public class QueryActivity extends AppCompatActivity {
@@ -43,6 +45,7 @@ public class QueryActivity extends AppCompatActivity {
     String currentUserId;
     private Button btnDateFrom;
     private Button btnDateTo;
+    private Button btnGoToQuery;
     private LocalDate fromDate;
     private LocalDate toDate;
     private Spinner sprCategory;
@@ -51,7 +54,8 @@ public class QueryActivity extends AppCompatActivity {
     private String selectedTimePeriodString;
     private RadioButton rbPayHistory;
     private RadioButton rbAllHistory;
-    boolean allHistoryChecked;
+    ArrayList<String> catlist = new ArrayList<>();
+    ArrayList<Double> categoriesSumAmount = new ArrayList<>();
 
 
     @Override
@@ -65,9 +69,11 @@ public class QueryActivity extends AppCompatActivity {
 
         btnDateFrom = findViewById(R.id.btn_query_from);
         btnDateFrom.setEnabled(false);
-//        btnDateFrom.setVisibility(View.GONE);
         btnDateTo = findViewById(R.id.btn_query_to);
         btnDateTo.setEnabled(false);
+
+        btnGoToQuery = findViewById(R.id.btn_query_goToPieChart);
+        btnGoToQuery.setEnabled(false);
 
         rbAllHistory = findViewById(R.id.all_history_radioButton);
         rbAllHistory.setChecked(true);
@@ -108,7 +114,6 @@ public class QueryActivity extends AppCompatActivity {
             }
         };
 
-        ArrayList<String> catlist = new ArrayList<>();
         catlist.add("All Categories");
         catlist.add("Grocery");
         catlist.add("Clothes");
@@ -176,6 +181,8 @@ public class QueryActivity extends AppCompatActivity {
         listView.setAdapter(expenseAdapter);
 
         expenses.clear();
+        resetArray(categoriesSumAmount, catlist.size());
+        btnGoToQuery.setEnabled(false);
         database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 task -> {
                     if (task.isSuccessful()) {
@@ -192,7 +199,20 @@ public class QueryActivity extends AppCompatActivity {
                                                 Expense expense = documentSnapshot.toObject(Expense.class);
                                                 expenses.add(expense);
                                             }
+                                            for(Expense e: expenses){
+                                                String c = e.getCategory();
+                                                Double a = e.getAmount();
+                                                for(int i = 0; i < catlist.size(); i++){
+                                                    if (catlist.get(i).equalsIgnoreCase(c)){
+                                                        Double newAmount = categoriesSumAmount.get(i) + a;
+                                                        categoriesSumAmount.set(i, newAmount);
+                                                    }
+                                                }
+                                            }
                                             expenseAdapter.notifyDataSetChanged();
+                                            if(expenses.size() != 0){
+                                                btnGoToQuery.setEnabled(true);
+                                            }
                                         });
                             }
                         }
@@ -265,6 +285,8 @@ public class QueryActivity extends AppCompatActivity {
 
         expenses.clear();
         tempExpenses.clear();
+        resetArray(categoriesSumAmount, catlist.size());
+        btnGoToQuery.setEnabled(false);
         database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 task -> {
                     if (task.isSuccessful()) {
@@ -284,7 +306,20 @@ public class QueryActivity extends AppCompatActivity {
                                                 tempExpenses.add(expense);
                                             }
                                             expenses.addAll(arrayBasedCategory(tempExpenses,category));
+                                            for(Expense e: expenses){
+                                                String c = e.getCategory();
+                                                Double a = e.getAmount();
+                                                for(int i = 0; i < catlist.size(); i++){
+                                                    if (catlist.get(i).equalsIgnoreCase(c)){
+                                                        Double newAmount = categoriesSumAmount.get(i) + a;
+                                                        categoriesSumAmount.set(i, newAmount);
+                                                    }
+                                                }
+                                            }
                                             expenseAdapter.notifyDataSetChanged();
+                                            if(expenses.size() != 0){
+                                                btnGoToQuery.setEnabled(true);
+                                            }
                                         });
 
                             }
@@ -303,6 +338,9 @@ public class QueryActivity extends AppCompatActivity {
 
         expenses.clear();
         tempExpenses.clear();
+        expenses.clear();
+        resetArray(categoriesSumAmount, catlist.size());
+        btnGoToQuery.setEnabled(false);
         database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
                 task -> {
                     if (task.isSuccessful()) {
@@ -322,7 +360,20 @@ public class QueryActivity extends AppCompatActivity {
                                                 tempExpenses.add(expense);
                                             }
                                             expenses.addAll(arrayBasedCategory(tempExpenses,category));
+                                            for(Expense e: expenses){
+                                                String c = e.getCategory();
+                                                Double a = e.getAmount();
+                                                for(int i = 0; i < catlist.size(); i++){
+                                                    if (catlist.get(i).equalsIgnoreCase(c)){
+                                                        Double newAmount = categoriesSumAmount.get(i) + a;
+                                                        categoriesSumAmount.set(i, newAmount);
+                                                    }
+                                                }
+                                            }
                                             expenseAdapter.notifyDataSetChanged();
+                                            if(expenses.size() != 0){
+                                                btnGoToQuery.setEnabled(true);
+                                            }
                                         });
                             }
                         }
@@ -341,5 +392,20 @@ public class QueryActivity extends AppCompatActivity {
             }
             return result;
         } else return expenseList;
+    }
+
+    public void gotToPieChart(View view){
+        if (expenses.size() == 0) btnGoToQuery.setEnabled(false);
+        Intent intent = new Intent(getApplicationContext(), com.sda5.walletdroid.activities.AddExpenseActivity.class);
+        intent.putStringArrayListExtra("categories", catlist);
+        intent.putExtra("categoriesSumAmount", categoriesSumAmount);
+//        startActivity(intent);
+    }
+
+    public void resetArray(ArrayList<Double> list, int size){
+        list.clear();
+        for(int i = 0; i < size; i ++){
+            list.add(0.0);
+        }
     }
 }
