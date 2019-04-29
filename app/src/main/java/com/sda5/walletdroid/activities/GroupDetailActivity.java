@@ -7,8 +7,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,6 +20,7 @@ import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.adapters.AccountAdapterGroupDetail;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
+import com.sda5.walletdroid.models.Notification;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +41,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     private Button btnDeleteGroup;
     private Button btnLeaveGroup;
     private Button btnSettle;
+    private Account currentAccount;
 
 
     @Override
@@ -107,6 +112,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                         if (null != accountSnapshot) {
                             Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
                             if (account.isPresent()) {
+                                currentAccount = account.get();
                                 accountId = account.get().getId();
                             }
                         }
@@ -149,7 +155,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     public void deleteMembers(View view) {
         Map<String, Double> groupBalance = group.getBalance();
         for (String accountID : accountAdapter.getSelectedAccountIDList()) {
-                groupBalance.remove(accountID);
+            groupBalance.remove(accountID);
         }
 
         List<String> accountIDsToBeDeleted = accountAdapter.getSelectedAccountIDList();
@@ -161,13 +167,13 @@ public class GroupDetailActivity extends AppCompatActivity {
         }
 
         Map<String, Object> updateFields = new HashMap<>();
-        updateFields.put("accountIdList" , group.getAccountIdList());
+        updateFields.put("accountIdList", group.getAccountIdList());
         updateFields.put("balance", groupBalance);
 
         database.collection("Groups").document(groupID)
                 .update(updateFields)
                 .addOnCompleteListener(task -> {
-                   finish();
+                    finish();
                     startActivity(getIntent());
                 });
     }
@@ -185,10 +191,40 @@ public class GroupDetailActivity extends AppCompatActivity {
     }
 
     public void settleTheGroupExpenses(View view) {
+        HashMap<String, Double> previousGroupBalance = new HashMap<>(group.getBalance());
         HashMap<String, Double> groupBalance = group.getBalance();
         groupBalance.forEach((key, value) -> groupBalance.put(key, 0.0));
-        database.collection("Groups").document(groupID).update("balance", groupBalance);
-        finish();
-        startActivity(getIntent());
+        database.collection("Groups")
+                .document(groupID)
+                .update("balance", groupBalance)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String from;
+                        String tokenId;
+                        String message;
+                        String amount;
+                        String groupName = group.getName().toUpperCase();
+                        Notification notification;
+                        for (Account account : accounts) {
+                            from =currentAccount.getOwnerName().toUpperCase();
+                            amount = previousGroupBalance.get(account.getId()).toString();
+                            message = "Hi! You owe " + amount + "Kr for settlement of expenses of group : " + groupName;
+                            tokenId = account.getTokenID();
+                            notification = new Notification(from, groupName, message, tokenId);
+                            database.collection("Accounts")
+                                    .document(account.getId()).collection("Notifications")
+                                    .document(notification.getNotificationId())
+                                    .set(notification)
+                                    .addOnCompleteListener(task1 -> {
+                                        finish();
+                                        startActivity(getIntent());
+                                    });
+                        }
+
+                    }
+                });
+
+
     }
 }
