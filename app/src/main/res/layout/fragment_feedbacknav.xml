@@ -64,10 +64,12 @@
 
 
         <Button
+            android:id="@+id/btnfeedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/textInputFeed"
             android:text="Send"
+            android:onClick="sendFeedback"
             android:theme="@style/Base.Widget.AppCompat.Button.Colored"/>
 
     </LinearLayout>
