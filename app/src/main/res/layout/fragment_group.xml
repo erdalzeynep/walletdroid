@@ -1,35 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="10dp"
-    android:background="@drawable/gradientbackground">
+    android:background="#FFF">
 
-    <TextView
+
+    <RelativeLayout
+        android:id="@+id/fg_relativeLayout4"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/fg_linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradientbackground"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:background="@drawable/circle"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_group_black_24dp"
+                android:tint="@color/ewhite" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Group"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/ewhite"/>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/fg_relativeLayout1"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/fe_linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ewhite"
+            android:orientation="vertical"
+            android:layout_marginTop="150dp">
+
+            <TextView
         android:id="@+id/textView"
         android:layout_width="337dp"
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
         android:text="Group List"
+                android:textColor="@color/startblue"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <ListView
         android:id="@+id/group_list"
-        android:layout_width="341dp"
-        android:layout_height="382dp"
-        android:layout_gravity="clip_vertical|center_horizontal" />
-
-
-    <Button
-        android:id="@+id/btn_new_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:onClick="createNewGroup"
-        android:text="New Group" />
+        android:layout_height="200dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_gravity="clip_vertical|center_horizontal"
+        />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/btn_new_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/blue_button"
+                android:clickable="true"
+                android:padding="16dp"
+                android:textAllCaps="false"
+                android:textColor="#FFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="New Group"
+                android:onClick="createNewGroup" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

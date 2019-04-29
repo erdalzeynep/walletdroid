@@ -9,25 +9,46 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="65dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:textColor="@color/startblue"
+        android:textSize="24sp"
+        android:textStyle="bold"
         android:text="Choose Users"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+         />
 
     <ListView
         android:id="@+id/expense_users_list"
-        android:layout_width="match_parent"
-        android:layout_height="241dp"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
 
     <Button
         android:id="@+id/btn_add_expense_user"
-        android:layout_width="match_parent"
+        android:layout_below="@+id/ae_linearLayout1"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Add Expense Users"
+        android:layout_gravity="center"
+        android:layout_marginTop="35dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/blue_button"
+        android:clickable="true"
+        android:padding="16dp"
+        android:text="Split"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:onClick="addExpenseUsers"/>
+
+
+
 
 </LinearLayout>

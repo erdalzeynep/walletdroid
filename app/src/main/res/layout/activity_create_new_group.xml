@@ -17,7 +17,11 @@
         android:layout_height="63dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
+        android:layout_marginTop="10dp"
         android:text="Group Name"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:textColor="@color/startblue"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -25,62 +29,101 @@
         android:id="@+id/et_group_name"
         android:layout_width="match_parent"
         android:layout_height="75dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="5dp"
         android:hint="Enter group name" />
 
     <TextView
         android:id="@+id/lbl_select_people"
         android:layout_width="match_parent"
-        android:layout_height="69dp"
+        android:layout_height="60dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
-        android:text="Select people"
+        android:text="Choose members"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:textColor="@color/startblue"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <ListView
         android:id="@+id/account_list"
         android:layout_width="match_parent"
-        android:layout_height="203dp" />
+        android:layout_height="200dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"/>
 
     <CheckBox
         android:id="@+id/checkBox_external_account"
         android:layout_width="297dp"
         android:layout_height="52dp"
         android:text="Continue with external person"
+        android:textColor="@color/startblue"
+        android:textStyle="bold"
+        android:buttonTint="@color/startblue"
         android:textSize="18sp" />
 
     <EditText
         android:id="@+id/editText_external_account_name"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:ems="10"
-        android:hint="enter name"
+        android:hint="Enter name"
         android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_external_account_email"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:ems="10"
-        android:hint="enter email address"
-        android:inputType="textPersonName" />
+        android:hint="Enter email address"
+        android:inputType="textEmailAddress" />
 
     <Button
         android:id="@+id/button_add_external_account"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:background="@drawable/blue_button"
+        android:clickable="true"
+        android:padding="16dp"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
         android:text="Add"
         android:onClick="addExternalAccount"/>
 
     <ListView
         android:id="@+id/listView_external_accounts"
         android:layout_width="match_parent"
-        android:layout_height="120dp" />
+        android:layout_height="150dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"/>
 
     <Button
         android:id="@+id/btn_create_group"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:background="@drawable/blue_button"
+        android:clickable="true"
+        android:padding="16dp"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
         android:onClick="saveNewGroup"
         android:text="Create Group" />
 

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">WalletDroid</string>
-    <string name="title_activity_service">ServiceActivity</string>
+    <string name="title_activity_service">Wallet Droid</string>
     <string name="title_groups">Groups</string>
     <string name="title_expnese">Expense</string>
     <string name="title_query">Query</string>

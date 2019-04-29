@@ -92,25 +92,30 @@ public class AddExpenseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_expense);
         btnPickDate = findViewById(R.id.btnPickDate);
 
-        addExpenseUsers = findViewById(R.id.btn_add_expense_users);
+        addExpenseUsers = findViewById(R.id.btn_add_expense_user);
         addExpenseSpinner = findViewById(R.id.spr_addExpense_users);
         checkBoxGroupExpense = findViewById(R.id.checkBox_group_expense);
 
-        addExpenseUsers.setVisibility(View.GONE);
-        addExpenseSpinner.setVisibility(View.GONE);
+//        addExpenseUsers.setVisibility(View.GONE);
+        addExpenseUsers.setEnabled(false);
+//        addExpenseSpinner.setVisibility(View.GONE);
 
         checkBoxGroupExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     isGroupExpenseChecked = true;
-                    addExpenseUsers.setVisibility(View.VISIBLE);
-                    addExpenseSpinner.setVisibility(View.VISIBLE);
+//                    addExpenseUsers.setVisibility(View.VISIBLE);
+                    addExpenseUsers.setEnabled(true);
+
+//                    addExpenseSpinner.setVisibility(View.VISIBLE);
 
                 } else {
                     isGroupExpenseChecked = false;
-                    addExpenseUsers.setVisibility(View.GONE);
-                    addExpenseSpinner.setVisibility(View.GONE);
+//                    addExpenseUsers.setVisibility(View.GONE);
+                    addExpenseUsers.setEnabled(false);
+
+//                    addExpenseSpinner.setVisibility(View.GONE);
                 }
 
             }
