@@ -1,7 +1,5 @@
 package com.sda5.walletdroid.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +12,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -389,10 +389,10 @@ public class QueryActivity extends AppCompatActivity {
 
     public void gotToPieChart(View view){
         if (expenses.size() == 0) btnGoToQuery.setEnabled(false);
-        Intent intent = new Intent(getApplicationContext(), com.sda5.walletdroid.activities.AddExpenseActivity.class);
+        Intent intent = new Intent(getApplicationContext(), com.sda5.walletdroid.activities.Graphs.MyPieChartActivity.class);
         intent.putStringArrayListExtra("categories", catlist);
         intent.putExtra("categoriesSumAmount", categoriesSumAmount);
-//        startActivity(intent);
+        startActivity(intent);
     }
 
     public void resetArray(ArrayList<Double> list, int size){

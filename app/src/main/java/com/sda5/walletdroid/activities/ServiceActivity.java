@@ -1,36 +1,34 @@
 package com.sda5.walletdroid.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.sda5.walletdroid.R;
-import com.sda5.walletdroid.activities.Graphs.ListViewMultiChartActivity;
-import com.sda5.walletdroid.activities.Graphs.MultiLineChartActivity;
-import com.sda5.walletdroid.activities.Graphs.PieChartActivity;
-import com.sda5.walletdroid.fragments.ExpenseFragment;
-import com.sda5.walletdroid.fragments.GroupFragment;
-import com.sda5.walletdroid.fragments.InvestFragment;
-import com.sda5.walletdroid.fragments.QueyFragment;
-import com.sda5.walletdroid.fragments.SettleFragment;
-import com.sda5.walletdroid.fragments.fragments_navigation.AppDetails;
-import com.sda5.walletdroid.fragments.fragments_navigation.Feedbacknav;
-import com.sda5.walletdroid.fragments.fragments_navigation.GraphFragment;
-import com.sda5.walletdroid.fragments.fragments_navigation.ShareNav;
-import com.sda5.walletdroid.fragments.fragments_navigation.userprofile;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.sda5.walletdroid.Notifications.NotificationFragment;
+import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.fragments.ExpenseFragment;
+import com.sda5.walletdroid.fragments.GroupFragment;
+import com.sda5.walletdroid.fragments.InvestFragment;
+import com.sda5.walletdroid.fragments.SettleFragment;
+import com.sda5.walletdroid.fragments.fragments_navigation.AppDetails;
+import com.sda5.walletdroid.fragments.fragments_navigation.Feedbacknav;
+import com.sda5.walletdroid.fragments.fragments_navigation.GraphFragment;
+import com.sda5.walletdroid.fragments.fragments_navigation.ShareNav;
+import com.sda5.walletdroid.fragments.fragments_navigation.userprofile;
 
 //import android.widget.Toolbar;
 
@@ -132,6 +130,10 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
             case R.id.nav_userProfile:
                 fragment = new userprofile();
                 break;
+            case R.id.nav_noOfNotification:
+                fragment = new NotificationFragment();
+                break;
+
             case R.id.nav_expenseSetting:
                 fragment = new GraphFragment();
                 break;
@@ -156,8 +158,6 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
     }
 
 
-
-
     private boolean loadFragment(Fragment fragment){
         if(fragment != null){
             getSupportFragmentManager()
@@ -171,52 +171,47 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
 
 
     /**
-     * Method to invoke multi line Chart
+     * Send an email to your friend and let him know abt this app
      * @param v
      */
-//    public void getLineChart(View v) {
-//        switch(v.getId()) {
-//            case R.id.buttonLineChart:
-//                Intent myIntent = new Intent(getApplicationContext(), MultiLineChartActivity.class);
-//                //myIntent.SerciceActivity.class, PieChartActivity.class);
-//                // for ex: your package name can be "com.example"
-//                // your activity name will be "com.example.Contact_Developer"
-//                startActivity(myIntent);
-//                break;
-//        }
-//    }
+    public void composeEmail(View v) {
+        switch (v.getId()) {
+            case R.id.buttonShareEmail:
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                intent.putExtra(Intent.EXTRA_EMAIL, "");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Wallet droid Invitation");
+                intent.putExtra(Intent.EXTRA_TEXT, "Use this link to download Wallet droid https://github.com/sda5-walletdroid/walletdroid");
+                //intent.setType("message/rfc822");
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+        }
+    }
 
     /**
-     * Method to invoke Graph as List
+     * Send email with your feedback
      * @param v
      */
-//    public void getGraphList(View v) {
-//        switch(v.getId()) {
-//            case R.id.buttonGraphList:
-//                Intent myIntent = new Intent(getApplicationContext(), ListViewMultiChartActivity.class);
-//                //myIntent.SerciceActivity.class, PieChartActivity.class);
-//                // for ex: your package name can be "com.example"
-//                // your activity name will be "com.example.Contact_Developer"
-//                startActivity(myIntent);
-//                break;
-//        }
-//    }
+    public void sendFeedback(View v) {
 
-    /**
-     * Method to invoke PieChartActivity
-     * @param v
-     */
-//    public void getPieChart(View v) {
-//        switch(v.getId()) {
-//            case R.id.buttonPieChart:
-//                Intent myIntent = new Intent(getApplicationContext(), PieChartActivity.class);
-//                //myIntent.SerciceActivity.class, PieChartActivity.class);
-//                // for ex: your package name can be "com.example"
-//                // your activity name will be "com.example.Contact_Developer"
-//                startActivity(myIntent);
-//                break;
-//        }
-//    }
+        final TextInputLayout userFeedback = findViewById(R.id.textInputLayoutFeed);
+        String feedback = userFeedback.getEditText().getText().toString();
+        String emailApp = "sudutechio@gmail.com";
+        switch (v.getId()) {
+            case R.id.btnfeedback:
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                intent.putExtra(Intent.EXTRA_TEXT, feedback);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback Wallet Droid");
+                intent.putExtra(Intent.EXTRA_EMAIL,emailApp );
+                //intent.setType("message/rfc822");
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+        }
+    }
+
 
     public void runQueryForParticularExpense(View view) {
         Intent myIntent = new Intent(getApplicationContext(), SeeExpenseGraphForParticularCategory.class);
