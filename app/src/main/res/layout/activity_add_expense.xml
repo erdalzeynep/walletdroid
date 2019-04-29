@@ -98,7 +98,6 @@
             android:buttonTint="@color/startblue"/>
 
         <Button
-            android:id="@+id/btn_add_expense_user"
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
@@ -142,9 +141,6 @@
             android:layout_below="@+id/ae_linearLayout1"
             android:text="Save"
             android:onClick="checkExpeseForPersonal"/>
-
-
-
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

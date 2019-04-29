@@ -23,6 +23,7 @@ import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.fragments.ExpenseFragment;
 import com.sda5.walletdroid.fragments.GroupFragment;
 import com.sda5.walletdroid.fragments.InvestFragment;
+import com.sda5.walletdroid.fragments.QueyFragment;
 import com.sda5.walletdroid.fragments.SettleFragment;
 import com.sda5.walletdroid.fragments.fragments_navigation.AppDetails;
 import com.sda5.walletdroid.fragments.fragments_navigation.Feedbacknav;
