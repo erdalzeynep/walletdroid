@@ -1,8 +1,10 @@
 package com.sda5.walletdroid.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,8 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
 
         Expense expense = expenses.get(position);
 
+
+
         final TextView tvExpenseTitle = listItem.findViewById(R.id.text_view_expense_title_item);
         final TextView tvExpenseDate = listItem.findViewById(R.id.text_view_expense_date_item);
         final TextView tvExpenseAmount = listItem.findViewById(R.id.text_view_expense_amount_item);
@@ -63,6 +67,17 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
         tvExpenseDate.setText(expense.getDate());
         tvExpenseAmount.setText(Double.toString(Math.round(expense.getAmount() * 10) / 10.0));
         tvExpenseDate.setTypeface(null, Typeface.ITALIC);
+
+        listItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), com.sda5.walletdroid.activities.ExpenseDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("expense", expense);
+                intent.putExtras(bundle);
+                getContext().startActivity(intent);
+            }
+        });
 
         return listItem;
     }
