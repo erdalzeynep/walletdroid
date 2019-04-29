@@ -1,5 +1,6 @@
 package com.sda5.walletdroid.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,10 +14,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.activities.Graphs.MyBarGraph;
 import com.sda5.walletdroid.helper.StartEndDate;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Expense;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -147,6 +150,10 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
                                         totalExpenseMapByMonth.put(key, totalAmountForMonth);
                                     }
                                     // Graph method can be called from this line with totalExpenseMapByMonth Map.
+                                    Intent intent = new Intent(this, MyBarGraph.class);
+                                    intent.putExtra("map", (Serializable) totalExpenseMapByMonth);
+                                    startActivity(intent);
+                                    //finish();
                                     System.out.println("______________________" + totalExpenseMapByMonth.entrySet().toString());
                                 });
                             }
