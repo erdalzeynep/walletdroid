@@ -152,6 +152,7 @@ public class MyBarGraph extends DemoBase implements
         data.setBarWidth(0.9f);
         data.setValueTextSize(14f);
         chart.setData((BarData)data);
+        chart.animateXY(2000, 2000);
         chart.invalidate();
 
 

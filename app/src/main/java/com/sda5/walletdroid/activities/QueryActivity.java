@@ -134,7 +134,6 @@ public class QueryActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -242,7 +241,6 @@ public class QueryActivity extends AppCompatActivity {
     }
 
     public void search(View view) {
-        String whichArrayToCheck;
 
         if(selectedTimePeriodString.equalsIgnoreCase("Last Month")){
             toDate = LocalDate.now();

@@ -1,9 +1,10 @@
 package com.sda5.walletdroid.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Expense {
+public class Expense implements Serializable {
     private String id;
     private String title;
     private Double amount;

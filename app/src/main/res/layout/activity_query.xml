@@ -14,12 +14,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <RadioGroup
+            android:id="@+id/radiogroup_query"
             android:orientation="horizontal"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:weightSum="2"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:gravity="center"
+            >
 
             <RadioButton
                 android:id="@+id/all_history_radioButton"
@@ -27,14 +29,16 @@
                 android:layout_height="wrap_content"
                 android:text="All History"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:onClick="search"/>
             <RadioButton
                 android:id="@+id/pay_history_radioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Pay History"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:onClick="search"/>
         </RadioGroup>
     </LinearLayout>
 

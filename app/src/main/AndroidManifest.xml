@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+
         <activity android:name=".activities.Graphs.MyPieChartActivity" />
         <activity android:name=".activities.Graphs.MyBarGraph" />
         <activity android:name=".activities.Graphs.MyLineGraph" />
@@ -26,6 +27,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+
+        <activity android:name=".activities.ExpenseDetailsActivity"></activity>
 
         <activity android:name=".activities.SeeExpenseGraphForParticularCategory"></activity>
         <activity android:name=".activities.QueryActivity" />
