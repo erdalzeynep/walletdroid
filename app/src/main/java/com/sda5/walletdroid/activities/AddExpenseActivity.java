@@ -3,6 +3,8 @@ package com.sda5.walletdroid.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,6 +38,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class AddExpenseActivity extends AppCompatActivity {
 
@@ -67,6 +71,9 @@ public class AddExpenseActivity extends AppCompatActivity {
     private double usersShare;
     private double buyerShare;
     private double rate;
+    private TextToSpeech tts;
+    private int languageResult;
+
 
     // Firestore database stuff
     private FirebaseFirestore database;
@@ -98,6 +105,19 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         addExpenseUsers.setVisibility(View.GONE);
         addExpenseSpinner.setVisibility(View.GONE);
+
+
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    languageResult = tts.setLanguage(Locale.UK);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Feature is not supported on your Device", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         checkBoxGroupExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -215,8 +235,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                selectedDate = LocalDate.of(year, month+1, dayOfMonth);
-                String s = " " + dayOfMonth + " - " + (month +1)+ " - " + year;
+                selectedDate = LocalDate.of(year, month + 1, dayOfMonth);
+                String s = " " + dayOfMonth + " - " + (month + 1) + " - " + year;
                 btnPickDate.setText(s);
             }
         };
@@ -245,13 +265,13 @@ public class AddExpenseActivity extends AppCompatActivity {
         finish();
     }
 
-    public void checkExpeseForPersonal(View view){
-        if (!isGroupExpenseChecked){
+    public void checkExpeseForPersonal(View view) {
+        if (!isGroupExpenseChecked) {
             database.collection("Accounts").whereEqualTo("userID", currentUserId).limit(1).get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(QueryDocumentSnapshot queryDocumentSnapshot: queryDocumentSnapshots){
+                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                 Account currentAccount = queryDocumentSnapshot.toObject(Account.class);
                                 expenseUsersId = new ArrayList<>();
                                 expenseUsersId.add(currentAccount.getId());
@@ -264,7 +284,7 @@ public class AddExpenseActivity extends AppCompatActivity {
 
 
         } else {
-            if(groupId!= null){
+            if (groupId != null) {
                 saveExpense();
             } else {
                 Toast.makeText(this, "There is no Group assigned", Toast.LENGTH_SHORT).show();
@@ -282,7 +302,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                 selectedCategory == null ||
                 selectedDate == null ||
                 expenseUsersId.size() == 0 ||
-                buyerId == null){
+                buyerId == null) {
             Toast.makeText(this, "Please enter all fields first", Toast.LENGTH_SHORT).show();
         } else {
             // Fetch data from API for getting rate for different currencies.
@@ -295,7 +315,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             dateMillisec = selectedDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
             // creating hashmap to update balance in group collection
-            if (groupId != null){
+            if (groupId != null) {
                 balanceOfExpense = new HashMap<>();
 
                 for (String memberId : groupMembersIds) {
@@ -393,6 +413,63 @@ public class AddExpenseActivity extends AppCompatActivity {
         selectedDate = tempDate;
         if (isGroupExpenseChecked) {
             checkBoxGroupExpense.setChecked(true);
+        }
+    }
+
+    public void listenTitle(View v) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 1);
+        } else {
+            Toast.makeText(this, "Feature is not supported on your Device", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void listenAmount(View v) {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 2);
+        } else {
+            Toast.makeText(this, "Feature is not supported on your Device", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String speachResult = result.get(0);
+                tempTitle = speachResult;
+            }
+        }
+
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String speachResult = result.get(0);
+                try {
+                    tempAmount = speachResult;
+                } catch (Exception e) {
+                    talk("Not a valid Amount");
+                    Toast.makeText(this, "Not a valid amount. Try again", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    public void talk(String message) {
+        if (languageResult == TextToSpeech.LANG_NOT_SUPPORTED || languageResult == TextToSpeech.LANG_MISSING_DATA) {
+            Toast.makeText(this, "Feature is not supported on your Device", Toast.LENGTH_LONG).show();
+        } else {
+            tts.speak(message, 0, null, "Mehdi");
         }
     }
 }
