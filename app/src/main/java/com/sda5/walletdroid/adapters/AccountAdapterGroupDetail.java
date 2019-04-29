@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 
 public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
@@ -34,8 +35,9 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
     private final List<Account> accounts;
     private final boolean showCheckboxes;
     private final List<String> selectedAccountIDList = new ArrayList<>();
-    private String balance;
     private Group group;
+    private final List<Boolean> checkedItems = new ArrayList<>();
+
 
 
     public AccountAdapterGroupDetail(Context context, Group group, ArrayList<Account> accounts, boolean showCheckboxes) {
@@ -44,8 +46,20 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
         this.accounts = accounts;
         this.showCheckboxes = showCheckboxes;
         this.group = group;
+        initializeCheckedList();
+
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        initializeCheckedList();
+    }
+
+    private void initializeCheckedList() {
+        checkedItems.clear();
+        IntStream.range(0, accounts.size()).boxed().forEach(ignored -> checkedItems.add(false));
+    }
 
     @NonNull
     @Override
@@ -97,6 +111,7 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
         checkBoxAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String selectedAccountID = checkBoxAccount.getTag().toString();
             HashMap<String, Double> groupBalance = group.getBalance();
+            checkedItems.set(position, isChecked);
             Double balanceForCurrentUser = groupBalance.get(selectedAccountID);
             if (isChecked) {
                 if (balanceForCurrentUser == 0) {
@@ -113,7 +128,7 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
                 finalListItem.setBackgroundColor(Color.parseColor("#FFFFFF"));
             }
         });
-
+        checkBoxAccount.setChecked(checkedItems.get(position));
         return listItem;
     }
 
