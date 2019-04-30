@@ -116,13 +116,14 @@
 
         <Button
             android:id="@+id/btnfeedback"
-            android:layout_width="300dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/textInputFeed"
             android:background="@drawable/white_button"
             android:layout_marginTop="10dp"
             android:text="Send"
             android:textColor="@color/startblue"
+            android:textStyle="bold"
             android:onClick="sendFeedback"
             android:theme="@style/Base.Widget.AppCompat.Button.Colored"/>
 
