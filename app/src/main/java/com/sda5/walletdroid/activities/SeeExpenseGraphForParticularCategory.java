@@ -132,8 +132,8 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
                             if (account.isPresent()) {
                                 accountId = account.get().getId();
                                 database.collection("Expenses")
-                                        .whereEqualTo("payerAccountId", accountId)
                                         .whereEqualTo("category", selectedCategory)
+                                        .whereArrayContains("expenseAccountIds", accountId)
                                         .whereGreaterThanOrEqualTo("dateMillisec", startDate)
                                         .whereLessThanOrEqualTo("dateMillisec", endDate)
                                         .orderBy("dateMillisec")
@@ -141,6 +141,7 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
                                     Map<String, Double> totalExpenseMapByMonth = new HashMap<>();
                                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                         Expense expense = documentSnapshot.toObject(Expense.class);
+                                        expense.setAmount(expense.getAmount()/expense.getExpenseAccountIds().size());
                                         expenses.add(expense);
                                         int expenseMonth = LocalDate.parse(expense.getDate(), formatter).getMonth().getValue();
                                         int expenseYear = LocalDate.parse(expense.getDate(), formatter).getYear();
