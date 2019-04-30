@@ -20,18 +20,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.models.Account;
-import com.sda5.walletdroid.models.Category;
 import com.sda5.walletdroid.models.Expense;
 import com.sda5.walletdroid.models.Group;
+import com.sda5.walletdroid.models.Notification;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -71,8 +74,11 @@ public class AddExpenseActivity extends AppCompatActivity {
     private double usersShare;
     private double buyerShare;
     private double rate;
+
     private TextToSpeech tts;
     private int languageResult;
+
+    private Notification notification;
 
 
     // Firestore database stuff
@@ -332,7 +338,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                         balanceOfExpense.put(usersId, usersShare);
                     }
                 }
-
+                final String groupName;
                 // Getting existing group balance hashmap from database
                 database.collection("Groups").whereEqualTo("id", groupId).limit(1).get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -369,7 +375,51 @@ public class AddExpenseActivity extends AppCompatActivity {
                     etTitle.setText(tempTitle);
                     etAmount.setText(tempAmount);
                     checkBoxGroupExpense.setChecked(false);
+
+                    database.collection("Groups").whereEqualTo("id", groupId).limit(1).get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                        Group group = queryDocumentSnapshot.toObject(Group.class);
+
+
+                                        for (String accountID : expenseUsersId) {
+                                            if (accountID != buyerId) {
+                                                database.collection("Accounts").whereEqualTo("id", accountID).limit(1).get()
+                                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                                                    Account account = queryDocumentSnapshot.toObject(Account.class);
+                                                                    String tokenId = account.getTokenID();
+                                                                    Notification notification;
+                                                                    String from = mAuth.getCurrentUser().getDisplayName().toUpperCase();
+                                                                    String amount = balanceOfExpense.get(account.getId()).toString();
+                                                                    String message = "Hi! You are assigned to " + title + " expense with" + amount + " Kr";
+                                                                    String groupName = group.getName();
+                                                                    notification = new Notification(from, groupName, message, tokenId);
+                                                                    database.collection("Accounts")
+                                                                            .document(account.getId()).collection("Notifications")
+                                                                            .document(notification.getNotificationId())
+                                                                            .set(notification)
+                                                                            .addOnCompleteListener(task1 -> {
+
+                                                                            });
+                                                                }
+                                                            }
+                                                        });
+
+
+                                            }
+                                        }
+
+
+                                    }
+                                }
+                            });
                 }
+
             })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -378,6 +428,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                         }
                     });
         }
+
     }
 
     @Override
