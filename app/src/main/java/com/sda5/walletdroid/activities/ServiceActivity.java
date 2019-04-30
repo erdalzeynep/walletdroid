@@ -201,7 +201,7 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                 intent.setData(Uri.parse("mailto:")); // only email apps should handle this
                 intent.putExtra(Intent.EXTRA_TEXT, feedback);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback Wallet Droid");
-                intent.putExtra(Intent.EXTRA_EMAIL,emailApp );
+                intent.putExtra(Intent.EXTRA_EMAIL,new String[]{emailApp});
                 //intent.setType("message/rfc822");
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
