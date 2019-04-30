@@ -123,19 +123,15 @@ public class MyBarGraph extends DemoBase implements
      */
     private void getRemoteData(HashMap<String, Double> expenseRemote) {
 
-        //Getting Set of keys Categories/months from HashMap
-        Set<String> keySet = expenseRemote.keySet();
-        // Transfer data to an array
-        String[] labelsExpense = keySet.toArray(new String[0]);
-        //Making a copy of labelsExpense
-        final String[] labelsExpense2 = keySet.toArray(new String[0]);
-        // Storing labels in another array that will be sorted
-        final String[] sortedString = labelsExpense;
+
+        Set<String> keySet = expenseRemote.keySet();//Getting Set of keys Categories/months from HashMap
+        String[] labelsExpense = keySet.toArray(new String[0]);// Transfer data to an array
+        final String[] labelsExpense2 = keySet.toArray(new String[0]);//Making a copy of labelsExpense
+        final String[] sortedString = labelsExpense;// Storing labels in another array that will be sorted
 
         // Getting values from HashMap
         Collection<Double> values = expenseRemote.values();
-        // Convert data to an array
-        Double[] valuesRemote = values.toArray(new Double[0]);
+        Double[] valuesRemote = values.toArray(new Double[0]);// Convert data to an array
 
         // This array will contain the values sorted based on sorting index of labels
         Double[] sortedA = new Double[labelsExpense.length];
