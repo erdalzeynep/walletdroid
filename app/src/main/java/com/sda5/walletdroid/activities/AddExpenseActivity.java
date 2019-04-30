@@ -456,9 +456,11 @@ public class AddExpenseActivity extends AppCompatActivity {
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 String speachResult = result.get(0);
                 try {
+                    Double d = Double.valueOf(speachResult);
                     tempAmount = speachResult;
                 } catch (Exception e) {
                     talk("Not a valid Amount");
+                    tempAmount = "";
                     Toast.makeText(this, "Not a valid amount. Try again", Toast.LENGTH_SHORT).show();
                 }
             }
