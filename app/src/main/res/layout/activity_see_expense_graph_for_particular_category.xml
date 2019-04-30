@@ -2,16 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="50dp"
+    android:layout_marginTop="20dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/text_view_graph"
-        android:layout_width="337dp"
-        android:layout_height="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
         android:text="See Expense Details"
+        android:textColor="@color/startblue"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:textSize="24sp"
         android:textStyle="bold"/>
 
@@ -19,26 +22,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp">
         <Spinner
             android:id="@+id/query_category"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:backgroundTint="@color/startblue"
+            android:focusedByDefault="true"
             android:layout_weight="1"
+            android:textColor="@color/startblue"
+            android:textSize="11sp"
+            android:layout_gravity="center"
             />
         <Spinner
             android:id="@+id/query_month"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_weight="1"/>
+            android:backgroundTint="@color/startblue"
+            android:focusedByDefault="true"
+            android:layout_weight="1"
+            android:textColor="@color/startblue"
+            android:textSize="11sp"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 
     <Button
         android:id="@+id/buttonPieChart"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:background="@drawable/white_button"
+        android:clickable="true"
+        android:padding="10dp"
+        android:textAllCaps="false"
+        android:textColor="@color/startblue"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_centerHorizontal="true"
         android:onClick="runQuery"
         android:text="OK" />
 

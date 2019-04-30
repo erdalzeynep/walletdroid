@@ -22,56 +22,47 @@
                 android:padding="10dp"
                 android:background="@drawable/circle"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/graph"
+                android:src="@drawable/aboutus"
                 android:tint="@color/ewhite" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Graph"
+                android:text="About Us"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:textColor="@color/ewhite"/>
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="150dp">
+    <TextView
+        android:id="@+id/appDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="200dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp">
-
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:text="Wallet Droid"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/text_view_graph"
-        android:layout_width="337dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:gravity="center_horizontal|left|center_vertical"
-        android:text="See Expense Details"
-        android:textColor="@color/startblue"
-        android:layout_marginLeft="10dp"
-        android:textSize="24sp"
-        android:textStyle="bold"/>
-
-
-    <Button
-        android:id="@+id/buttonPieChart"
+        android:id="@+id/appVersion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/white_button"
-        android:clickable="true"
-        android:textAllCaps="false"
-        android:textColor="@color/startblue"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:onClick="runQueryForParticularExpense"
-        android:text="For Particular Category" />
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:text="Version 1.0"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
 </LinearLayout>
 </RelativeLayout>
