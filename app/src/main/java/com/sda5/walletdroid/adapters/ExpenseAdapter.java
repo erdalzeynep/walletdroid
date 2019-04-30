@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,18 +51,17 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
         final TextView tvExpenseTitle = listItem.findViewById(R.id.text_view_expense_title_item);
         final TextView tvExpenseDate = listItem.findViewById(R.id.text_view_expense_date_item);
         final TextView tvExpenseAmount = listItem.findViewById(R.id.text_view_expense_amount_item);
-        final TextView tvExpenseColourTag = listItem.findViewById(R.id.expense_colourTag);
+        final ImageView categoryImage = listItem.findViewById(R.id.expense_list_category_picture);
 
 
-        if(expense.getCategory().equalsIgnoreCase("grocery")) tvExpenseColourTag.setBackgroundColor(Color.RED);
-        if(expense.getCategory().equalsIgnoreCase("Clothes")) tvExpenseColourTag.setBackgroundColor(Color.BLUE);
-        if(expense.getCategory().equalsIgnoreCase("Transportation")) tvExpenseColourTag.setBackgroundColor(Color.YELLOW);
-        if(expense.getCategory().equalsIgnoreCase("Eat out")) tvExpenseColourTag.setBackgroundColor(Color.LTGRAY);
-        if(expense.getCategory().equalsIgnoreCase("Recurring")) tvExpenseColourTag.setBackgroundColor(Color.GREEN);
-        if(expense.getCategory().equalsIgnoreCase("Utility")) tvExpenseColourTag.setBackgroundColor(Color.DKGRAY);
-        if(expense.getCategory().equalsIgnoreCase("Membership")) tvExpenseColourTag.setBackgroundColor(Color.CYAN);
-        if(expense.getCategory().equalsIgnoreCase("Other")) tvExpenseColourTag.setBackgroundColor(Color.MAGENTA);
-
+        if(expense.getCategory().equalsIgnoreCase("grocery")) categoryImage.setImageResource(R.drawable.grocery);
+        if(expense.getCategory().equalsIgnoreCase("Clothes")) categoryImage.setImageResource(R.drawable.clothes);
+        if(expense.getCategory().equalsIgnoreCase("Transportation")) categoryImage.setImageResource(R.drawable.transportation);
+        if(expense.getCategory().equalsIgnoreCase("Eat out")) categoryImage.setImageResource(R.drawable.eat);
+        if(expense.getCategory().equalsIgnoreCase("Recurring")) categoryImage.setImageResource(R.drawable.recurring);
+        if(expense.getCategory().equalsIgnoreCase("Utility")) categoryImage.setImageResource(R.drawable.utility);
+        if(expense.getCategory().equalsIgnoreCase("Membership")) categoryImage.setImageResource(R.drawable.grocery);
+        if(expense.getCategory().equalsIgnoreCase("Other")) categoryImage.setImageResource(R.drawable.grocery);
 
         tvExpenseTitle.setText(expense.getTitle());
         tvExpenseDate.setText(expense.getDate());
