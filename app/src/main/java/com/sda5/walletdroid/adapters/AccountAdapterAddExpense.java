@@ -16,6 +16,7 @@ package com.sda5.walletdroid.adapters;
 
         import java.util.ArrayList;
         import java.util.List;
+        import java.util.stream.IntStream;
 
         import androidx.annotation.NonNull;
         import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
     private final boolean showCheckboxes;
     private final List<String> selectedExpenseUsersIDList = new ArrayList<>();
     private final List<String> selectedExpenseUsersNameList = new ArrayList<>();
+    private final List<Boolean> checkedItems = new ArrayList<>();
 
 
     public AccountAdapterAddExpense(Context context, ArrayList<Account> accounts, boolean showCheckboxes) {
@@ -33,7 +35,20 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
         mContext = context;
         this.accounts = accounts;
         this.showCheckboxes = showCheckboxes;
+        initializeCheckedList();
     }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        initializeCheckedList();
+    }
+
+    private void initializeCheckedList() {
+        checkedItems.clear();
+        IntStream.range(0, accounts.size()).boxed().forEach(ignored -> checkedItems.add(false));
+    }
+
 
 
     @NonNull
@@ -62,6 +77,7 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 String selectedAccountID = checkBoxAccount.getTag().toString();
+                checkedItems.set(position, isChecked);
                 if (isChecked) {
                     selectedExpenseUsersIDList.add(selectedAccountID);
                     selectedExpenseUsersNameList.add(account.getOwnerName());
@@ -71,6 +87,7 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
                 }
             }
         });
+        checkBoxAccount.setChecked(checkedItems.get(position));
 
         return listItem;
     }

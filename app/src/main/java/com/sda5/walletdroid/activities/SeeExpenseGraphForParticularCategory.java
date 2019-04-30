@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -106,6 +107,7 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedTimePeriod = (String) parent.getItemAtPosition(position);
                 selectedTimePeriodInteger = timePeriod.get(selectedTimePeriod);
+
             }
 
             @Override
@@ -118,49 +120,57 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
     public void runQuery(View view) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        StartEndDate startEndDate = getStartEndDate(selectedTimePeriodInteger);
-        long startDate = startEndDate.getStartDate();
-        long endDate = startEndDate.getEndDate();
+        if (selectedTimePeriodInteger == null) {
+            Toast.makeText(SeeExpenseGraphForParticularCategory.this,
+                    "" +
+                            "Please select time period", Toast.LENGTH_SHORT).show();
+        } else {
+            StartEndDate startEndDate = getStartEndDate(selectedTimePeriodInteger);
+            long startDate = startEndDate.getStartDate();
+            long endDate = startEndDate.getEndDate();
 
-        expenses = new ArrayList<>();
-        database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
-                task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot accountSnapshot = task.getResult();
-                        if (null != accountSnapshot) {
-                            Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
-                            if (account.isPresent()) {
-                                accountId = account.get().getId();
-                                database.collection("Expenses")
-                                        .whereEqualTo("payerAccountId", accountId)
-                                        .whereEqualTo("category", selectedCategory)
-                                        .whereGreaterThanOrEqualTo("dateMillisec", startDate)
-                                        .whereLessThanOrEqualTo("dateMillisec", endDate)
-                                        .orderBy("dateMillisec")
-                                        .get().addOnSuccessListener(queryDocumentSnapshots -> {
-                                    Map<String, Double> totalExpenseMapByMonth = new HashMap<>();
-                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                        Expense expense = documentSnapshot.toObject(Expense.class);
-                                        expenses.add(expense);
-                                        int expenseMonth = LocalDate.parse(expense.getDate(), formatter).getMonth().getValue();
-                                        int expenseYear = LocalDate.parse(expense.getDate(), formatter).getYear();
-                                        String key = expenseYear + "-" + expenseMonth;
-                                        Double totalAmountForMonth = totalExpenseMapByMonth.getOrDefault(key, 0.0);
-                                        totalAmountForMonth += expense.getAmount();
-                                        totalExpenseMapByMonth.put(key, totalAmountForMonth);
-                                    }
-                                    // Graph method can be called from this line with totalExpenseMapByMonth Map.
-                                    Intent intent = new Intent(this, MyBarGraph.class);
-                                    intent.putExtra("map", (Serializable) totalExpenseMapByMonth);
-                                    startActivity(intent);
-                                    //finish();
-                                    System.out.println("______________________" + totalExpenseMapByMonth.entrySet().toString());
-                                });
+            expenses = new ArrayList<>();
+            database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
+                    task -> {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot accountSnapshot = task.getResult();
+                            if (null != accountSnapshot) {
+                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                                if (account.isPresent()) {
+                                    accountId = account.get().getId();
+                                    database.collection("Expenses")
+                                            .whereEqualTo("category", selectedCategory)
+                                            .whereArrayContains("expenseAccountIds", accountId)
+                                            .whereGreaterThanOrEqualTo("dateMillisec", startDate)
+                                            .whereLessThanOrEqualTo("dateMillisec", endDate)
+                                            .orderBy("dateMillisec")
+                                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                        Map<String, Double> totalExpenseMapByMonth = new HashMap<>();
+                                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                            Expense expense = documentSnapshot.toObject(Expense.class);
+                                            expense.setAmount(expense.getAmount() / expense.getExpenseAccountIds().size());
+                                            expenses.add(expense);
+                                            int expenseMonth = LocalDate.parse(expense.getDate(), formatter).getMonth().getValue();
+                                            int expenseYear = LocalDate.parse(expense.getDate(), formatter).getYear();
+                                            String key = expenseYear + "-" + expenseMonth;
+                                            Double totalAmountForMonth = totalExpenseMapByMonth.getOrDefault(key, 0.0);
+                                            totalAmountForMonth += expense.getAmount();
+                                            totalExpenseMapByMonth.put(key, totalAmountForMonth);
+                                        }
+                                        // Graph method can be called from this line with totalExpenseMapByMonth Map.
+                                        Intent intent = new Intent(this, MyBarGraph.class);
+                                        intent.putExtra("map", (Serializable) totalExpenseMapByMonth);
+                                        startActivity(intent);
+                                        //finish();
+                                        System.out.println("______________________" + totalExpenseMapByMonth.entrySet().toString());
+                                    });
+                                }
                             }
                         }
                     }
-                }
-        );
+            );
+        }
+
     }
 
     public StartEndDate getStartEndDate(Integer howManyMonths) {
@@ -168,7 +178,7 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
         LocalDate toDate = LocalDate.now();
         LocalDate fromDate = toDate.minus(howManyMonths, ChronoUnit.MONTHS);
 
-        System.out.println("FROM=========="+fromDate.toString()+"TO=============="+toDate.toString());
+        System.out.println("FROM==========" + fromDate.toString() + "TO==============" + toDate.toString());
         long fromDateLong = fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         long toDateLong = toDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         return new StartEndDate(fromDateLong, toDateLong);
