@@ -152,7 +152,13 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
                                             expenses.add(expense);
                                             int expenseMonth = LocalDate.parse(expense.getDate(), formatter).getMonth().getValue();
                                             int expenseYear = LocalDate.parse(expense.getDate(), formatter).getYear();
-                                            String key = expenseYear + "-" + expenseMonth;
+                                            String key;
+                                            if(expenseMonth<10){
+
+                                                key = expenseYear + "-" + "0"+ expenseMonth;
+                                            }else {
+                                                key = expenseYear + "-" + expenseMonth;
+                                            }
                                             Double totalAmountForMonth = totalExpenseMapByMonth.getOrDefault(key, 0.0);
                                             totalAmountForMonth += expense.getAmount();
                                             totalExpenseMapByMonth.put(key, totalAmountForMonth);
