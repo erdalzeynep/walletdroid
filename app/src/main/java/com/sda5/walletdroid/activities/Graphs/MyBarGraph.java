@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
@@ -28,6 +29,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sda5.walletdroid.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
@@ -58,7 +60,7 @@ public class MyBarGraph extends DemoBase implements
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(true);
-        xAxis.setDrawLabels(false);
+        xAxis.setDrawLabels(true);
 
         //xAxis.mAxisMinimum=0;
         //xAxis.mAxisMaximum=20;
@@ -82,7 +84,7 @@ public class MyBarGraph extends DemoBase implements
         chart.getAxisLeft().setEnabled(false);
         chart.getAxisRight().setDrawAxisLine(false);
         chart.getAxisRight().setDrawGridLines(false);
-        chart.getXAxis().setDrawAxisLine(false);
+        chart.getXAxis().setDrawAxisLine(true);
         chart.getXAxis().setDrawGridLines(false);
 
         // enable touch gestures
@@ -103,7 +105,7 @@ public class MyBarGraph extends DemoBase implements
 
         // Get  HashMap from the incoming intent
         Intent intent = getIntent();
-        expenseMaps = (HashMap<String, Double>)intent.getSerializableExtra("map");
+        expenseMaps = (HashMap<String, Double>) intent.getSerializableExtra("map");
 
         //generateDataLine();
         getRemoteData(expenseMaps);
@@ -121,37 +123,83 @@ public class MyBarGraph extends DemoBase implements
      */
     private void getRemoteData(HashMap<String, Double> expenseRemote) {
 
-        //Getting Set of keys Categories/months
+        //Getting Set of keys Categories/months from HashMap
         Set<String> keySet = expenseRemote.keySet();
         // Transfer data to an array
         String[] labelsExpense = keySet.toArray(new String[0]);
+        //Making a copy of labelsExpense
+        final String[] labelsExpense2 = keySet.toArray(new String[0]);
+        // Storing labels in another array that will be sorted
+        final String[] sortedString = labelsExpense;
 
         // Getting values from HashMap
         Collection<Double> values = expenseRemote.values();
-
         // Convert data to an array
-        Double[] test = values.toArray(new Double[0]);
+        Double[] valuesRemote = values.toArray(new Double[0]);
 
-        // Array list for storing data
+        // This array will contain the values sorted based on sorting index of labels
+        Double[] sortedA = new Double[labelsExpense.length];
+
+        // BarEntry
         ArrayList<BarEntry> valuesExpense = new ArrayList<>();
 
-        for (int i = 0; i < test.length; i++) {
-            valuesExpense.add(new BarEntry(i,test[i].intValue(),labelsExpense[i]));
+        if (true) {
 
+            Arrays.sort(sortedString); // sort the labels
+
+            // For loops for Printing the results just to confirm the sorting. Will be removed once sorting done.
+            for (String labelss : labelsExpense2) {
+                System.out.println("labelsOriginal " + labelss);
+            }
+            for (String labelSorted : sortedString) {
+                System.out.println("labelsSorted " + labelSorted);
+            }
+            // Values before sorting
+            for (Double valuess : valuesRemote) {
+                System.out.println("valuesBeforeSorting " + valuess);
+            }
+
+            // Loop for sorting the data based on dates.
+            for (int i = 0; i < labelsExpense.length; i++) {
+                for (int j = 0; j < valuesRemote.length; j++) {
+                    if (sortedString[i] == labelsExpense2[j]) {
+                        sortedA[i] = valuesRemote[j];
+                    }
+                }
+            }
+            for (Double valuesSort : sortedA) {
+                System.out.println("valuessAfterSorting " + valuesSort);
+            }
+        }
+        //Printing values after sorting
+        for (int i = 0; i < valuesRemote.length; i++) {
+            valuesExpense.add(new BarEntry(i, sortedA[i].intValue()));
         }
 
+        //
         BarDataSet d4 = new BarDataSet(valuesExpense, "Expenses ");
         d4.setColors(ColorTemplate.VORDIPLOM_COLORS);
         d4.setHighLightAlpha(255);
 
-        //XAxis xAxis = chart.getXAxis();
+
+        //xAxis.setAxisMinimum(0);
+        //xAxis.setAxisMaximum(labelsExpense.length);
+        //xAxis.mAxisMaximum=labelsExpense.length;
         //xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense));
-        //xAxis.setTextSize(13);
+
+        //xAxis.setAvoidFirstLastClipping(true);
+
+        //xAxis.setAxisMaximum(40f);
 
         BarData data = new BarData(d4);
-        data.setBarWidth(0.9f);
-        data.setValueTextSize(14f);
-        chart.setData((BarData)data);
+        data.setBarWidth(0.9f); // TO SET BAR WIDTH
+        data.setValueTextSize(14f); // SET VALUE SIZE DISPLAYED ABOVE THE BAR
+        chart.setData((BarData) data);
+
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setTextSize(10); // Set size of x labels
+        xAxis.setLabelCount(labelsExpense.length); // set how many labels you want to see
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense)); // set user defined labels
         chart.animateXY(2000, 2000);
         chart.invalidate();
 
