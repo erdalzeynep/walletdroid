@@ -17,6 +17,7 @@ import com.sda5.walletdroid.models.Account;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
     private final List<Account> accounts;
     private final boolean showCheckboxes;
     private final List<String> selectedAccountIDList = new ArrayList<>();
+    private final List<Boolean> checkedItems = new ArrayList<>();
 
 
     public AccountAdapter(Context context, ArrayList<Account> accounts, boolean showCheckboxes) {
@@ -33,8 +35,19 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         mContext = context;
         this.accounts = accounts;
         this.showCheckboxes = showCheckboxes;
+        initializeCheckedList();
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        initializeCheckedList();
+    }
+
+    private void initializeCheckedList() {
+        checkedItems.clear();
+        IntStream.range(0, accounts.size()).boxed().forEach(ignored -> checkedItems.add(false));
+    }
 
     @NonNull
     @Override
@@ -50,11 +63,10 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         checkBoxAccount.setTag(account.getId());
 
         TextView textViewAccount = listItem.findViewById(R.id.textview_account_item);
-        if(account.isInternalAccount()){
+        if (account.isInternalAccount()) {
             textViewAccount.setText(account.getOwnerName());
-        }
-        else{
-            textViewAccount.setText("Name: "+account.getOwnerName()+"\n"+"Email:"+account.getEmail());
+        } else {
+            textViewAccount.setText("Name: " + account.getOwnerName() + "\n" + "Email:" + account.getEmail());
             textViewAccount.setTypeface(null, Typeface.ITALIC);
         }
 
@@ -70,6 +82,8 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         View finalListItem = listItem;
         checkBoxAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String selectedAccountID = checkBoxAccount.getTag().toString();
+            checkedItems.set(position, isChecked);
+
             if (isChecked) {
                 selectedAccountIDList.add(selectedAccountID);
                 finalListItem.setBackgroundColor(Color.parseColor("#FFFFE0"));
@@ -79,6 +93,8 @@ public class AccountAdapter extends ArrayAdapter<Account> {
             }
         });
 
+        checkBoxAccount.setChecked(checkedItems.get(position));
+
         return listItem;
     }
 
@@ -87,7 +103,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
     }
 
 
-    public void addSelectedAccountId(String accountId){
+    public void addSelectedAccountId(String accountId) {
         this.selectedAccountIDList.add(accountId);
     }
 }

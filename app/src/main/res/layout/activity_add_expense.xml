@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,85 +7,126 @@
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".activities.AddExpenseActivity">
-
-    <RelativeLayout
-            android:id="@+id/ae_relativeLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
         <LinearLayout
-            android:id="@+id/ae_linearLayout1"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:orientation="horizontal"
-            android:layout_marginStart="5dp" >
-
-            <EditText
-                android:id="@+id/txt_addExpense_expenseTitle"
-                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/ae_linearLayout2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="For what did you spend?" />
+                android:orientation="vertical"
+                android:layout_marginStart="5dp">
+
+                <ImageView
+                    android:id="@+id/btn_voice1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp"
+                    android:clickable="true"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/circle_blue_border"
+                    android:src="@drawable/voice"
+                    android:tint="@color/startblue"
+                    android:onClick="listenTitle"/>
+
+
+                <ImageView
+                    android:id="@+id/btn_voice2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:clickable="true"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/circle_blue_border"
+                    android:src="@drawable/voice"
+                    android:tint="@color/startblue"
+                    android:onClick="listenAmount"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ae_linearLayout3"
+                android:layout_width="290dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="5dp">
+
+                <EditText
+                    android:id="@+id/txt_addExpense_expenseTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="For what did you spend?" />
+
+                <LinearLayout
+                    android:id="@+id/ae_linearLayout4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    android:gravity="top">
+
+
+                    <EditText
+                        android:id="@+id/txt_addExpense_expenseAmount"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:hint="How much?"
+                        android:inputType="numberDecimal" />
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/sprCurrency"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/startblue"
+                        android:focusedByDefault="true"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="7">
-
-        <EditText
-            android:id="@+id/txt_addExpense_expenseAmount"
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:layout_marginTop="60dp"
-            android:layout_marginLeft="10dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="How much?"
-            android:inputType="numberDecimal" />
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/sprCurrency"
-            android:layout_marginTop="30dp"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_gravity="center"/>
-
-
-
-    </LinearLayout>
+            android:weightSum="5"
+            android:paddingLeft="30dp"
+            >
 
         <Spinner
             android:id="@+id/spr_addExpense_category"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
-            android:background="@drawable/spinner_background"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="110dp"
+            android:backgroundTint="@color/startblue"
+            android:focusedByDefault="true"
+            android:layout_weight="3"
             android:textColor="@color/startblue"
-            android:textSize="11sp" />
+            android:textSize="11sp"
+            android:layout_gravity="center"/>
 
         <ImageView
             android:id="@+id/btn_settle"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:layout_toRightOf="@+id/spr_addExpense_category"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="2"
             android:clickable="true"
-            android:layout_margin="5dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/date"
             android:tint="@color/startblue"
-            android:onClick="settleTheGroupExpenses"/>
+            android:onClick="pickDate"/>
+
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/btnPickDate"
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:background="@drawable/white_button"
             android:clickable="true"
             android:padding="16dp"
@@ -103,8 +144,6 @@
             android:id="@+id/checkBox_group_expense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ae_linearLayout1"
-            android:layout_marginTop="100dp"
             android:text="Group expense"
             android:textSize="20sp"
             android:textColor="@color/startblue"
@@ -116,7 +155,6 @@
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="160dp"
             android:background="@drawable/white_button"
             android:clickable="true"
             android:padding="16dp"
@@ -124,19 +162,14 @@
             android:textColor="@color/startblue"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/ae_linearLayout1"
             android:text="Split with"
             android:onClick="addExpenseUsers"/>
 
         <Spinner
             android:id="@+id/spr_addExpense_users"
-            android:layout_width="320dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:padding="5dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="420dp"
             android:textColor="@color/startblue"
             android:textSize="11sp" />
 
@@ -144,7 +177,6 @@
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="300dp"
             android:background="@drawable/white_button"
             android:clickable="true"
             android:padding="16dp"
@@ -152,10 +184,6 @@
             android:textColor="@color/startblue"
             android:textSize="18sp"
             android:textStyle="bold"
-           android:layout_centerHorizontal="true"
-            android:layout_below="@+id/ae_linearLayout1"
             android:text="Save"
             android:onClick="checkExpeseForPersonal"/>
-
-    </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
