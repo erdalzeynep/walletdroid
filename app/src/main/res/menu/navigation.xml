@@ -4,7 +4,7 @@
     <item
         android:id="@+id/navigation_group"
         android:icon="@drawable/ic_group_black_24dp"
-        android:title="@string/title_groups" />
+        android:title="Group" />
 
     <item
         android:id="@+id/navigation_expense"

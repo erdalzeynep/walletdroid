@@ -96,8 +96,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         addExpenseSpinner = findViewById(R.id.spr_addExpense_users);
         checkBoxGroupExpense = findViewById(R.id.checkBox_group_expense);
 
-       addExpenseUsers.setVisibility(View.GONE);
-        addExpenseUsers.setEnabled(false);
+        addExpenseUsers.setVisibility(View.GONE);
+//        addExpenseUsers.setEnabled(false);
         addExpenseSpinner.setVisibility(View.GONE);
 
         checkBoxGroupExpense.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

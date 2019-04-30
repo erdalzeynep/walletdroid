@@ -22,32 +22,76 @@
     <ListView
         android:id="@+id/member_list"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_height="350dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
 
-    <Button
-        android:id="@+id/btn_settle"
-        android:layout_width="350dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:background="@drawable/white_button"
-        android:clickable="true"
-        android:padding="16dp"
-        android:textAllCaps="false"
-        android:textColor="@color/startblue"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:text="Settle"
-        android:onClick="settleTheGroupExpenses"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="50dp">
 
+        <ImageView
+            android:id="@+id/btn_settle"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:clickable="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/circle_blue_border"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/money_settle"
+            android:tint="@color/startblue"
+            android:onClick="settleTheGroupExpenses"/>
+
+        <ImageView
+            android:id="@+id/btn_add_member"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:clickable="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/circle_blue_border"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/addsign"
+            android:tint="@color/startblue"
+            android:onClick="addMember"/>
+        <ImageView
+            android:id="@+id/btn_delete_member"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:clickable="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/circle_blue_border"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/remove_sign"
+            android:tint="@color/startblue"
+            android:onClick="deleteMembers"/>
+        <ImageView
+            android:id="@+id/btn_delete_group"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:clickable="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/circle_blue_border"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/delete_sign"
+            android:tint="@color/startblue"
+            android:onClick="deleteGroup"/>
+
+    </LinearLayout>
     <Button
         android:id="@+id/btn_leave_group"
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
@@ -62,59 +106,5 @@
         android:layout_margin="5dp"
         android:text="Leave Group"
         android:onClick="leaveGroup"/>
-
-    <Button
-        android:id="@+id/btn_add_member"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:background="@drawable/white_button"
-        android:clickable="true"
-        android:padding="16dp"
-        android:textAllCaps="false"
-        android:textColor="@color/startblue"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:text="Add Member"
-        android:onClick="addMember"/>
-
-    <Button
-        android:id="@+id/btn_delete_member"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:background="@drawable/white_button"
-        android:clickable="true"
-        android:padding="16dp"
-        android:textAllCaps="false"
-        android:textColor="@color/startblue"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:text="Delete Member"
-        android:onClick="deleteMembers"/>
-
-    <Button
-        android:id="@+id/btn_delete_group"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:background="@drawable/white_button"
-        android:clickable="true"
-        android:padding="16dp"
-        android:textAllCaps="false"
-        android:textColor="@color/startblue"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
-        android:text="Delete Group"
-        android:onClick="deleteGroup"/>
 
 </LinearLayout>

@@ -57,14 +57,28 @@
 
         <Spinner
             android:id="@+id/spr_addExpense_category"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:padding="5dp"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:background="@drawable/spinner_background"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="110dp"
             android:textColor="@color/startblue"
             android:textSize="11sp" />
+
+        <ImageView
+            android:id="@+id/btn_settle"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:layout_toRightOf="@+id/spr_addExpense_category"
+            android:clickable="true"
+            android:layout_margin="5dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/date"
+            android:tint="@color/startblue"
+            android:onClick="settleTheGroupExpenses"/>
 
         <Button
             android:id="@+id/btnPickDate"
@@ -81,7 +95,7 @@
             android:textStyle="bold"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/ae_linearLayout1"
-            android:text="When?"
+            android:text="Date"
             android:onClick="pickDate"/>
 
 
@@ -98,6 +112,7 @@
             android:buttonTint="@color/startblue"/>
 
         <Button
+            android:id="@+id/btn_add_expense_user"
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
