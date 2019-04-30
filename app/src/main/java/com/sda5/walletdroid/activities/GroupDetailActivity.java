@@ -1,7 +1,11 @@
 package com.sda5.walletdroid.activities;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -18,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.adapters.AccountAdapterGroupDetail;
+import com.sda5.walletdroid.helper.ListViewHelper;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 import com.sda5.walletdroid.models.Notification;
@@ -27,6 +32,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
+import static android.text.Html.FROM_HTML_MODE_COMPACT;
+import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_DIV;
 
 public class GroupDetailActivity extends AppCompatActivity {
     private String groupID;
@@ -190,6 +199,17 @@ public class GroupDetailActivity extends AppCompatActivity {
                 });
     }
 
+    public void sendEmail(View v, List<String> emails, String message) {
+        String[] emailList = emails.toArray(new String[emails.size()]);
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_TEXT, message);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Settlement Info");
+        intent.putExtra(Intent.EXTRA_EMAIL, emailList);
+        startActivity(intent);
+
+    }
+
     public void settleTheGroupExpenses(View view) {
         HashMap<String, Double> previousGroupBalance = new HashMap<>(group.getBalance());
         HashMap<String, Double> groupBalance = group.getBalance();
@@ -206,25 +226,66 @@ public class GroupDetailActivity extends AppCompatActivity {
                         String amount;
                         String groupName = group.getName().toUpperCase();
                         Notification notification;
+                        List<String> externalMailAdresses = new ArrayList<>();
+                        Map<Account, String> balanceStatus = new HashMap<>();
                         for (Account account : accounts) {
-                            from =currentAccount.getOwnerName().toUpperCase();
                             amount = previousGroupBalance.get(account.getId()).toString();
-                            message = "Hi! You owe " + amount + "Kr for settlement of expenses of group : " + groupName;
-                            tokenId = account.getTokenID();
-                            notification = new Notification(from, groupName, message, tokenId);
-                            database.collection("Accounts")
-                                    .document(account.getId()).collection("Notifications")
-                                    .document(notification.getNotificationId())
-                                    .set(notification)
-                                    .addOnCompleteListener(task1 -> {
-                                        finish();
-                                        startActivity(getIntent());
-                                    });
+                            balanceStatus.put(account, amount);
+                            if (account.isInternalAccount()) {
+                                from = currentAccount.getOwnerName().toUpperCase();
+                                message = "Hi! You owe " + amount + "Kr for settlement of expenses of group : " + groupName;
+                                tokenId = account.getTokenID();
+                                notification = new Notification(from, groupName, message, tokenId);
+                                database.collection("Accounts")
+                                        .document(account.getId()).collection("Notifications")
+                                        .document(notification.getNotificationId())
+                                        .set(notification)
+                                        .addOnCompleteListener(task1 -> {
+
+                                        });
+                            } else if (previousGroupBalance.get(account.getId()) != 0) {
+                                externalMailAdresses.add(account.getEmail());
+                            }
                         }
+
+                        ArrayList<Account> balanceAccounts = new ArrayList<>(balanceStatus.keySet());
+                        String messageContent = "Hi! This is the Group : "+ groupName + " balance details:";
+                        for (Account account : balanceAccounts) {
+                            String ownerName = account.getOwnerName();
+                            String amountForPerson = balanceStatus.get(account);
+                            messageContent += "<div>" + ownerName + ":" + amountForPerson + "</div>";
+                        }
+                        messageContent += "</table>";
+                        if (externalMailAdresses.size() > 0) {
+
+                            try {
+                                String[] emailList = externalMailAdresses.toArray(new String[externalMailAdresses.size()]);
+                                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                                intent.setType("text/html");
+                                intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(messageContent, FROM_HTML_SEPARATOR_LINE_BREAK_DIV));
+                                intent.putExtra(Intent.EXTRA_SUBJECT, "Settlement Info");
+                                intent.putExtra(Intent.EXTRA_EMAIL, emailList);
+                                startActivity(intent);
+
+                            } catch (Exception exception) {
+                                System.out.println(exception + messageContent);
+                            }
+
+                        } else {
+                            finish();
+                            startActivity(getIntent());
+                        }
+
 
                     }
                 });
+    }
 
-
+    public static Spanned fromHtml(String source) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(source);
+        }
     }
 }
