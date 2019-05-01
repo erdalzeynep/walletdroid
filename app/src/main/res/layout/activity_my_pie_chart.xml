@@ -9,9 +9,14 @@
     <TextView
         android:id="@+id/textViewMyPieChart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:text="Expenses"
-
+        android:textColor="@color/ewhite"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:background="@drawable/gradientbackground"
         android:textAlignment="center" />
 
     <com.github.mikephil.charting.charts.PieChart

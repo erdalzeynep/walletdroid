@@ -4,26 +4,18 @@
     <item
         android:id="@+id/navigation_group"
         android:icon="@drawable/ic_group_black_24dp"
-        android:title="@string/title_groups" />
+        android:title="Group" />
 
     <item
         android:id="@+id/navigation_expense"
         android:icon="@drawable/expense"
         android:title="@string/title_expnese" />
 
+
     <item
         android:id="@+id/navigation_graph"
         android:icon="@drawable/graph"
-        android:title="Graph" />
-    <item
-        android:id="@+id/navigation_settle"
-        android:icon="@drawable/settle"
-        android:title="@string/title_settle"/>
-
-    <item
-        android:id="@+id/navigation_stock"
-        android:icon="@drawable/invest"
-        android:title="@string/title_invest"/>
+        android:title="Graph"/>
 
 
 

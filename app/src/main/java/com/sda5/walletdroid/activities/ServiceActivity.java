@@ -23,6 +23,7 @@ import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.fragments.ExpenseFragment;
 import com.sda5.walletdroid.fragments.GroupFragment;
 import com.sda5.walletdroid.fragments.InvestFragment;
+import com.sda5.walletdroid.fragments.QueyFragment;
 import com.sda5.walletdroid.fragments.SettleFragment;
 import com.sda5.walletdroid.fragments.fragments_navigation.AppDetails;
 import com.sda5.walletdroid.fragments.fragments_navigation.Feedbacknav;
@@ -48,14 +49,17 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                     case R.id.navigation_expense:
                         fragment = new ExpenseFragment();
                         break;
+                    //case R.id.navigation_query:
+                      //  fragment = new QueyFragment();
+                       // break;
                     case R.id.navigation_graph:
                         fragment = new GraphFragment();
                         break;
-                    case R.id.navigation_settle:
-                        fragment = new SettleFragment();
-                        break;
-                    case R.id.navigation_stock:
-                        fragment = new InvestFragment();
+                    //case R.id.navigation_settle:
+                      //  fragment = new SettleFragment();
+                      //  break;
+                   // case R.id.navigation_stock:
+                    //    fragment = new InvestFragment();
 
 
                 }

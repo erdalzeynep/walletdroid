@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,12 +38,13 @@ public class GroupDetailActivity extends AppCompatActivity {
     private AccountAdapterGroupDetail accountAdapter;
     private Group group;
     private ArrayList<Account> accounts = new ArrayList<>();
-    private Button btnAddMember;
-    private Button btnDeleteMember;
-    private Button btnDeleteGroup;
+    private ImageView btnAddMember;
+    private ImageView btnDeleteMember;
+    private ImageView btnDeleteGroup;
     private Button btnLeaveGroup;
-    private Button btnSettle;
+    private ImageView btnSettle;
     private Account currentAccount;
+
 
 
     @Override

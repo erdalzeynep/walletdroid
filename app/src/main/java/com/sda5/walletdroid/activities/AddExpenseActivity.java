@@ -104,10 +104,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
         btnPickDate = findViewById(R.id.btnPickDate);
-
-        addExpenseUsers = findViewById(R.id.btn_add_expense_users);
+        addExpenseUsers = findViewById(R.id.btn_add_expense_user);
         checkBoxGroupExpense = findViewById(R.id.checkBox_group_expense);
-
         addExpenseUsers.setVisibility(View.GONE);
 
 

@@ -10,6 +10,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         app:srcCompat="@drawable/no_buyer"
+        android:tint="@color/startblue"
         android:layout_gravity="center"
         />
 
