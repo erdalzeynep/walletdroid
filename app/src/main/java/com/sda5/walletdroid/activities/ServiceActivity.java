@@ -49,15 +49,15 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                     case R.id.navigation_expense:
                         fragment = new ExpenseFragment();
                         break;
-                    case R.id.navigation_query:
-                        fragment = new QueyFragment();
-                        break;
+                    //case R.id.navigation_query:
+                      //  fragment = new QueyFragment();
+                       // break;
                     case R.id.navigation_graph:
                         fragment = new GraphFragment();
                         break;
-                    case R.id.navigation_settle:
-                        fragment = new SettleFragment();
-                        break;
+                    //case R.id.navigation_settle:
+                      //  fragment = new SettleFragment();
+                      //  break;
                    // case R.id.navigation_stock:
                     //    fragment = new InvestFragment();
 

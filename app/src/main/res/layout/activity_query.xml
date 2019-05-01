@@ -92,6 +92,7 @@
             android:background="@drawable/white_button"
             android:clickable="true"
             android:textAllCaps="false"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:textColor="@color/startblue"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -119,7 +120,7 @@
     <ListView
         android:id="@+id/expense_query_list"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_marginStart="35dp"
         android:layout_marginEnd="35dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
@@ -134,6 +135,6 @@
         android:textColor="@color/startblue"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Show graph"
+        android:text="Show Graph"
         android:onClick="gotToPieChart"/>
 </LinearLayout>

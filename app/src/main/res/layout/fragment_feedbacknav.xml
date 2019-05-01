@@ -124,6 +124,7 @@
             android:text="Send"
             android:textAllCaps="false"
             android:textColor="@color/startblue"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:onClick="sendFeedback"
             android:theme="@style/Base.Widget.AppCompat.Button.Colored"/>

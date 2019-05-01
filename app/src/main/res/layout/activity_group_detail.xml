@@ -97,7 +97,6 @@
         android:layout_gravity="center"
         android:background="@drawable/white_button"
         android:clickable="true"
-        android:padding="16dp"
         android:textAllCaps="false"
         android:textColor="@color/startblue"
         android:textSize="18sp"

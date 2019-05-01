@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -38,8 +36,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="200dp"
+        android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,14 +68,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#FFF" />
+        android:background="@color/graydark" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="200dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp">
 
@@ -87,7 +83,7 @@
         android:id="@+id/giveFriendphone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/transparent"
         android:drawableStart="@drawable/ic_phone_android_black_24dp"
         android:drawableTint="@color/graydark"
@@ -103,17 +99,13 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#FFF" />
     </LinearLayout>
 
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="280dp"
+    android:layout_marginTop="5dp"
     android:layout_marginStart="30dp"
     android:layout_marginEnd="30dp">
     <TextView
@@ -137,12 +129,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textInputFeed"
         android:background="@drawable/white_button"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Send"
         android:textColor="@color/startblue"
+        android:textAllCaps="false"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:theme="@style/Base.Widget.AppCompat.Button.Colored"
         android:onClick="composeEmail"/>
 
 </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

@@ -40,7 +40,6 @@
         android:layout_marginRight="40dp"
         android:background="@drawable/white_button"
         android:clickable="true"
-        android:padding="16dp"
         android:text="Split"
         android:textAllCaps="false"
         android:textColor="@color/startblue"

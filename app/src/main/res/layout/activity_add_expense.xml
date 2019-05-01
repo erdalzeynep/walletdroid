@@ -129,7 +129,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/white_button"
             android:clickable="true"
-            android:padding="10dp"
             android:textAllCaps="false"
             android:textColor="@color/startblue"
             android:textSize="18sp"
