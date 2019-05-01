@@ -1,4 +1,5 @@
 package com.sda5.walletdroid.activities;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,7 +45,6 @@ public class GroupDetailActivity extends AppCompatActivity {
     private Button btnLeaveGroup;
     private ImageView btnSettle;
     private Account currentAccount;
-
 
 
     @Override
@@ -236,8 +236,8 @@ public class GroupDetailActivity extends AppCompatActivity {
                             for (Account account : externalAccounts) {
                                 String ownerName = account.getOwnerName();
                                 String amountForPerson = balanceStatus.get(account);
-                                String subject = "WalletDroid settlement detail for group: "+groupName;
-                                String messageContentIndividual ="Hi "+ownerName+"! Your balance is "+amountForPerson+" Kr in group: "+groupName;
+                                String subject = "WalletDroid settlement detail for group: " + groupName;
+                                String messageContentIndividual = "Hi " + ownerName + "! Your balance is " + amountForPerson + " Kr in group: " + groupName;
                                 // you can call sendEmail() method inside this for. this for goes through external users in group
                                 // which they have balance different than zero.
                                 String emailTo = account.getEmail();
@@ -246,13 +246,15 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 GMailSender sender = new GMailSender(emailFrom, emailPass);
                                 try {
                                     sender.sendMail(subject, messageContentIndividual, emailFrom, emailTo);
-                                } catch (Exception e){
+                                } catch (Exception e) {
                                     Log.e("Email problem: ", e.getMessage());
                                     successfulSendMail = false;
                                 }
                             }
-                            if(successfulSendMail)
+                            if (successfulSendMail)
                                 Toast.makeText(GroupDetailActivity.this, "Emails SENT", Toast.LENGTH_SHORT).show();
+                                 finish();
+                                 startActivity(getIntent());
                         } else {
                             finish();
                             startActivity(getIntent());

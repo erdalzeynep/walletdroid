@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.activities.GroupDetailActivity;

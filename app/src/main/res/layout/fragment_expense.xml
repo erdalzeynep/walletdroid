@@ -21,22 +21,21 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
-                android:background="@drawable/circle"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/expense"
                 android:tint="@color/ewhite" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Expense"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:textColor="@color/ewhite"/>
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:text="Expense"-->
+                <!--android:textSize="30sp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@color/ewhite"/>-->
 
 
         </LinearLayout>
@@ -44,7 +43,7 @@
     </RelativeLayout>
         <RelativeLayout
             android:id="@+id/fe_relativeLayout1"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -60,9 +59,9 @@
                 <ListView
                     android:id="@+id/expense_list"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginEnd="40dp"/>
+                    android:layout_height="388dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -72,7 +71,7 @@
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginStart="30dp"
                     android:background="@drawable/white_button"
                     android:clickable="true"
                     android:textAllCaps="false"
@@ -88,7 +87,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/white_button"
                     android:clickable="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="20dp"
                     android:textAllCaps="false"
                     android:textColor="@color/startblue"
                     android:textSize="18sp"

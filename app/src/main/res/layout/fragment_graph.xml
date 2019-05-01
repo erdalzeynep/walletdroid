@@ -8,9 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/up_ll1"
+            android:layout_alignBottom="@+id/up_ll1"
             android:layout_marginTop="50dp"
             android:background="@drawable/gradientbackground"
             android:orientation="vertical">
@@ -18,20 +21,12 @@
             <ImageView
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
-                android:background="@drawable/circle"
-                android:layout_gravity="center_horizontal"
                 android:src="@drawable/graph"
                 android:tint="@color/ewhite" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Graph"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:textColor="@color/ewhite"/>
+
         </LinearLayout>
     </LinearLayout>
 
@@ -39,8 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="200dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginStart="10dp"
         android:layout_marginEnd="30dp">
 
 
@@ -52,7 +47,7 @@
         android:gravity="center_horizontal|left|center_vertical"
         android:text="See Expense Details"
         android:textColor="@color/startblue"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="30dp"
         android:textSize="24sp"
         android:textStyle="bold"/>
 
@@ -63,6 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/white_button"
+        android:layout_gravity="center_horizontal|center_vertical"
         android:clickable="true"
         android:textAllCaps="false"
         android:textColor="@color/startblue"

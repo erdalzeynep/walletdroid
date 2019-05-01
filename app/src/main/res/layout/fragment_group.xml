@@ -23,27 +23,26 @@
             <ImageView
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:padding="10dp"
-                android:background="@drawable/circle"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_group_black_24dp"
                 android:tint="@color/ewhite" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Group"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:textColor="@color/ewhite"/>
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:text="Group"-->
+                <!--android:textSize="20sp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@color/ewhite"/>-->
 
 
         </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/fg_relativeLayout1"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -56,24 +55,23 @@
             android:layout_marginTop="150dp">
 
 
-    <ListView
-        android:id="@+id/group_list"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_gravity="clip_vertical|center_horizontal"
-        />
+            <ListView
+                android:id="@+id/group_list"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_gravity="clip_vertical|center_horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp" />
 
             <Button
                 android:id="@+id/btn_new_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/white_button"
                 android:clickable="true"
                 android:textAllCaps="false"

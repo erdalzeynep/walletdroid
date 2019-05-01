@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp">
+    android:layout_margin="1dp">
 
     <TextView
         android:id="@+id/textView_member_list"
@@ -13,8 +13,8 @@
         android:gravity="center_horizontal|left|center_vertical"
         android:layout_marginTop="10dp"
         android:text="Members List"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:textColor="@color/startblue"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -23,8 +23,8 @@
         android:id="@+id/member_list"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginEnd="35dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
 
     <LinearLayout
@@ -36,8 +36,8 @@
 
         <ImageView
             android:id="@+id/btn_settle"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:padding="10dp"
             android:clickable="true"
@@ -50,8 +50,8 @@
 
         <ImageView
             android:id="@+id/btn_add_member"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:padding="10dp"
             android:clickable="true"
@@ -60,11 +60,13 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/addsign"
             android:tint="@color/startblue"
-            android:onClick="addMember"/>
+            android:onClick="addMember"
+
+            />
         <ImageView
             android:id="@+id/btn_delete_member"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:padding="10dp"
             android:clickable="true"
@@ -76,8 +78,8 @@
             android:onClick="deleteMembers"/>
         <ImageView
             android:id="@+id/btn_delete_group"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:padding="10dp"
             android:clickable="true"

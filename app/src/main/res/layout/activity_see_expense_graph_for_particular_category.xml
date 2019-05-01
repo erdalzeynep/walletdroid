@@ -13,8 +13,8 @@
         android:gravity="center_horizontal|left|center_vertical"
         android:text="See Expense Details"
         android:textColor="@color/startblue"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:textSize="24sp"
         android:textStyle="bold"/>
 
@@ -23,8 +23,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
         <Spinner
             android:id="@+id/query_category"
             android:layout_width="0dp"
@@ -51,20 +51,20 @@
 
     <Button
         android:id="@+id/buttonPieChart"
-        android:layout_width="350dp"
+        android:layout_width="333dp"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/white_button"
         android:clickable="true"
+        android:onClick="runQuery"
+        android:text="Show Graph"
         android:textAllCaps="false"
         android:textColor="@color/startblue"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_centerHorizontal="true"
-        android:onClick="runQuery"
-        android:text="Show Graph" />
+        android:textStyle="bold" />
 
 
 </LinearLayout>
