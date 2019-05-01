@@ -49,7 +49,7 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_my_pie_chart);
 
-        setTitle("PieChartActivity");
+        setTitle("PieChart of All Expenses");
 
         chart = findViewById(R.id.chartpie);
         chart.setUsePercentValues(true);

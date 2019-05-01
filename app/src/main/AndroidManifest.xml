@@ -15,9 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-
+        <activity android:name=".activities.Graphs.MyBarGraphComparison"></activity>
+        <activity android:name=".activities.SeeExpenseGraphForTwoActivities" />
         <activity android:name=".activities.Graphs.MyPieChartActivity" />
         <activity android:name=".activities.Graphs.MyBarGraph" />
         <activity android:name=".activities.Graphs.MyLineGraph" />
@@ -28,16 +27,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name=".activities.ExpenseDetailsActivity"></activity>
-
-
-        <activity android:name=".activities.ExpenseDetailsActivity"></activity>
-
-        <activity android:name=".activities.SeeExpenseGraphForParticularCategory"></activity>
+        <activity android:name=".activities.ExpenseDetailsActivity" />
+        <activity android:name=".activities.ExpenseDetailsActivity" />
+        <activity android:name=".activities.SeeExpenseGraphForParticularCategory" />
         <activity android:name=".activities.QueryActivity" />
-
         <activity android:name=".activities.AddExpenseUsersActivity" />
         <activity android:name=".activities.ChooseGroupForExpenseActivity" />
         <activity android:name=".activities.AddNewGroupMemberActivity" /> <!-- Splash Screen -->
@@ -73,7 +66,6 @@
         <activity
             android:name=".activities.SigninGoogle"
             android:label="@string/manifest_google_sign_in" /> <!-- Creating graphs -->
-
         <meta-data
             android:name="com.google.android.gms.ads.1:718366885828:android:f43e24c6a69a4b70"
             android:value=" ca-app-pub-1803960866730048~9900200003" />

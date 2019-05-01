@@ -3,6 +3,7 @@ package com.sda5.walletdroid.activities.Graphs;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -34,14 +35,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
-public class MyBarGraph extends DemoBase implements
+public class MyBarGraphComparison extends DemoBase implements
         OnChartGestureListener, OnChartValueSelectedListener {
 
     private BarChart chart;
 
-    private String categoryIntent;
 
     private HashMap<String, Double> expenseMaps = new HashMap<>();
+    private HashMap<String, Double> expenseMaps2 = new HashMap<>();
+    private String categoryIntent1;
+    private String categoryIntent2;
 
     public static final String TAG = "My Bar Graph";
 
@@ -50,11 +53,11 @@ public class MyBarGraph extends DemoBase implements
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_my_bar_graph);
+        setContentView(R.layout.activity_my_bar_graph_comparison);
 
-        setTitle("Bar plot for One Expense");
+        setTitle("Comparison of 2 categories");
 
-        chart = findViewById(R.id.chartMyBar);
+        chart = findViewById(R.id.chartMyBarComp);
         chart.setOnChartValueSelectedListener(this);
 
         XAxis xAxis = chart.getXAxis();
@@ -84,7 +87,7 @@ public class MyBarGraph extends DemoBase implements
 
         chart.getAxisLeft().setEnabled(false);
         chart.getAxisRight().setDrawAxisLine(false);
-        chart.getAxisRight().setDrawGridLines(false);
+        chart.getAxisRight().setDrawGridLines(true);
         chart.getXAxis().setDrawAxisLine(true);
         chart.getXAxis().setDrawGridLines(false);
 
@@ -103,14 +106,15 @@ public class MyBarGraph extends DemoBase implements
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
-        l.setTextSize(12);
 
         // Get  HashMap from the incoming intent
         Intent intent = getIntent();
         expenseMaps = (HashMap<String, Double>) intent.getSerializableExtra("map");
-        categoryIntent = (intent.getStringExtra("category"));
+        expenseMaps2 = (HashMap<String, Double>) intent.getSerializableExtra("map2");
+        categoryIntent1 = (intent.getStringExtra("category1"));
+        categoryIntent2 = (intent.getStringExtra("category2"));
         //generateDataLine();
-        getRemoteData(expenseMaps, categoryIntent);
+        getRemoteData(expenseMaps, expenseMaps2, categoryIntent1, categoryIntent2);
     }
 
     private final int[] colors = new int[]{
@@ -123,85 +127,131 @@ public class MyBarGraph extends DemoBase implements
     /**
      * @param expenseRemote
      */
-    private void getRemoteData(HashMap<String, Double> expenseRemote, String c1) {
+    private void getRemoteData(HashMap<String, Double> expenseRemote, HashMap<String, Double> expenseRemote2, String c1, String c2) {
 
+        try {
 
-        Set<String> keySet = expenseRemote.keySet();//Getting Set of keys Categories/months from HashMap
-        String[] labelsExpense = keySet.toArray(new String[0]);// Transfer data to an array
-        final String[] labelsExpense2 = keySet.toArray(new String[0]);//Making a copy of labelsExpense
-        final String[] sortedString = labelsExpense;// Storing labels in another array that will be sorted
+            // DATESET 1
+            Set<String> keySet = expenseRemote.keySet();//Getting Set of keys Categories/months from HashMap
+            String[] labelsExpense = keySet.toArray(new String[0]);// Transfer data to an array
+            final String[] labelsExpenseCopy = keySet.toArray(new String[0]);//Making a copy of labelsExpense
+            final String[] sortedString = labelsExpense;// Storing labels in another array that will be sorted
 
-        // Getting values from HashMap
-        Collection<Double> values = expenseRemote.values();
-        Double[] valuesRemote = values.toArray(new Double[0]);// Convert data to an array
+            // Getting values from HashMap
+            Collection<Double> values = expenseRemote.values();
+            Double[] valuesRemote = values.toArray(new Double[0]);// Convert data to an array
 
-        // This array will contain the values sorted based on sorting index of labels
-        Double[] sortedA = new Double[labelsExpense.length];
+            // This array will contain the values sorted based on sorting index of labels
+            Double[] sortedA = new Double[labelsExpense.length];
 
-        // BarEntry
-        ArrayList<BarEntry> valuesExpense = new ArrayList<>();
+            // BarEntry
+            ArrayList<BarEntry> valuesExpense = new ArrayList<>();
 
-        if (true) {
+            if (true) {
 
-            Arrays.sort(sortedString); // sort the labels
+                Arrays.sort(sortedString); // sort the labels
 
-            // For loops for Printing the results just to confirm the sorting. Will be removed once sorting done.
-            for (String labelss : labelsExpense2) {
-                System.out.println("labelsOriginal " + labelss);
-            }
-            for (String labelSorted : sortedString) {
-                System.out.println("labelsSorted " + labelSorted);
-            }
-            // Values before sorting
-            for (Double valuess : valuesRemote) {
-                System.out.println("valuesBeforeSorting " + valuess);
-            }
+                // For loops for Printing the results just to confirm the sorting. Will be removed once sorting done.
+                for (String labelss : labelsExpenseCopy) {
+                    System.out.println("labelsOriginal " + labelss);
+                }
 
-            // Loop for sorting the data based on dates.
-            for (int i = 0; i < labelsExpense.length; i++) {
-                for (int j = 0; j < valuesRemote.length; j++) {
-                    if (sortedString[i] == labelsExpense2[j]) {
-                        sortedA[i] = valuesRemote[j];
+                // Loop for sorting the data based on dates.
+                for (int i = 0; i < labelsExpense.length; i++) {
+                    for (int j = 0; j < valuesRemote.length; j++) {
+                        if (sortedString[i] == labelsExpenseCopy[j]) {
+                            sortedA[i] = valuesRemote[j];
+                        }
                     }
                 }
             }
-            for (Double valuesSort : sortedA) {
-                System.out.println("valuessAfterSorting " + valuesSort);
+            //values after sorting
+            for (int i = 0; i < valuesRemote.length; i++) {
+                valuesExpense.add(new BarEntry(i, sortedA[i].intValue()));
             }
+            BarDataSet d4 = new BarDataSet(valuesExpense, c1);
+            //d4.setColors(ColorTemplate.VORDIPLOM_COLORS);
+            d4.setColors(Color.rgb(164, 228, 251));
+            d4.setHighLightAlpha(255);
+
+
+            // DATESET 2
+            Set<String> keySet2 = expenseRemote2.keySet();//Getting Set of keys Categories/months from HashMap
+            String[] labelsExpense2 = keySet2.toArray(new String[0]);// Transfer data to an array
+            final String[] labelsExpenseCopy2 = keySet2.toArray(new String[0]);//Making a copy of labelsExpense
+            final String[] sortedString2 = labelsExpense2;// Storing labels in another array that will be sorted
+
+            // Getting values from HashMap
+            Collection<Double> values2 = expenseRemote2.values();
+            Double[] valuesRemote2 = values2.toArray(new Double[0]);// Convert data to an array
+
+            // This array will contain the values sorted based on sorting index of labels
+            Double[] sortedA2 = new Double[labelsExpense2.length];
+
+            // BarEntry
+            ArrayList<BarEntry> valuesExpense2 = new ArrayList<>();
+
+            if (true) {
+
+                Arrays.sort(sortedString2); // sort the labels
+
+                // Loop for sorting the data based on dates.
+                for (int i = 0; i < labelsExpense2.length; i++) {
+                    for (int j = 0; j < valuesRemote2.length; j++) {
+                        if (sortedString2[i] == labelsExpenseCopy2[j]) {
+                            sortedA2[i] = valuesRemote2[j];
+                        }
+                    }
+                }
+            }
+            //values after sorting
+            for (int i = 0; i < valuesRemote2.length; i++) {
+                valuesExpense2.add(new BarEntry(i, sortedA2[i].intValue()));
+            }
+
+            //
+            BarDataSet d5 = new BarDataSet(valuesExpense2, c2);
+            //d5.setColors(ColorTemplate.VORDIPLOM_COLORS);
+            d5.setColors(Color.rgb(104, 241, 175));
+            d5.setHighLightAlpha(255);
+
+
+            //xAxis.setAxisMinimum(0);
+            //xAxis.setAxisMaximum(labelsExpense.length);
+            //xAxis.mAxisMaximum=labelsExpense.length;
+            //xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense));
+
+            //xAxis.setAvoidFirstLastClipping(true);
+
+            //xAxis.setAxisMaximum(40f);
+
+            BarData data = new BarData(d4, d5);
+            data.setBarWidth(0.15f); // TO SET BAR WIDTH
+            data.setValueTextSize(14f); // SET VALUE SIZE DISPLAYED ABOVE THE BAR
+            chart.setData((BarData) data);
+
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setTextSize(10); // Set size of x labels
+            xAxis.setLabelCount(labelsExpense.length); // set how many labels you want to see
+            xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense)); // set user defined labels
+            xAxis.setCenterAxisLabels(true);
+            xAxis.setGranularity(1);
+
+            float barSpace = 0.1f;
+            float groupSpace = 0.5f;
+
+            chart.setDragEnabled(true);
+            chart.getXAxis().setAxisMinimum(0);
+            chart.getXAxis().setAxisMaximum(0 + chart.getBarData().getGroupWidth(groupSpace, barSpace) * labelsExpense.length);
+            chart.getAxisLeft().setAxisMinimum(0);
+            chart.groupBars(0, groupSpace, barSpace);
+
+
+            chart.animateXY(2000, 2000);
+            chart.invalidate();
+        }catch(NullPointerException ignored){
+
         }
-        //Printing values after sorting
-        for (int i = 0; i < valuesRemote.length; i++) {
-            valuesExpense.add(new BarEntry(i, sortedA[i].intValue()));
-        }
-
-        //
-        BarDataSet d4 = new BarDataSet(valuesExpense, c1);
-        d4.setColors(ColorTemplate.VORDIPLOM_COLORS);
-        d4.setHighLightAlpha(255);
-
-
-        //xAxis.setAxisMinimum(0);
-        //xAxis.setAxisMaximum(labelsExpense.length);
-        //xAxis.mAxisMaximum=labelsExpense.length;
-        //xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense));
-
-        //xAxis.setAvoidFirstLastClipping(true);
-
-        //xAxis.setAxisMaximum(40f);
-
-        BarData data = new BarData(d4);
-        data.setBarWidth(0.9f); // TO SET BAR WIDTH
-        data.setValueTextSize(14f); // SET VALUE SIZE DISPLAYED ABOVE THE BAR
-        chart.setData((BarData) data);
-
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setTextSize(10); // Set size of x labels
-        xAxis.setLabelCount(labelsExpense.length); // set how many labels you want to see
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense)); // set user defined labels
-        chart.animateXY(2000, 2000);
-        chart.invalidate();
-
-
     }
 
     @Override

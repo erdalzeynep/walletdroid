@@ -215,6 +215,14 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
         startActivity(myIntent);
     }
 
+    /**
+     * For comparing 2 expense categories and making a bar plot
+     * @param view
+     */
+    public void runQueryForExpenseComparison(View view) {
+        Intent myIntent = new Intent(getApplicationContext(), SeeExpenseGraphForTwoActivities.class);
+        startActivity(myIntent);
+    }
 
     public void signOut(View view) {
         mAuth.signOut();
