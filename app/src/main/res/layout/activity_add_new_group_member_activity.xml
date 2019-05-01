@@ -48,6 +48,15 @@
         android:hint="enter email address"
         android:inputType="textPersonName" />
 
+    <EditText
+        android:id="@+id/et_external_phone_add_member"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:ems="10"
+        android:hint="enter phone number"
+        android:inputType="phone"
+        android:digits="0123456789+" />
+
     <Button
         android:id="@+id/button_add_external_add_member"
         android:layout_width="match_parent"

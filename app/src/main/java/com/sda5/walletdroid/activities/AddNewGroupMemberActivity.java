@@ -41,11 +41,13 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
     private Group group;
     private EditText editTextExternalAccountName;
     private EditText editTextExternalAccountEmail;
+    private EditText editTextExternalAccountPhone;
     private Button buttonAddExternalAccount;
     private ListView listViewExternalAccounts;
     private HashMap<String, String> externalAccountNameAndEmails = new HashMap<>();
     private ArrayList<String> externalAccountList = new ArrayList<>();
     private ArrayAdapter<String> externalUserAdapter;
+    private String externalUserPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +73,13 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
         CheckBox checkBoxExternalAccount = findViewById(R.id.cb_external_account_add_member);
         editTextExternalAccountName = findViewById(R.id.et_external_name_add_member);
         editTextExternalAccountEmail = findViewById(R.id.et_external_email_add_member);
+        editTextExternalAccountPhone = findViewById(R.id.et_external_phone_add_member);
         buttonAddExternalAccount = findViewById(R.id.button_add_external_add_member);
         listViewExternalAccounts = findViewById(R.id.listView_external_add_member);
 
         editTextExternalAccountName.setVisibility(View.GONE);
         editTextExternalAccountEmail.setVisibility(View.GONE);
+        editTextExternalAccountPhone.setVisibility(View.GONE);
         buttonAddExternalAccount.setVisibility(View.GONE);
         listViewExternalAccounts.setVisibility(View.GONE);
 
@@ -83,12 +87,14 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
             if (isChecked) {
                 editTextExternalAccountName.setVisibility(View.VISIBLE);
                 editTextExternalAccountEmail.setVisibility(View.VISIBLE);
+                editTextExternalAccountPhone.setVisibility(View.VISIBLE);
                 buttonAddExternalAccount.setVisibility(View.VISIBLE);
                 listViewExternalAccounts.setVisibility(View.VISIBLE);
                 listViewExternalAccounts.setAdapter(externalUserAdapter);
             } else {
                 editTextExternalAccountName.setVisibility(View.GONE);
                 editTextExternalAccountEmail.setVisibility(View.GONE);
+                editTextExternalAccountPhone.setVisibility(View.GONE);
                 buttonAddExternalAccount.setVisibility(View.GONE);
                 listViewExternalAccounts.setVisibility(View.GONE);
             }
@@ -146,6 +152,7 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
             return Tasks.forResult(null);
         } else {
             final Account externalAccount = new Account(false, ownerName, email);
+            externalAccount.setPhoneNumber(externalUserPhoneNumber);
             return database.collection("Accounts")
                     .document(externalAccount.getId())
                     .set(externalAccount)
@@ -189,10 +196,18 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
     public void addExternalMembersToListView(View view) {
         String externalAccountName = editTextExternalAccountName.getText().toString();
         String externalAccountEmail = editTextExternalAccountEmail.getText().toString();
-        externalAccountNameAndEmails.put(externalAccountEmail, externalAccountName);
-        externalAccountList.add("Name:  " + externalAccountName + "   " + "Email:  " + externalAccountEmail);
-        externalUserAdapter.notifyDataSetChanged();
-        editTextExternalAccountName.setText("");
-        editTextExternalAccountEmail.setText("");
+        String externalAccountPhone = editTextExternalAccountPhone.getText().toString();
+        if (externalAccountEmail.equals("") || externalAccountName.equals("")) {
+            Toast.makeText(this, "Please fill all name and email", Toast.LENGTH_SHORT).show();
+        } else {
+            externalAccountNameAndEmails.put(externalAccountEmail, externalAccountName);
+            externalAccountList.add("Name:  " + externalAccountName + "\n" + "Email:  "
+                    + externalAccountEmail + "\n" + "Phone: " + externalAccountPhone);
+            externalUserAdapter.notifyDataSetChanged();
+            editTextExternalAccountName.setText("");
+            editTextExternalAccountEmail.setText("");
+            externalUserPhoneNumber = editTextExternalAccountPhone.getText().toString();
+            editTextExternalAccountPhone.setText("");
+        }
     }
 }
