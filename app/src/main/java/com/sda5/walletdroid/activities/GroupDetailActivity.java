@@ -1,9 +1,10 @@
 package com.sda5.walletdroid.activities;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sda5.walletdroid.GMailSender;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.adapters.AccountAdapterGroupDetail;
 import com.sda5.walletdroid.models.Account;
@@ -36,12 +38,13 @@ public class GroupDetailActivity extends AppCompatActivity {
     private AccountAdapterGroupDetail accountAdapter;
     private Group group;
     private ArrayList<Account> accounts = new ArrayList<>();
-    private Button btnAddMember;
-    private Button btnDeleteMember;
-    private Button btnDeleteGroup;
+    private ImageView btnAddMember;
+    private ImageView btnDeleteMember;
+    private ImageView btnDeleteGroup;
     private Button btnLeaveGroup;
-    private Button btnSettle;
+    private ImageView btnSettle;
     private Account currentAccount;
+
 
 
     @Override
@@ -206,25 +209,55 @@ public class GroupDetailActivity extends AppCompatActivity {
                         String amount;
                         String groupName = group.getName().toUpperCase();
                         Notification notification;
+                        List<Account> externalAccounts = new ArrayList<>();
+                        Map<Account, String> balanceStatus = new HashMap<>();
                         for (Account account : accounts) {
-                            from =currentAccount.getOwnerName().toUpperCase();
                             amount = previousGroupBalance.get(account.getId()).toString();
-                            message = "Hi! You owe " + amount + "Kr for settlement of expenses of group : " + groupName;
-                            tokenId = account.getTokenID();
-                            notification = new Notification(from, groupName, message, tokenId);
-                            database.collection("Accounts")
-                                    .document(account.getId()).collection("Notifications")
-                                    .document(notification.getNotificationId())
-                                    .set(notification)
-                                    .addOnCompleteListener(task1 -> {
-                                        finish();
-                                        startActivity(getIntent());
-                                    });
+                            balanceStatus.put(account, amount);
+                            if (account.isInternalAccount()) {
+                                from = currentAccount.getOwnerName().toUpperCase();
+                                message = "Hi! You owe " + amount + "Kr for settlement of expenses of group : " + groupName;
+                                tokenId = account.getTokenID();
+                                notification = new Notification(from, groupName, message, tokenId);
+                                database.collection("Accounts")
+                                        .document(account.getId()).collection("Notifications")
+                                        .document(notification.getNotificationId())
+                                        .set(notification)
+                                        .addOnCompleteListener(task1 -> {
+
+                                        });
+                            } else if (previousGroupBalance.get(account.getId()) != 0) {
+                                externalAccounts.add(account);
+                            }
                         }
 
+                        if (externalAccounts.size() > 0) {
+                            boolean successfulSendMail = true;
+                            for (Account account : externalAccounts) {
+                                String ownerName = account.getOwnerName();
+                                String amountForPerson = balanceStatus.get(account);
+                                String subject = "WalletDroid settlement detail for group: "+groupName;
+                                String messageContentIndividual ="Hi "+ownerName+"! Your balance is "+amountForPerson+" Kr in group: "+groupName;
+                                // you can call sendEmail() method inside this for. this for goes through external users in group
+                                // which they have balance different than zero.
+                                String emailTo = account.getEmail();
+                                String emailFrom = "sudutechio@gmail.com";
+                                String emailPass = "M3hdi#23";
+                                GMailSender sender = new GMailSender(emailFrom, emailPass);
+                                try {
+                                    sender.sendMail(subject, messageContentIndividual, emailFrom, emailTo);
+                                } catch (Exception e){
+                                    Log.e("Email problem: ", e.getMessage());
+                                    successfulSendMail = false;
+                                }
+                            }
+                            if(successfulSendMail)
+                                Toast.makeText(GroupDetailActivity.this, "Emails SENT", Toast.LENGTH_SHORT).show();
+                        } else {
+                            finish();
+                            startActivity(getIntent());
+                        }
                     }
                 });
-
-
     }
 }

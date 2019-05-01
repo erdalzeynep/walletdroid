@@ -22,8 +22,6 @@ import com.sda5.walletdroid.Notifications.NotificationFragment;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.fragments.ExpenseFragment;
 import com.sda5.walletdroid.fragments.GroupFragment;
-import com.sda5.walletdroid.fragments.InvestFragment;
-import com.sda5.walletdroid.fragments.SettleFragment;
 import com.sda5.walletdroid.fragments.fragments_navigation.AppDetails;
 import com.sda5.walletdroid.fragments.fragments_navigation.Feedbacknav;
 import com.sda5.walletdroid.fragments.fragments_navigation.GraphFragment;
@@ -48,14 +46,17 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                     case R.id.navigation_expense:
                         fragment = new ExpenseFragment();
                         break;
+                    //case R.id.navigation_query:
+                      //  fragment = new QueyFragment();
+                       // break;
                     case R.id.navigation_graph:
                         fragment = new GraphFragment();
                         break;
-                    case R.id.navigation_settle:
-                        fragment = new SettleFragment();
-                        break;
-                    case R.id.navigation_stock:
-                        fragment = new InvestFragment();
+                    //case R.id.navigation_settle:
+                      //  fragment = new SettleFragment();
+                      //  break;
+                   // case R.id.navigation_stock:
+                    //    fragment = new InvestFragment();
 
 
                 }
@@ -195,13 +196,14 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
         final TextInputLayout userFeedback = findViewById(R.id.textInputLayoutFeed);
         String feedback = userFeedback.getEditText().getText().toString();
         String emailApp = "sudutechio@gmail.com";
+        String emailApp1 = "mazenbahy@gmail.com";
         switch (v.getId()) {
             case R.id.btnfeedback:
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse("mailto:")); // only email apps should handle this
                 intent.putExtra(Intent.EXTRA_TEXT, feedback);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback Wallet Droid");
-                intent.putExtra(Intent.EXTRA_EMAIL,new String[]{emailApp});
+                intent.putExtra(Intent.EXTRA_EMAIL,new String[]{emailApp,emailApp1});
                 //intent.setType("message/rfc822");
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);

@@ -7,24 +7,24 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_userProfile"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/user"
             android:title="User profile" />
         <item
             android:id="@+id/nav_expenseSetting"
-            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:icon="@drawable/graph"
             android:title="Graphs" />
 
         <item
-            android:icon="@drawable/ic_notifications_black_24dp"
+            android:icon="@drawable/notification"
             android:id="@+id/nav_notification"
             android:title="Notification"
             app:actionLayout="@layout/switch_item_2"
             app:showAsAction="always" />
 
         <item
-            android:icon="@drawable/ic_notifications_black_24dp"
+            android:icon="@drawable/all_notifications"
             android:id="@+id/nav_noOfNotification"
-            android:title=" Unread Notification"
+            android:title="Notification History"
             app:showAsAction="always"/>
 
 
@@ -53,8 +53,8 @@
                 android:title="Feedback" />
             <item
                 android:id="@+id/nav_phoneNumber"
-                android:icon="@drawable/ic_contact_phone_black_24dp"
-                android:title="About Walletdroid"/>
+                android:icon="@drawable/aboutus"
+                android:title="About us"/>
 
             <item
                 android:id="@+id/nav_signOut"

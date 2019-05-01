@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:descendantFocusability="blocksDescendants">
 
+    <ImageView
+        android:id="@+id/picture-user-type"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_gravity ="center" />
+
     <TextView
         android:id="@+id/textview_account_item_gd"
         android:layout_width="252dp"
@@ -26,7 +32,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_weight="1"
-        android:gravity="center|left"
+        android:gravity="center|right"
         android:text="TextView"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"

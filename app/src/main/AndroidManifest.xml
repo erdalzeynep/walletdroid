@@ -28,7 +28,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ExpenseDetailsActivity" />
-        <activity android:name=".activities.ExpenseDetailsActivity" />
         <activity android:name=".activities.SeeExpenseGraphForParticularCategory" />
         <activity android:name=".activities.QueryActivity" />
         <activity android:name=".activities.AddExpenseUsersActivity" />

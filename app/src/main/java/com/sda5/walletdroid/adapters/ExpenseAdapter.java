@@ -65,7 +65,8 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
 
         tvExpenseTitle.setText(expense.getTitle());
         tvExpenseDate.setText(expense.getDate());
-        tvExpenseAmount.setText(Double.toString(Math.round(expense.getAmount() * 10) / 10.0));
+        Long individualAmount = (Math.round(expense.getAmount())/ (expense.getExpenseAccountIds().size()));
+        tvExpenseAmount.setText(Long.toString(individualAmount) + " SEK");
         tvExpenseDate.setTypeface(null, Typeface.ITALIC);
 
         listItem.setOnClickListener(new View.OnClickListener() {

@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.QueryActivity"
-    android:padding="20dp"
-    android:background="@drawable/gradientbackground">
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,6 +15,9 @@
         <RadioGroup
             android:id="@+id/radiogroup_query"
             android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:weightSum="2"
@@ -28,16 +30,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="All History"
+                android:drawableTint="@color/startblue"
                 android:layout_weight="1"
-                android:gravity="center"
+
                 android:onClick="search"/>
             <RadioButton
                 android:id="@+id/pay_history_radioButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Pay History"
+                android:drawableTint="@color/startblue"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:onClick="search"/>
         </RadioGroup>
     </LinearLayout>
@@ -46,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_margin="20dp"
         android:weightSum="2">
         <Spinner
             android:id="@+id/spr_query_category"
@@ -64,6 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_margin="20dp"
         android:weightSum="2">
 
         <Button
@@ -71,6 +76,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/white_button"
+            android:clickable="true"
+            android:textAllCaps="false"
+            android:textColor="@color/startblue"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:text="From"
             android:onClick="pickDateFrom"
             />
@@ -78,27 +89,52 @@
             android:id="@+id/btn_query_to"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/white_button"
+            android:clickable="true"
+            android:textAllCaps="false"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textColor="@color/startblue"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:layout_weight="1"
             android:text="To"
             android:onClick="pickDateTo"
             />
     </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/btn_voice1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:clickable="true"
+        android:layout_margin="5dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_blue_border"
+        android:src="@drawable/search"
+        android:tint="@color/startblue"
         android:onClick="search"/>
+
 
     <ListView
         android:id="@+id/expense_query_list"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
     <Button
         android:id="@+id/btn_query_goToPieChart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show graph"
+        android:background="@drawable/white_button"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:textAllCaps="false"
+        android:textColor="@color/startblue"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Show Graph"
         android:onClick="gotToPieChart"/>
 </LinearLayout>
