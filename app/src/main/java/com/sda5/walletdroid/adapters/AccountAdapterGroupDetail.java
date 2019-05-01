@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,18 +72,20 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
 
         Account account = accounts.get(position);
         TextView debt = listItem.findViewById(R.id.textview_account_debt_gd);
+        ImageView userTypeImage = listItem.findViewById(R.id.picture_user_type);
         String accountID = account.getId();
 
 
         if (accountID != null) {
-            Double balance = group.getBalance().get(accountID);
+            Integer balance = group.getBalance().get(accountID).intValue();
             if (null != balance) {
                 String accountBalance = balance.toString();
-                debt.setText(accountBalance);
+                debt.setText(accountBalance+ " SEK  ");
+                int greenColorValue = Color.parseColor("#277521");
                 if (accountBalance.contains("-")) {
                     debt.setTextColor(Color.RED);
                 } else {
-                    debt.setTextColor(Color.GREEN);
+                    debt.setTextColor(greenColorValue);
                 }
             }
         }
@@ -90,9 +93,10 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
         TextView textViewAccount = listItem.findViewById(R.id.textview_account_item_gd);
         if (account.isInternalAccount()) {
             textViewAccount.setText(account.getOwnerName());
+            userTypeImage.setImageResource(R.drawable.circleblue);
         } else {
-            textViewAccount.setText("Name: " + account.getOwnerName() + "\n" + "Email:" + account.getEmail());
-            textViewAccount.setTypeface(null, Typeface.ITALIC);
+            textViewAccount.setText( account.getOwnerName());
+            userTypeImage.setImageResource(R.drawable.greycircle);
         }
 
         textViewAccount.setTag(account.getId());
@@ -105,7 +109,6 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
         } else {
             checkBoxAccount.setVisibility(View.GONE);
         }
-
 
         View finalListItem = listItem;
         checkBoxAccount.setOnCheckedChangeListener((buttonView, isChecked) -> {
