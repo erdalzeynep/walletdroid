@@ -72,6 +72,6 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:onClick="runQueryForParticularExpense"
-        android:text="For Particular Category" />
+        android:text="Select Category" />
 </LinearLayout>
 </RelativeLayout>
