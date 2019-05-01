@@ -152,7 +152,6 @@
             android:textColor="@color/startblue"
             android:textStyle="bold"
             android:buttonTint="@color/startblue"/>
-
         <Button
             android:id="@+id/btn_add_expense_user"
             style="@style/Base.TextAppearance.AppCompat.Body1"
@@ -169,15 +168,6 @@
             android:textStyle="bold"
             android:text="Split with"
             android:onClick="addExpenseUsers"/>
-
-        <Spinner
-            android:id="@+id/spr_addExpense_users"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:textColor="@color/startblue"
-            android:textSize="11sp" />
-
         <Button
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:layout_width="350dp"

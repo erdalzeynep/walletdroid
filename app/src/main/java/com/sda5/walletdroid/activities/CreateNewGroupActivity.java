@@ -38,14 +38,15 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore database;
     private String accountId;
-    private CheckBox checkBoxExternalAccount;
     private EditText editTextExternalAccountName;
     private EditText editTextExternalAccountEmail;
+    private EditText editTextExternalAccountPhone;
     private Button buttonAddExternalAccount;
     private ListView listViewExternalAccounts;
     private HashMap<String, String> externalAccountNameAndEmails = new HashMap<>();
     private ArrayList<String> externalAccountList = new ArrayList<>();
     private ArrayAdapter<String> externalUserAdapter;
+    private String externalUserPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +68,16 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         accountAdapter = new AccountAdapter(getApplicationContext(), accounts, true);
         listView.setAdapter(accountAdapter);
 
-        checkBoxExternalAccount = findViewById(R.id.checkBox_external_account);
+        CheckBox checkBoxExternalAccount = findViewById(R.id.checkBox_external_account);
         editTextExternalAccountName = findViewById(R.id.editText_external_account_name);
         editTextExternalAccountEmail = findViewById(R.id.editText_external_account_email);
+        editTextExternalAccountPhone = findViewById(R.id.editText_external_account_phone);
         buttonAddExternalAccount = findViewById(R.id.button_add_external_account);
         listViewExternalAccounts = findViewById(R.id.listView_external_accounts);
 
         editTextExternalAccountName.setVisibility(View.GONE);
         editTextExternalAccountEmail.setVisibility(View.GONE);
+        editTextExternalAccountPhone.setVisibility(View.GONE);
         buttonAddExternalAccount.setVisibility(View.GONE);
         listViewExternalAccounts.setVisibility(View.GONE);
 
@@ -82,12 +85,14 @@ public class CreateNewGroupActivity extends AppCompatActivity {
             if (isChecked) {
                 editTextExternalAccountName.setVisibility(View.VISIBLE);
                 editTextExternalAccountEmail.setVisibility(View.VISIBLE);
+                editTextExternalAccountPhone.setVisibility(View.VISIBLE);
                 buttonAddExternalAccount.setVisibility(View.VISIBLE);
                 listViewExternalAccounts.setVisibility(View.VISIBLE);
                 listViewExternalAccounts.setAdapter(externalUserAdapter);
             } else {
                 editTextExternalAccountName.setVisibility(View.GONE);
                 editTextExternalAccountEmail.setVisibility(View.GONE);
+                editTextExternalAccountPhone.setVisibility(View.GONE);
                 buttonAddExternalAccount.setVisibility(View.GONE);
                 listViewExternalAccounts.setVisibility(View.GONE);
             }
@@ -159,6 +164,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
             return Tasks.forResult(null);
         } else {
             final Account externalAccount = new Account(false, ownerName, email);
+            externalAccount.setPhoneNumber(externalUserPhoneNumber);
             return database.collection("Accounts")
                     .document(externalAccount.getId())
                     .set(externalAccount)
@@ -187,13 +193,20 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     }
 
     public void addExternalAccount(View view) {
-        listViewExternalAccounts.setVisibility(View.VISIBLE);
         String externalAccountName = editTextExternalAccountName.getText().toString();
         String externalAccountEmail = editTextExternalAccountEmail.getText().toString();
-        externalAccountNameAndEmails.put(externalAccountEmail, externalAccountName);
-        externalAccountList.add("Name:  " + externalAccountName + "   " + "Email:  " + externalAccountEmail);
-        externalUserAdapter.notifyDataSetChanged();
-        editTextExternalAccountName.setText("");
-        editTextExternalAccountEmail.setText("");
+        String externalAccountPhone = editTextExternalAccountPhone.getText().toString();
+        if (externalAccountEmail.equals("") || externalAccountName.equals("")) {
+            Toast.makeText(this, "Please fill all name and email", Toast.LENGTH_SHORT).show();
+        } else {
+            externalAccountNameAndEmails.put(externalAccountEmail, externalAccountName);
+            externalAccountList.add("Name:  " + externalAccountName + "\n" + "Email:  "
+                    + externalAccountEmail + "\n" + "Phone: " + externalAccountPhone);
+            externalUserAdapter.notifyDataSetChanged();
+            editTextExternalAccountName.setText("");
+            editTextExternalAccountEmail.setText("");
+            externalUserPhoneNumber = editTextExternalAccountPhone.getText().toString();
+            editTextExternalAccountPhone.setText("");
+        }
     }
 }

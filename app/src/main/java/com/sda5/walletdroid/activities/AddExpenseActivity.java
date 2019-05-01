@@ -59,7 +59,6 @@ public class AddExpenseActivity extends AppCompatActivity {
     private EditText etTitle;
     private EditText etAmount;
     private Button addExpenseUsers;
-    private Spinner addExpenseSpinner;
     private CheckBox checkBoxGroupExpense;
     private LocalDate selectedDate;
     private Long dateMillisec;
@@ -91,7 +90,8 @@ public class AddExpenseActivity extends AppCompatActivity {
     // onRestoreInstanceState
     static String tempTitle;
     static String tempAmount;
-    static LocalDate tempDate;
+//    static LocalDate tempDate;
+    static String tempDateS;
     static int sprCategoryDefaultItem;
     static int sprCurrencyDefaultItem;
     HashMap<String, Double> CurMap;
@@ -104,13 +104,9 @@ public class AddExpenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
         btnPickDate = findViewById(R.id.btnPickDate);
-
         addExpenseUsers = findViewById(R.id.btn_add_expense_user);
-        addExpenseSpinner = findViewById(R.id.spr_addExpense_users);
         checkBoxGroupExpense = findViewById(R.id.checkBox_group_expense);
-
         addExpenseUsers.setVisibility(View.GONE);
-        addExpenseSpinner.setVisibility(View.GONE);
 
 
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -131,12 +127,10 @@ public class AddExpenseActivity extends AppCompatActivity {
                 if (isChecked) {
                     isGroupExpenseChecked = true;
                     addExpenseUsers.setVisibility(View.VISIBLE);
-                    addExpenseSpinner.setVisibility(View.VISIBLE);
 
                 } else {
                     isGroupExpenseChecked = false;
                     addExpenseUsers.setVisibility(View.GONE);
-                    addExpenseSpinner.setVisibility(View.GONE);
                 }
 
             }
@@ -214,36 +208,36 @@ public class AddExpenseActivity extends AppCompatActivity {
             }
         });
 
-        if (expenseUsersId != null) {
-            sprBuyer = findViewById(R.id.spr_addExpense_users);
-            ArrayAdapter adapterBuyer = new ArrayAdapter(this, android.R.layout.simple_spinner_item, expenseUsersName);
-            adapterBuyer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            adapterBuyer.notifyDataSetChanged();
-            sprBuyer.setAdapter(adapterBuyer);
-            sprBuyer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String buyerSelected = (String) parent.getItemAtPosition(position);
-                    for (int i = 0; i < expenseUsersName.size(); i++) {
-                        if (buyerSelected == expenseUsersName.get(i)) {
-                            buyerId = expenseUsersId.get(i);
-                        }
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-        }
+//        if (expenseUsersId != null) {
+//            sprBuyer = findViewById(R.id.spr_addExpense_users);
+//            ArrayAdapter adapterBuyer = new ArrayAdapter(this, android.R.layout.simple_spinner_item, expenseUsersName);
+//            adapterBuyer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//            adapterBuyer.notifyDataSetChanged();
+//            sprBuyer.setAdapter(adapterBuyer);
+//            sprBuyer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                @Override
+//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                    String buyerSelected = (String) parent.getItemAtPosition(position);
+//                    for (int i = 0; i < expenseUsersName.size(); i++) {
+//                        if (buyerSelected == expenseUsersName.get(i)) {
+//                            buyerId = expenseUsersId.get(i);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onNothingSelected(AdapterView<?> parent) {
+//                }
+//            });
+//        }
 
         // Get the date of expense from user
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 selectedDate = LocalDate.of(year, month + 1, dayOfMonth);
-                String s = " " + dayOfMonth + " - " + (month + 1) + " - " + year;
-                btnPickDate.setText(s);
+//                String s = " " + dayOfMonth + " - " + (month + 1) + " - " + year;
+                btnPickDate.setText(selectedDate.toString());
             }
         };
     }
@@ -262,9 +256,15 @@ public class AddExpenseActivity extends AppCompatActivity {
     }
 
     public void addExpenseUsers(View view) {
-        if (!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()) {
+        if (!etTitle.getText().toString().trim().isEmpty()) {
             tempTitle = etTitle.getText().toString();
+        }
+        if(!etAmount.getText().toString().trim().isEmpty()){
             tempAmount = etAmount.getText().toString();
+        }
+
+        if(selectedDate != null){
+            tempDateS = selectedDate.toString();
         }
         Intent intent = new Intent(this, ChooseGroupForExpenseActivity.class);
         startActivity(intent);
@@ -291,7 +291,17 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         } else {
             if (groupId != null) {
-                saveExpense();
+                database.collection("Accounts").whereEqualTo("userID", currentUserId).limit(1).get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                    Account currentAccount = queryDocumentSnapshot.toObject(Account.class);
+                                    buyerId = currentAccount.getId();
+                                }
+                                saveExpense();
+                            }
+                        });
             } else {
                 Toast.makeText(this, "There is no Group assigned", Toast.LENGTH_SHORT).show();
             }
@@ -301,6 +311,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     public void saveExpense() {
         if (selectedDate == null) {
             selectedDate = LocalDate.now();
+            tempDateS = selectedDate.toString();
         }
 
         if (etTitle.getText().toString().trim().isEmpty() ||
@@ -332,7 +343,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                 buyerShare = amount + usersShare;
 
                 for (String usersId : expenseUsersId) {
-                    if (usersId == buyerId) {
+                    if (usersId.equals(buyerId)) {
                         balanceOfExpense.put(usersId, buyerShare);
                     } else {
                         balanceOfExpense.put(usersId, usersShare);
@@ -351,11 +362,11 @@ public class AddExpenseActivity extends AppCompatActivity {
                                     balanceOfExpense.forEach((k, v) -> balanceToUpdate.merge(k, v, (a, b) -> a + b));
                                     //update the balance
                                     database.collection("Groups").document(groupId).update("balance", balanceToUpdate);
+                                    System.out.println("check");
                                 }
                             }
                         });
             }
-
 
             // creating expense object
             Expense expense = new Expense(title, amount, selectedCategory, buyerId, groupId,
@@ -369,11 +380,13 @@ public class AddExpenseActivity extends AppCompatActivity {
                     sprCurrency.setSelection(0);
                     sprCategoryDefaultItem = 0;
                     sprCurrencyDefaultItem = 0;
-                    tempDate = LocalDate.now();
+                    selectedDate = LocalDate.now();
+                    tempDateS = selectedDate.toString();
                     tempAmount = "";
                     tempTitle = "";
                     etTitle.setText(tempTitle);
                     etAmount.setText(tempAmount);
+                    btnPickDate.setText(tempDateS);
                     checkBoxGroupExpense.setChecked(false);
 
                     database.collection("Groups").whereEqualTo("id", groupId).limit(1).get()
@@ -437,13 +450,14 @@ public class AddExpenseActivity extends AppCompatActivity {
         if (!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()) {
             outState.putString("Title", etTitle.getText().toString().trim());
             outState.putString("Amount", etAmount.getText().toString().trim());
+            outState.putString("Date", selectedDate.toString());
             outState.putInt("CategoryPosition", sprCategoryDefaultItem);
             outState.putInt("CurrencyPosition", sprCurrencyDefaultItem);
 
 
             tempTitle = etTitle.getText().toString().trim();
             tempAmount = etAmount.getText().toString().trim();
-            tempDate = selectedDate;
+            tempDateS = selectedDate.toString();
         }
     }
 
@@ -452,6 +466,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         tempTitle = savedInstanceState.getString("Title");
         tempAmount = savedInstanceState.getString("Amount");
+        tempDateS = savedInstanceState.getString("Date");
         sprCategoryDefaultItem = savedInstanceState.getInt("CategoryPosition");
         sprCurrencyDefaultItem = savedInstanceState.getInt("CurrencyPosition");
     }
@@ -461,7 +476,17 @@ public class AddExpenseActivity extends AppCompatActivity {
         super.onResume();
         etTitle.setText(tempTitle);
         etAmount.setText(tempAmount);
-        selectedDate = tempDate;
+//        if(tempDateS != null && tempDateS != ""){
+//            selectedDate = LocalDate.parse(tempDateS);
+//            btnPickDate.setText(tempDateS);
+//        }
+        try{
+            selectedDate = LocalDate.parse(tempDateS);
+            btnPickDate.setText(tempDateS);
+        } catch (Exception e){
+
+        }
+
         if (isGroupExpenseChecked) {
             checkBoxGroupExpense.setChecked(true);
         }
@@ -509,9 +534,11 @@ public class AddExpenseActivity extends AppCompatActivity {
                 try {
                     Double d = Double.valueOf(speachResult);
                     tempAmount = speachResult;
+                    tempTitle = etTitle.getText().toString();
                 } catch (Exception e) {
                     talk("Not a valid Amount");
                     tempAmount = "";
+                    tempTitle = etTitle.getText().toString();
                     Toast.makeText(this, "Not a valid amount. Try again", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -524,5 +551,11 @@ public class AddExpenseActivity extends AppCompatActivity {
         } else {
             tts.speak(message, 0, null, "Mehdi");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        tts.shutdown();
     }
 }
