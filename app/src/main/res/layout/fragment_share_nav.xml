@@ -35,6 +35,11 @@
                     android:textColor="@color/ewhite"/>
             </LinearLayout>
         </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="200dp"
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,67 +48,72 @@
         android:layout_marginTop="200dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp">
-    <TextView
-        android:id="@+id/emailShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:hint="Email:  "
-        android:paddingTop="10dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/design_default_color_on_secondary"
-        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/giveFriendEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/emailShare"
-        android:hint="Friends Email"
-        android:paddingStart="5dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:background="@android:color/transparent"
+        android:drawableStart="@drawable/ic_email_black_24dp"
+        android:drawableTint="@color/graydark"
+        android:drawableLeft="@drawable/ic_email_black_24dp"
+        android:drawablePadding="12dp"
+        android:ems="10"
+        android:hint="Enter friend´s email-id"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:textColor="@color/graydark"
+        android:textColorHint="@color/graydark"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="200dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp">
-        <TextView
-            android:id="@+id/phoneShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:hint="Phone:"
-            android:paddingTop="10dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/design_default_color_on_secondary"
-            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/giveFriendPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/emailShare"
-            android:hint="Friend´ Phone"
-            android:layout_marginStart="5dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/giveFriendphone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/transparent"
+        android:drawableStart="@drawable/ic_phone_android_black_24dp"
+        android:drawableTint="@color/graydark"
+        android:drawableLeft="@drawable/ic_phone_android_black_24dp"
+        android:drawablePadding="12dp"
+        android:ems="10"
+        android:hint="Enter friend´s phone number"
+        android:inputType="number"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:textColor="@color/graydark"
+        android:textColorHint="@color/graydark"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFF" />
     </LinearLayout>
-<LinearLayout
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="300dp"
+    android:layout_marginTop="280dp"
     android:layout_marginStart="30dp"
     android:layout_marginEnd="30dp">
     <TextView

@@ -79,7 +79,7 @@
             android:text="@string/check_remember_me"
             android:textColor="#FFF"
             android:textSize="16sp"
-            android:visibility="gone" />
+             />
 
         <Button
             android:id="@+id/btn_login_login"
