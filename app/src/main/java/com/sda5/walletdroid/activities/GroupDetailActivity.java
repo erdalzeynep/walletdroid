@@ -1,8 +1,7 @@
 package com.sda5.walletdroid.activities;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -17,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sda5.walletdroid.GMailSender;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.adapters.AccountAdapterGroupDetail;
 import com.sda5.walletdroid.models.Account;
@@ -28,8 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static android.text.Html.FROM_HTML_SEPARATOR_LINE_BREAK_DIV;
 
 public class GroupDetailActivity extends AppCompatActivity {
     private String groupID;
@@ -209,7 +207,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                         String amount;
                         String groupName = group.getName().toUpperCase();
                         Notification notification;
-                        List<String> externalMailAdresses = new ArrayList<>();
+                        List<Account> externalAccounts = new ArrayList<>();
                         Map<Account, String> balanceStatus = new HashMap<>();
                         for (Account account : accounts) {
                             amount = previousGroupBalance.get(account.getId()).toString();
@@ -227,39 +225,36 @@ public class GroupDetailActivity extends AppCompatActivity {
 
                                         });
                             } else if (previousGroupBalance.get(account.getId()) != 0) {
-                                externalMailAdresses.add(account.getEmail());
+                                externalAccounts.add(account);
                             }
                         }
 
-                        ArrayList<Account> balanceAccounts = new ArrayList<>(balanceStatus.keySet());
-                        String messageContent = "Hi! This is the Group : "+ groupName + " balance details:";
-                        for (Account account : balanceAccounts) {
-                            String ownerName = account.getOwnerName();
-                            String amountForPerson = balanceStatus.get(account);
-                            messageContent += "<div>" + ownerName + ":" + amountForPerson + "</div>";
-                        }
-                        messageContent += "</table>";
-                        if (externalMailAdresses.size() > 0) {
-
-                            try {
-                                String[] emailList = externalMailAdresses.toArray(new String[externalMailAdresses.size()]);
-                                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-                                intent.setType("text/html");
-                                intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(messageContent, FROM_HTML_SEPARATOR_LINE_BREAK_DIV));
-                                intent.putExtra(Intent.EXTRA_SUBJECT, "Settlement Info");
-                                intent.putExtra(Intent.EXTRA_EMAIL, emailList);
-                                startActivity(intent);
-
-                            } catch (Exception exception) {
-                                System.out.println(exception + messageContent);
+                        if (externalAccounts.size() > 0) {
+                            boolean successfulSendMail = true;
+                            for (Account account : externalAccounts) {
+                                String ownerName = account.getOwnerName();
+                                String amountForPerson = balanceStatus.get(account);
+                                String subject = "WalletDroid settlement detail for group: "+groupName;
+                                String messageContentIndividual ="Hi "+ownerName+"! Your balance is "+amountForPerson+" Kr in group: "+groupName;
+                                // you can call sendEmail() method inside this for. this for goes through external users in group
+                                // which they have balance different than zero.
+                                String emailTo = account.getEmail();
+                                String emailFrom = "sudutechio@gmail.com";
+                                String emailPass = "M3hdi#23";
+                                GMailSender sender = new GMailSender(emailFrom, emailPass);
+                                try {
+                                    sender.sendMail(subject, messageContentIndividual, emailFrom, emailTo);
+                                } catch (Exception e){
+                                    Log.e("Email problem: ", e.getMessage());
+                                    successfulSendMail = false;
+                                }
                             }
-
+                            if(successfulSendMail)
+                                Toast.makeText(GroupDetailActivity.this, "Emails SENT", Toast.LENGTH_SHORT).show();
                         } else {
                             finish();
                             startActivity(getIntent());
                         }
-
-
                     }
                 });
     }
