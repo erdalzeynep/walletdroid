@@ -79,11 +79,6 @@
             android:text="Add Expense Users"
             android:onClick="addExpenseUsers"/>
 
-    <Spinner
-        android:id="@+id/spr_addExpense_users"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
