@@ -29,6 +29,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
     private TextView category;
     private TextView date;
     private TextView buyer;
+    private TextView totalAmount;
     private ListView expenseUserslistview;
     private ArrayList<String> names = new ArrayList<>();
     private Account buyerObject;
@@ -50,6 +51,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
         category = findViewById(R.id.expense_detail_category);
         date = findViewById(R.id.expense_detail_date);
         buyer = findViewById(R.id.expense_detail_buyer);
+        totalAmount = findViewById(R.id.expense_detail_totalAmount);
         expenseUserslistview = findViewById(R.id.expense_details_listview);
         categoryImage = findViewById(R.id.expense_detail_category_pic);
 
@@ -61,6 +63,8 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
         title.setText(expense.getTitle());
         date.setText(expense.getDate());
         category.setText(expense.getCategory());
+        Long totalAmountL = (Math.round(expense.getAmount()));
+        totalAmount.setText(totalAmountL.toString() + " SEK");
 
         // Setting the picture for each category
         switch (expense.getCategory()){
