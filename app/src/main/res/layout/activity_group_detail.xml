@@ -22,9 +22,9 @@
     <ListView
         android:id="@+id/member_list"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="400dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
 
     <LinearLayout
@@ -93,8 +93,10 @@
     </LinearLayout>
     <Button
         android:id="@+id/btn_leave_group"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:background="@drawable/white_button"
@@ -104,7 +106,6 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:layout_margin="5dp"
         android:text="Leave Group"
         android:onClick="leaveGroup"/>
 

@@ -19,14 +19,22 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/circle"
+                android:layout_gravity="center_horizontal"
                 android:padding="10dp"
                 android:src="@drawable/graph"
                 android:tint="@color/ewhite" />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Graph"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="@color/ewhite"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -43,7 +51,7 @@
         android:id="@+id/text_view_graph"
         android:layout_width="337dp"
         android:layout_height="70dp"
-        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_gravity="center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
         android:text="See Expense Details"
         android:textColor="@color/startblue"
