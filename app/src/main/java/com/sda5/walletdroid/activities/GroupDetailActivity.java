@@ -30,7 +30,6 @@ import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 import com.sda5.walletdroid.models.Notification;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,9 +84,6 @@ public class GroupDetailActivity extends AppCompatActivity {
         database.collection("Groups")
                 .whereEqualTo("id", groupID)
                 .addSnapshotListener((value, e) -> {
-                    if (e != null) {
-                        return;
-                    }
                     if (null != value) {
                         Optional<Group> groupOptional = value.toObjects(Group.class).stream().findAny();
                         if (groupOptional.isPresent()) {
@@ -226,9 +222,8 @@ public class GroupDetailActivity extends AppCompatActivity {
                         Notification notification;
                         List<Account> externalAccounts = new ArrayList<>();
                         Map<Account, String> balanceStatus = new HashMap<>();
-                        DecimalFormat df = new DecimalFormat("0.00");
                         for (Account account : accounts) {
-                            amount = df.format(previousGroupBalance.get(account.getId()));
+                            amount = previousGroupBalance.get(account.getId()).toString();
                             balanceStatus.put(account, amount);
                             if (account.isInternalAccount()) {
                                 from = currentAccount.getOwnerName().toUpperCase();
