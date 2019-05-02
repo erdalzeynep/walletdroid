@@ -199,14 +199,13 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
         final TextInputLayout userFeedback = findViewById(R.id.textInputLayoutFeed);
         String feedback = userFeedback.getEditText().getText().toString();
         String emailApp = "sudutechio@gmail.com";
-        String emailApp1 = "mazenbahy@gmail.com";
         switch (v.getId()) {
             case R.id.btnfeedback:
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse("mailto:")); // only email apps should handle this
                 intent.putExtra(Intent.EXTRA_TEXT, feedback);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback Wallet Droid");
-                intent.putExtra(Intent.EXTRA_EMAIL,new String[]{emailApp,emailApp1});
+                intent.putExtra(Intent.EXTRA_EMAIL,new String[]{emailApp});
                 //intent.setType("message/rfc822");
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
