@@ -1,4 +1,4 @@
-package com.sda5.walletdroid.Notifications;
+package com.sda5.walletdroid.notifications;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -16,8 +16,8 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
         NotifyData = (TextView)findViewById(R.id.text);
 
-        String message = getIntent().getStringExtra("Message");
-        String from  = getIntent().getStringExtra("From");
+        String message = getIntent().getStringExtra("message");
+        String from  = getIntent().getStringExtra("sentBy");
 
         NotifyData.setText("From: " + from + " Message: "+message);
     }
