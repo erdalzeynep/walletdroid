@@ -125,7 +125,7 @@
 
     <Button
         android:id="@+id/buttonShareEmail"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textInputFeed"
         android:background="@drawable/white_button"

@@ -14,7 +14,9 @@
         android:layout_weight="1"
         android:gravity="center|left|center_vertical"
         android:text="TextView"
+        android:textColor="#808080"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="30dp" />
 

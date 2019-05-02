@@ -12,12 +12,12 @@
     <TextView
         android:id="@+id/textView_user_list"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:gravity="center_horizontal|left|center_vertical"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:textColor="@color/startblue"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -26,10 +26,10 @@
     <ListView
         android:id="@+id/account_list"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_gravity="clip_vertical|center_horizontal" />
+        android:layout_height="384dp"
+        android:layout_gravity="clip_vertical|center_horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp" />
 
     <CheckBox
         android:id="@+id/cb_external_account_add_member"
@@ -38,9 +38,8 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:textColor="@color/startblue"
-        android:textStyle="bold"
         android:buttonTint="@color/startblue"
-        android:text="Continue with external person"
+        android:text="Add external user"
         android:textSize="18sp" />
 
     <EditText
@@ -70,13 +69,16 @@
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:ems="10"
-        android:hint="enter phone number"
+        android:hint="Enter phone number"
         android:inputType="phone"
-        android:digits="0123456789+" />
+        android:digits="0123456789+"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 
     <Button
         android:id="@+id/button_add_external_add_member"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
@@ -88,22 +90,26 @@
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
         android:text="Add"
-        android:onClick="addExternalMembersToListView"/>
+        android:onClick="addExternalMembersToListView"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 
     <ListView
         android:id="@+id/listView_external_add_member"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_gravity="clip_vertical|center_horizontal" />
 
     <Button
         android:id="@+id/btn_add_member_to_group"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/white_button"
         android:clickable="true"
         android:textAllCaps="false"

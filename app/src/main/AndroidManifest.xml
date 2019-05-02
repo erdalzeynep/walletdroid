@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <application
         android:allowBackup="true"
@@ -20,15 +21,21 @@
         <activity android:name=".activities.Graphs.MyPieChartActivity" />
         <activity android:name=".activities.Graphs.MyBarGraph" />
         <activity android:name=".activities.Graphs.MyLineGraph" />
-        <activity android:name=".Notifications.NotificationActivity">
+        <activity android:name=".notifications.NotificationActivity">
             <intent-filter>
                 <action android:name="com.sda5.walletdroid.TargetNotification" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ExpenseDetailsActivity" />
-        <activity android:name=".activities.SeeExpenseGraphForParticularCategory" />
+
+
+
+        <activity android:name=".activities.ExpenseDetailsActivity"></activity>
+
+
+        <activity android:name=".activities.SeeExpenseGraphForParticularCategory"></activity>
+
         <activity android:name=".activities.QueryActivity" />
         <activity android:name=".activities.AddExpenseUsersActivity" />
         <activity android:name=".activities.ChooseGroupForExpenseActivity" />
@@ -72,11 +79,15 @@
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true" />
 
-        <service android:name=".Notifications.FirebaseMessagingService">
+        <service android:name="com.sda5.walletdroid.notifications.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+
             </intent-filter>
         </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
     </application>
 
 </manifest>
