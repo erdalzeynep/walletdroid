@@ -200,7 +200,7 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
 
         final TextInputLayout userFeedback = findViewById(R.id.textInputLayoutFeed);
         String feedback = userFeedback.getEditText().getText().toString();
-        String emailApp = "sudutechio@gmail.com";
+        String emailApp = "walletdroid@gmail.com";
         switch (v.getId()) {
             case R.id.btnfeedback:
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
