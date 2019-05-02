@@ -286,6 +286,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                             }
                             groupId = null;
                             saveExpense();
+                            finish();
                         }
                     });
 
@@ -301,6 +302,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                                     buyerId = currentAccount.getId();
                                 }
                                 saveExpense();
+                                finish();
                             }
                         });
             } else {
@@ -448,6 +450,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (selectedDate==null) selectedDate = LocalDate.now();
         if (!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()) {
             outState.putString("Title", etTitle.getText().toString().trim());
             outState.putString("Amount", etAmount.getText().toString().trim());
