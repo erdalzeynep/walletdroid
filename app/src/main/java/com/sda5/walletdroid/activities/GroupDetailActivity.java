@@ -77,9 +77,9 @@ public class GroupDetailActivity extends AppCompatActivity {
         btnLeaveGroup = findViewById(R.id.btn_leave_group);
         btnSettle = findViewById(R.id.btn_settle);
 
-        if(!checkPermission(Manifest.permission.SEND_SMS)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
-        }
+//        if(!checkPermission(Manifest.permission.SEND_SMS)) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
+//        }
 
         database.collection("Groups")
                 .whereEqualTo("id", groupID)
@@ -245,6 +245,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                         if (externalAccounts.size() > 0) {
                             boolean successfulSendMail = true;
                             boolean successfulSendSMS= true;
+                            boolean atLestOneSms = false;
                             int numberOfSuccessfulSMS = 0 ;
                             for (Account account : externalAccounts) {
                                 String ownerName = account.getOwnerName();
@@ -258,7 +259,15 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 String emailFrom = "sudutechio@gmail.com";
                                 String emailPass = "M3hdi#23";
 
+                                if(atLestOneSms){
+                                    if(!checkPermission(Manifest.permission.SEND_SMS)) {
+                                        ActivityCompat.requestPermissions(GroupDetailActivity.this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
+                                    }
+                                }
+
                                 if(phoneNo != null && !phoneNo.equals("")){
+
+                                    atLestOneSms = true;
                                     if(sendSMS(phoneNo,messageContentIndividual)){
                                         numberOfSuccessfulSMS++;
                                     }
