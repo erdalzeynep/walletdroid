@@ -52,8 +52,8 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
                     case R.id.navigation_graph:
                         fragment = new GraphFragment();
                         break;
-                    //case R.id.navigation_settle:
-                      //  fragment = new SettleFragment();
+                    case R.id.navigation_notification:
+                        fragment = new NotificationFragment();
                       //  break;
                    // case R.id.navigation_stock:
                     //    fragment = new InvestFragment();
