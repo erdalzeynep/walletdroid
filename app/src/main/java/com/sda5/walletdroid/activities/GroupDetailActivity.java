@@ -30,6 +30,7 @@ import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 import com.sda5.walletdroid.models.Notification;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -221,12 +222,13 @@ public class GroupDetailActivity extends AppCompatActivity {
                         String tokenId;
                         String message;
                         String amount;
-                        String groupName = group.getName().toUpperCase();
+                        String groupName = group.getName();
                         Notification notification;
                         List<Account> externalAccounts = new ArrayList<>();
                         Map<Account, String> balanceStatus = new HashMap<>();
+                        DecimalFormat df = new DecimalFormat("0.00");
                         for (Account account : accounts) {
-                            amount = previousGroupBalance.get(account.getId()).toString();
+                            amount = df.format(previousGroupBalance.get(account.getId()));
                             balanceStatus.put(account, amount);
                             if (account.isInternalAccount()) {
                                 from = currentAccount.getOwnerName().toUpperCase();
@@ -259,8 +261,8 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 // which they have balance different than zero.
                                 String phoneNo = account.getPhoneNumber();
                                 String emailTo = account.getEmail();
-                                String emailFrom = "sudutechio@gmail.com";
-                                String emailPass = "M3hdi#23";
+                                String emailFrom = "walletdroid@gmail.com";
+                                String emailPass = "walletdroid123";
 
                                 if(atLestOneSms){
                                     if(!checkPermission(Manifest.permission.SEND_SMS)) {
