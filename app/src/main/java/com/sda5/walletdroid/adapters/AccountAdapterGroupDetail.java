@@ -77,12 +77,13 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
 
 
         if (accountID != null) {
-            Integer balance = group.getBalance().get(accountID).intValue();
+            Double balance = group.getBalance().get(accountID);
             if (null != balance) {
-                String accountBalance = balance.toString();
-                debt.setText(accountBalance+ " SEK  ");
+                String balanceString = balance.toString();
+                Long accountBalance =(Math.round(balance));
+                debt.setText(accountBalance.toString()+ " SEK  ");
                 int greenColorValue = Color.parseColor("#277521");
-                if (accountBalance.contains("-")) {
+                if (balanceString.contains("-")) {
                     debt.setTextColor(Color.RED);
                 } else {
                     debt.setTextColor(greenColorValue);
