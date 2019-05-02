@@ -9,11 +9,11 @@
     tools:context=".activities.AddExpenseActivity">
 
     <LinearLayout
-        android:layout_width="359dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="10dp"
         >
-
 
         <LinearLayout
             android:id="@+id/ae_linearLayout3"
@@ -28,8 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="For what did you spend?"
-                android:padding="10dp"
-                />
+                android:padding="10dp" />
 
             <LinearLayout
                 android:id="@+id/ae_linearLayout4"
@@ -71,7 +70,6 @@
                 android:id="@+id/btn_voice1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="1dp"
                 android:layout_marginTop="10dp"
                 android:clickable="true"
                 android:onClick="listenTitle"
@@ -98,8 +96,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="5"
-            android:paddingLeft="1dp"
+            android:weightSum="7"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             >
 
             <Spinner
@@ -116,34 +115,33 @@
 
             <ImageView
                 android:id="@+id/btn_settle"
-                android:layout_width="77dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:clickable="true"
                 android:onClick="pickDate"
                 android:src="@drawable/date"
                 android:tint="@color/startblue" />
 
+            <TextView
+                android:id="@+id/btnPickDate"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="3"
+                android:onClick="pickDate"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/startblue"
+                android:textSize="18sp" />
+
+
+
+
         </LinearLayout>
 
 
-    <Button
-        android:id="@+id/btnPickDate"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_below="@+id/ae_linearLayout1"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        android:background="#FFFFFF"
-        android:clickable="true"
-        android:onClick="pickDate"
-        android:text="Date"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="#00ACC1"
-        android:textSize="18sp" />
+
 
 
     <CheckBox

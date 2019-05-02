@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,7 +54,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private Group selectedGroup;
     private String selectedCurrency;
-    private Button btnPickDate;
+    private TextView btnPickDate;
 
     // To save on database
     private EditText etTitle;
