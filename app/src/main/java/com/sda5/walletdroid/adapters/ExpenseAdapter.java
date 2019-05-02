@@ -19,6 +19,7 @@ import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Expense;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,8 +66,9 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
 
         tvExpenseTitle.setText(expense.getTitle());
         tvExpenseDate.setText(expense.getDate());
-        Long individualAmount = (Math.round(expense.getAmount())/ (expense.getExpenseAccountIds().size()));
-        tvExpenseAmount.setText(Long.toString(individualAmount) + " SEK");
+        DecimalFormat df = new DecimalFormat("0.00");
+        String individualAmount = (df.format(expense.getAmount()/ (expense.getExpenseAccountIds().size())));
+        tvExpenseAmount.setText(individualAmount + " SEK");
         tvExpenseDate.setTypeface(null, Typeface.ITALIC);
 
         listItem.setOnClickListener(new View.OnClickListener() {

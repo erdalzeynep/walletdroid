@@ -24,6 +24,7 @@ import com.sda5.walletdroid.activities.GroupDetailActivity;
 import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,9 +80,9 @@ public class AccountAdapterGroupDetail extends ArrayAdapter<Account> {
         if (accountID != null) {
             Double balance = group.getBalance().get(accountID);
             if (null != balance) {
-                String balanceString = balance.toString();
-                Long accountBalance =(Math.round(balance));
-                debt.setText(accountBalance.toString()+ " SEK  ");
+                DecimalFormat df = new DecimalFormat("0.00");
+                 String balanceString = df.format(balance);
+                debt.setText(balanceString+ " SEK  ");
                 int greenColorValue = Color.parseColor("#277521");
                 if (balanceString.contains("-")) {
                     debt.setTextColor(Color.RED);
