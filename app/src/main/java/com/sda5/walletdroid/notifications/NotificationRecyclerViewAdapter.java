@@ -1,4 +1,4 @@
-package com.sda5.walletdroid.Notifications;
+package com.sda5.walletdroid.notifications;
 
 import android.content.Context;
 import android.view.LayoutInflater;
