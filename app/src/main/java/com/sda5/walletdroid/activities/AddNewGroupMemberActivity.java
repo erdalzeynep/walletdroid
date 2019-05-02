@@ -182,6 +182,7 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
                         accountAdapter.notifyDataSetChanged();
                         Toast.makeText(AddNewGroupMemberActivity.this, "Members are added successfully",
                                 Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 });
     }

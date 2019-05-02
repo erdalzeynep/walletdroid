@@ -164,6 +164,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddNewGroupMemberActivity.class);
         intent.putExtra("group_id", groupID);
         startActivity(intent);
+        finish();
     }
 
     public void deleteMembers(View view) {
@@ -187,8 +188,9 @@ public class GroupDetailActivity extends AppCompatActivity {
         database.collection("Groups").document(groupID)
                 .update(updateFields)
                 .addOnCompleteListener(task -> {
-                    finish();
+
                     startActivity(getIntent());
+                    finish();
                 });
     }
 
@@ -201,6 +203,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                             "Group is deleted successfully",
                             Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
+
                 });
     }
 
