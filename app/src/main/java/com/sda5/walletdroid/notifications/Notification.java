@@ -1,4 +1,4 @@
-package com.sda5.walletdroid.Notifications;
+package com.sda5.walletdroid.notifications;
 
 public class Notification {
 
