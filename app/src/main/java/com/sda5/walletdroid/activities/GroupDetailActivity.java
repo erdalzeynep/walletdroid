@@ -1,6 +1,10 @@
 package com.sda5.walletdroid.activities;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,6 +50,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     private Button btnLeaveGroup;
     private ImageView btnSettle;
     private Account currentAccount;
+    private final static int SEND_SMS_PERMISSION_REQ=1;
 
 
 
@@ -69,6 +76,10 @@ public class GroupDetailActivity extends AppCompatActivity {
         btnDeleteGroup = findViewById(R.id.btn_delete_group);
         btnLeaveGroup = findViewById(R.id.btn_leave_group);
         btnSettle = findViewById(R.id.btn_settle);
+
+        if(!checkPermission(Manifest.permission.SEND_SMS)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
+        }
 
         database.collection("Groups")
                 .whereEqualTo("id", groupID)
@@ -233,6 +244,8 @@ public class GroupDetailActivity extends AppCompatActivity {
 
                         if (externalAccounts.size() > 0) {
                             boolean successfulSendMail = true;
+                            boolean successfulSendSMS= true;
+                            int numberOfSuccessfulSMS = 0 ;
                             for (Account account : externalAccounts) {
                                 String ownerName = account.getOwnerName();
                                 String amountForPerson = balanceStatus.get(account);
@@ -240,24 +253,77 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 String messageContentIndividual ="Hi "+ownerName+"! Your balance is "+amountForPerson+" Kr in group: "+groupName;
                                 // you can call sendEmail() method inside this for. this for goes through external users in group
                                 // which they have balance different than zero.
+                                String phoneNo = account.getPhoneNumber();
                                 String emailTo = account.getEmail();
                                 String emailFrom = "sudutechio@gmail.com";
                                 String emailPass = "M3hdi#23";
-                                GMailSender sender = new GMailSender(emailFrom, emailPass);
-                                try {
-                                    sender.sendMail(subject, messageContentIndividual, emailFrom, emailTo);
-                                } catch (Exception e){
-                                    Log.e("Email problem: ", e.getMessage());
-                                    successfulSendMail = false;
+
+                                if(phoneNo != null && !phoneNo.equals("")){
+                                    if(sendSMS(phoneNo,messageContentIndividual)){
+                                        numberOfSuccessfulSMS++;
+                                    }
+                                } else {
+                                    GMailSender sender = new GMailSender(emailFrom, emailPass);
+                                    try {
+                                        sender.sendMail(subject, messageContentIndividual, emailFrom, emailTo);
+
+                                    } catch (Exception e){
+                                        Log.e("Email problem: ", e.getMessage());
+                                        successfulSendMail = false;
+                                    }
                                 }
                             }
-                            if(successfulSendMail)
+                            if(successfulSendMail) {
                                 Toast.makeText(GroupDetailActivity.this, "Emails SENT", Toast.LENGTH_SHORT).show();
+                                finish();
+                                startActivity(getIntent());
+                            }
+                            if(numberOfSuccessfulSMS == externalAccounts.size()){
+                                Toast.makeText(GroupDetailActivity.this, "Emails SENT", Toast.LENGTH_SHORT).show();
+                                finish();
+                                startActivity(getIntent());
+                            }
+                            // if we have no external
                         } else {
                             finish();
                             startActivity(getIntent());
                         }
                     }
                 });
+    }
+
+    private boolean checkPermission(String sendSms) {
+        int checkpermission= ContextCompat.checkSelfPermission(this,sendSms);
+        return checkpermission== PackageManager.PERMISSION_GRANTED;
+    }
+
+    public boolean sendSMS(String phoneNo, String sms) {
+        if(!TextUtils.isEmpty(phoneNo)&&!TextUtils.isEmpty(sms)) {
+            if(checkPermission(Manifest.permission.SEND_SMS)) {
+                SmsManager smsManager=SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNo,null,sms,null,null);
+                return true;
+            }
+            else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        else {
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode)
+        {
+            case SEND_SMS_PERMISSION_REQ:
+                if(grantResults.length>0 &&(grantResults[0]==PackageManager.PERMISSION_GRANTED)) {
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
     }
 }
