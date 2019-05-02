@@ -142,7 +142,6 @@ public class CreateNewGroupActivity extends AppCompatActivity {
             Optional<Account> account = accountSnapshots.toObjects(Account.class).stream().findFirst();
             if (account.isPresent()) {
                 accountId = account.get().getId();
-                accountAdapter.addSelectedAccountId(accountId);
                 return Tasks.forResult(null);
             }
         }
@@ -183,12 +182,14 @@ public class CreateNewGroupActivity extends AppCompatActivity {
 
     private Task<Void> persistGroup(Task<Void> voidTask) {
         String groupName = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
-        if (!groupName.equals("")) {
+        if (!groupName.equals("") && accountAdapter.getSelectedAccountIDList().size() != 0) {
+            accountAdapter.addSelectedAccountId(accountId);
             Group group = new Group(groupName, accountAdapter.getSelectedAccountIDList(), accountId);
             return database.collection("Groups").document(group.getId()).set(group);
         } else {
             Toast.makeText(CreateNewGroupActivity.this, "Please enter the group name and select the members", Toast.LENGTH_SHORT).show();
-            return voidTask;
+            throw new RuntimeException("Enter all fields");
+            //return voidTask;
         }
     }
 
@@ -198,6 +199,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         String externalAccountPhone = editTextExternalAccountPhone.getText().toString();
         if (externalAccountEmail.equals("") || externalAccountName.equals("")) {
             Toast.makeText(this, "Please fill all name and email", Toast.LENGTH_SHORT).show();
+
         } else {
             externalAccountNameAndEmails.put(externalAccountEmail, externalAccountName);
             externalAccountList.add("Name:  " + externalAccountName + "\n" + "Email:  "

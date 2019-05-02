@@ -3,6 +3,7 @@ package com.sda5.walletdroid.adapters;
         import android.content.Context;
 //        import android.support.annotation.NonNull;
 //        import android.support.annotation.Nullable;
+        import android.graphics.Color;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
             checkBoxAccount.setVisibility(View.GONE);
         }
 
+        View finalListItem = listItem;
         checkBoxAccount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -81,9 +83,13 @@ public class AccountAdapterAddExpense extends ArrayAdapter<Account> {
                 if (isChecked) {
                     selectedExpenseUsersIDList.add(selectedAccountID);
                     selectedExpenseUsersNameList.add(account.getOwnerName());
+                    finalListItem.setBackgroundColor(Color.parseColor("#FFFFE0"));
+
                 } else {
                     selectedExpenseUsersIDList.remove(selectedAccountID);
-                    selectedExpenseUsersNameList.add(account.getOwnerName());
+                    selectedExpenseUsersNameList.remove(account.getOwnerName());
+                    finalListItem.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
                 }
             }
         });
