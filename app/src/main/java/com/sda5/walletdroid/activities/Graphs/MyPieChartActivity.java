@@ -88,7 +88,7 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
 
         Legend l = chart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
         l.setXEntrySpace(7f);
@@ -131,11 +131,11 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
 
         ArrayList<PieEntry> entries = new ArrayList<>();
 
-        for (int i = 0; i < labelsExpense.length; i++) {
+        for (int i = 1; i < labelsExpense.length; i++) {
             entries.add(new PieEntry((float) (test[i].intValue()), labelsExpense[i]));
         }
 
-        PieDataSet dPie = new PieDataSet(entries, "Expense Details");
+        PieDataSet dPie = new PieDataSet(entries, "");
 
         dPie.setDrawIcons(false);
 
@@ -145,6 +145,19 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
 
         // add a lot of colors
 
+        final int[] MY_COLORS = {
+                Color.rgb(255,192,0),
+                Color.rgb(177,30,50),
+                Color.rgb(146,208,80),
+                Color.rgb(50,176,80),
+                Color.rgb(79,129,189),
+                Color.rgb(20,179,220),
+                Color.rgb(100,100,100),
+                Color.rgb(20,100,0)};
+        ArrayList<Integer> colors = new ArrayList<>();
+        for(int c: MY_COLORS) colors.add(c);
+
+        /*
         ArrayList<Integer> colors = new ArrayList<>();
 
         for (int c : ColorTemplate.VORDIPLOM_COLORS)
@@ -161,7 +174,7 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
 
         for (int c : ColorTemplate.PASTEL_COLORS)
             colors.add(c);
-
+        */
         colors.add(ColorTemplate.getHoloBlue());
 
         dPie.setColors(colors);
