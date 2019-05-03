@@ -124,10 +124,11 @@ public class GroupDetailActivity extends AppCompatActivity {
                                         .whereEqualTo("id", accountId)
                                         .get()
                                         .addOnSuccessListener(queryDocumentSnapshots -> {
-                                            accounts.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
+                                            if(!accounts.contains(queryDocumentSnapshots.toObjects(Account.class).get(0))){
+                                                accounts.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
+                                            }
                                             accountAdapter.notifyDataSetChanged();
                                         });
-
                             }
                         }
                     }
@@ -279,14 +280,16 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 String emailFrom = "walletdroid@gmail.com";
                                 String emailPass = "walletdroid123";
 
-                                if(atLestOneSms){
+//                                if(atLestOneSms){
+//                                    if(!checkPermission(Manifest.permission.SEND_SMS)) {
+//                                        ActivityCompat.requestPermissions(GroupDetailActivity.this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
+//                                    }
+//                                }
+
+                                if(phoneNo != null && !phoneNo.equals("")){
                                     if(!checkPermission(Manifest.permission.SEND_SMS)) {
                                         ActivityCompat.requestPermissions(GroupDetailActivity.this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
                                     }
-                                }
-
-                                if(phoneNo != null && !phoneNo.equals("")){
-
                                     atLestOneSms = true;
                                     if(sendSMS(phoneNo,messageContentIndividual)){
                                         numberOfSuccessfulSMS++;
