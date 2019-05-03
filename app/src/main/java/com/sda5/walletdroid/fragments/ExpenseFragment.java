@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
@@ -60,6 +61,7 @@ public class ExpenseFragment extends Fragment {
                                 accountId = account.get().getId();
                                 database.collection("Expenses")
                                         .whereArrayContains("expenseAccountIds", accountId)
+                                        .orderBy("logDate", Query.Direction.DESCENDING)
                                         .get()
                                         .addOnSuccessListener(queryDocumentSnapshots -> {
                                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
