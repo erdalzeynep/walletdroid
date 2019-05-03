@@ -57,12 +57,12 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        // Getting expense from expense list view
+        //Getting expense from expense list view
         expense = (Expense) bundle.getSerializable("expense");
 
         title.setText(expense.getTitle());
         date.setText(expense.getDate());
-        category.setText(expense.getCategory());
+       category.setText(expense.getCategory());
         Long totalAmountL = (Math.round(expense.getAmount()));
         totalAmount.setText(totalAmountL.toString() + " SEK");
 

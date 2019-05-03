@@ -8,9 +8,8 @@
     <ImageView
         android:id="@+id/buyer_image"
         android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_height="25dp"
         app:srcCompat="@drawable/no_buyer"
-        android:tint="@color/startblue"
         android:layout_gravity="center"
         />
 
@@ -22,6 +21,6 @@
         android:layout_toRightOf="@+id/buyer_image"
         android:gravity="center_vertical"
         android:text="Name"
-        android:textSize="20dp"
-        android:padding="10dp"/>
+        android:textSize="17dp"
+        android:padding="5dp"/>
 </LinearLayout>
