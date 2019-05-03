@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -173,19 +174,23 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
      * @param v
      */
     public void composeEmail(View v) {
+        final EditText userFeedback = findViewById(R.id.giveFriendEmail);
+        String emailFriend = userFeedback.getText().toString();
         switch (v.getId()) {
             case R.id.buttonShareEmail:
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                intent.putExtra(Intent.EXTRA_EMAIL, "");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Wallet droid Invitation");
                 intent.putExtra(Intent.EXTRA_TEXT, "Use this link to download Wallet droid https://github.com/sda5-walletdroid/walletdroid");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "WalletDroid Invitation");
+                intent.putExtra(Intent.EXTRA_EMAIL,new String[]{emailFriend});
                 //intent.setType("message/rfc822");
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 }
         }
     }
+//                    intent.putExtra(Intent.EXTRA_SUBJECT, "Wallet droid Invitation");
+//                    intent.putExtra(Intent.EXTRA_TEXT, "Use this link to download Wallet droid https://github.com/sda5-walletdroid/walletdroid");
 
     /**
      * Send email with your feedback
@@ -195,13 +200,13 @@ public class ServiceActivity extends AppCompatActivity implements NavigationView
 
         final TextInputLayout userFeedback = findViewById(R.id.textInputLayoutFeed);
         String feedback = userFeedback.getEditText().getText().toString();
-        String emailApp = "sudutechio@gmail.com";
+        String emailApp = "walletdroid@gmail.com";
         switch (v.getId()) {
             case R.id.btnfeedback:
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse("mailto:")); // only email apps should handle this
                 intent.putExtra(Intent.EXTRA_TEXT, feedback);
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback Wallet Droid");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback WalletDroid");
                 intent.putExtra(Intent.EXTRA_EMAIL,new String[]{emailApp});
                 //intent.setType("message/rfc822");
                 if (intent.resolveActivity(getPackageManager()) != null) {
