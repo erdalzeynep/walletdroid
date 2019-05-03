@@ -98,9 +98,6 @@ public class GroupDetailActivity extends AppCompatActivity {
         database.collection("Groups")
                 .whereEqualTo("id", groupID)
                 .addSnapshotListener((value, e) -> {
-                    if (e != null) {
-                        return;
-                    }
                     if (null != value) {
                         Optional<Group> groupOptional = value.toObjects(Group.class).stream().findAny();
                         if (groupOptional.isPresent()) {
@@ -240,7 +237,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                         String tokenId;
                         String message;
                         String amount;
-                        String groupName = group.getName().toUpperCase();
+                        String groupName = group.getName();
                         Notification notification;
                         List<Account> externalAccounts = new ArrayList<>();
                         Map<Account, String> balanceStatus = new HashMap<>();
@@ -278,8 +275,8 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 // which they have balance different than zero.
                                 String phoneNo = account.getPhoneNumber();
                                 String emailTo = account.getEmail();
-                                String emailFrom = "sudutechio@gmail.com";
-                                String emailPass = "M3hdi#23";
+                                String emailFrom = "walletdroid@gmail.com";
+                                String emailPass = "walletdroid123";
 
                                 if(atLestOneSms){
                                     if(!checkPermission(Manifest.permission.SEND_SMS)) {
