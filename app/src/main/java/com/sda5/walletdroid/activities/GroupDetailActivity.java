@@ -72,6 +72,10 @@ public class GroupDetailActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
 
+        if(!checkPermission(Manifest.permission.SEND_SMS)) {
+            ActivityCompat.requestPermissions(GroupDetailActivity.this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
+        }
+
         Intent intent = getIntent();
         groupID = intent.getStringExtra("group_id");
 
