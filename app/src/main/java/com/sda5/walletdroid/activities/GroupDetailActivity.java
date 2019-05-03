@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,8 @@ import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 import com.sda5.walletdroid.models.Notification;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,10 +48,16 @@ public class GroupDetailActivity extends AppCompatActivity {
     private Group group;
     private ArrayList<Account> accounts = new ArrayList<>();
     private ImageView btnAddMember;
+    private TextView txtAddMember;
+
     private ImageView btnDeleteMember;
+    private TextView txtDeleteMember;
     private ImageView btnDeleteGroup;
+    private TextView txtDeleteGroup;
+
     private Button btnLeaveGroup;
     private ImageView btnSettle;
+    private TextView txtSettle;
     private Account currentAccount;
     private final static int SEND_SMS_PERMISSION_REQ=1;
 
@@ -77,6 +86,11 @@ public class GroupDetailActivity extends AppCompatActivity {
         btnLeaveGroup = findViewById(R.id.btn_leave_group);
         btnSettle = findViewById(R.id.btn_settle);
 
+        txtAddMember = findViewById(R.id.txt_add_member);
+        txtDeleteMember = findViewById(R.id.txt_delete_group_member);
+        txtDeleteGroup = findViewById(R.id.txt_delete_group);
+        txtSettle = findViewById(R.id.txt_settle);
+
 //        if(!checkPermission(Manifest.permission.SEND_SMS)) {
 //            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
 //        }
@@ -96,8 +110,13 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 btnAddMember.setVisibility(View.GONE);
                                 btnDeleteMember.setVisibility(View.GONE);
                                 btnDeleteGroup.setVisibility(View.GONE);
+                                txtSettle.setVisibility(View.GONE);
+                                txtAddMember.setVisibility(View.GONE);
+                                txtDeleteMember.setVisibility(View.GONE);
+                                txtDeleteGroup.setVisibility(View.GONE);
                             } else {
                                 btnLeaveGroup.setVisibility(View.GONE);
+
                             }
                             CollectionReference accountRef = database.collection("Accounts");
                             for (String accountId : group.getAccountIdList()) {

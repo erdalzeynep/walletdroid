@@ -60,8 +60,8 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
         if(expense.getCategory().equalsIgnoreCase("Eat out")) categoryImage.setImageResource(R.drawable.eat);
         if(expense.getCategory().equalsIgnoreCase("Recurring")) categoryImage.setImageResource(R.drawable.recurring);
         if(expense.getCategory().equalsIgnoreCase("Utility")) categoryImage.setImageResource(R.drawable.utility);
-        if(expense.getCategory().equalsIgnoreCase("Membership")) categoryImage.setImageResource(R.drawable.grocery);
-        if(expense.getCategory().equalsIgnoreCase("Other")) categoryImage.setImageResource(R.drawable.grocery);
+        if(expense.getCategory().equalsIgnoreCase("Membership")) categoryImage.setImageResource(R.drawable.membership);
+        if(expense.getCategory().equalsIgnoreCase("Other")) categoryImage.setImageResource(R.drawable.other);
 
         tvExpenseTitle.setText(expense.getTitle());
         tvExpenseDate.setText(expense.getDate());
