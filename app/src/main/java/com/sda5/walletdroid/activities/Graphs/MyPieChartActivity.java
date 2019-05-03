@@ -88,7 +88,7 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
 
         Legend l = chart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
         l.setXEntrySpace(7f);
@@ -131,11 +131,11 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
 
         ArrayList<PieEntry> entries = new ArrayList<>();
 
-        for (int i = 0; i < labelsExpense.length; i++) {
+        for (int i = 1; i < labelsExpense.length; i++) {
             entries.add(new PieEntry((float) (test[i].intValue()), labelsExpense[i]));
         }
 
-        PieDataSet dPie = new PieDataSet(entries, "Expense Details");
+        PieDataSet dPie = new PieDataSet(entries, "");
 
         dPie.setDrawIcons(false);
 
