@@ -242,7 +242,8 @@ public class GroupDetailActivity extends AppCompatActivity {
                         List<Account> externalAccounts = new ArrayList<>();
                         Map<Account, String> balanceStatus = new HashMap<>();
                         for (Account account : accounts) {
-                            amount = previousGroupBalance.get(account.getId()).toString();
+                            long amountL = Math.round(previousGroupBalance.get(account.getId()));
+                            amount = Long.toString(amountL);
                             balanceStatus.put(account, amount);
                             if (account.isInternalAccount()) {
                                 from = currentAccount.getOwnerName().toUpperCase();
