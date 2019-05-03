@@ -32,8 +32,11 @@ import com.sda5.walletdroid.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MyBarGraphComparison extends DemoBase implements
         OnChartGestureListener, OnChartValueSelectedListener {
@@ -45,6 +48,8 @@ public class MyBarGraphComparison extends DemoBase implements
     private HashMap<String, Double> expenseMaps2 = new HashMap<>();
     private String categoryIntent1;
     private String categoryIntent2;
+    private String selectedTimePeriod;
+
 
     public static final String TAG = "My Bar Graph";
 
@@ -113,8 +118,13 @@ public class MyBarGraphComparison extends DemoBase implements
         expenseMaps2 = (HashMap<String, Double>) intent.getSerializableExtra("map2");
         categoryIntent1 = (intent.getStringExtra("category1"));
         categoryIntent2 = (intent.getStringExtra("category2"));
+        selectedTimePeriod = (intent.getStringExtra("selectedTimePeriod"));
+        String startDate = (intent.getStringExtra("startDate"));
+        String endDate = (intent.getStringExtra("endDate"));
+
+        int timeIntent = Integer.parseInt(selectedTimePeriod);
         //generateDataLine();
-        getRemoteData(expenseMaps, expenseMaps2, categoryIntent1, categoryIntent2);
+        getRemoteData(expenseMaps, expenseMaps2, categoryIntent1, categoryIntent2, timeIntent, startDate, endDate);
     }
 
     private final int[] colors = new int[]{
@@ -127,11 +137,26 @@ public class MyBarGraphComparison extends DemoBase implements
     /**
      * @param expenseRemote
      */
-    private void getRemoteData(HashMap<String, Double> expenseRemote, HashMap<String, Double> expenseRemote2, String c1, String c2) {
+    private void getRemoteData(HashMap<String, Double> expenseRemote, HashMap<String, Double> expenseRemote2, String c1, String c2, Integer noOfTimePoints, String startDate, String endDate) {
 
         try {
 
-            // DATESET 1
+            List<String> uniqueLabelsFrom2DataSets = new ArrayList<>(); // This list will have unique labels from list2
+            List<String> list1 = new ArrayList<>(expenseRemote.keySet()); // DATASET 1
+            List<String> list2 = new ArrayList<>(expenseRemote2.keySet()); // DATASET 2
+
+            // Finding the unique labels from list 2 that are not present in list 1
+            uniqueLabelsFrom2DataSets.addAll(
+                    list2.stream()
+                            .filter(str -> !list1.contains(str))
+                            .collect(Collectors.toList()));
+
+            // Adding the unique label from list2 to list 1
+            list1.addAll(uniqueLabelsFrom2DataSets);
+            Collections.sort(list1); // Sorting the unique collection
+
+
+            //DATESET 1 ANALYSIS
             Set<String> keySet = expenseRemote.keySet();//Getting Set of keys Categories/months from HashMap
             String[] labelsExpense = keySet.toArray(new String[0]);// Transfer data to an array
             final String[] labelsExpenseCopy = keySet.toArray(new String[0]);//Making a copy of labelsExpense
@@ -144,9 +169,11 @@ public class MyBarGraphComparison extends DemoBase implements
             // This array will contain the values sorted based on sorting index of labels
             Double[] sortedA = new Double[labelsExpense.length];
 
-            // BarEntry
+
+            // This list will store values for BarEntry
             ArrayList<BarEntry> valuesExpense = new ArrayList<>();
 
+            // TO SORT THE DATA BASED ON DATES IN THE ORDER (JAN-DEC)
             if (true) {
 
                 Arrays.sort(sortedString); // sort the labels
@@ -165,17 +192,24 @@ public class MyBarGraphComparison extends DemoBase implements
                     }
                 }
             }
-            //values after sorting
-            for (int i = 0; i < valuesRemote.length; i++) {
-                valuesExpense.add(new BarEntry(i, sortedA[i].intValue()));
+
+            // This array will contain the values sorted based on sorting index of their labels
+            // We are padding them with 0
+            Double[] sortedAndUniqueA = new Double[list1.size()];
+            for (int i = 0; i < sortedAndUniqueA.length; i++) {
+                sortedAndUniqueA[i] = 0.0;
             }
-            BarDataSet d4 = new BarDataSet(valuesExpense, c1);
-            //d4.setColors(ColorTemplate.VORDIPLOM_COLORS);
-            d4.setColors(Color.rgb(164, 228, 251));
-            d4.setHighLightAlpha(255);
 
+            for (int i = 0; i < list1.size(); i++) {// outer loop for going through the unique labels from list1 and list2
+                for (int j = 0; j < labelsExpense.length; j++) {//inner loop for going through dataset1
+                    if (list1.get(i).equals(labelsExpense[j])) {
+                        sortedAndUniqueA[i] = sortedA[j];
+                        break;
+                    }
+                }
+            }
 
-            // DATESET 2
+            // DATESET 2 ANALYSIS
             Set<String> keySet2 = expenseRemote2.keySet();//Getting Set of keys Categories/months from HashMap
             String[] labelsExpense2 = keySet2.toArray(new String[0]);// Transfer data to an array
             final String[] labelsExpenseCopy2 = keySet2.toArray(new String[0]);//Making a copy of labelsExpense
@@ -204,26 +238,49 @@ public class MyBarGraphComparison extends DemoBase implements
                     }
                 }
             }
-            //values after sorting
-            for (int i = 0; i < valuesRemote2.length; i++) {
-                valuesExpense2.add(new BarEntry(i, sortedA2[i].intValue()));
+
+            // This array will contain the values sorted based on sorting index of labels
+            // Pad the array with 0
+            Double[] sortedAndUniqueA2 = new Double[list1.size()];
+            for (int i = 0; i < sortedAndUniqueA2.length; i++) {
+                sortedAndUniqueA2[i] = 0.0;
+            }
+            // Match the labels from unique labels list with dataset2
+            for (int i = 0; i < list1.size(); i++) {// outer loop for going through the unique labels from list1 and list2
+                for (int j = 0; j < labelsExpense2.length; j++) {//inner loop for going through DATASET2
+                    if (list1.get(i).equals(labelsExpense2[j])) {
+                        sortedAndUniqueA2[i] = sortedA2[j];
+                        break;
+                    }
+                }
             }
 
-            //
+            //Storing data as BarEntry in the ArrayList for each data set
+            // DATASET 2
+            for (int i = 0; i < list1.size(); i++) {
+                valuesExpense2.add(new BarEntry(i, sortedAndUniqueA2[i].intValue()));
+            }
+            //DATASET 1
+            for (int i = 0; i < list1.size(); i++) {
+                valuesExpense.add(new BarEntry(i, sortedAndUniqueA[i].intValue()));
+            }
+
+            //BARDATASET
+            //DATASET 1
+            BarDataSet d4 = new BarDataSet(valuesExpense, c1);
+            //d4.setColors(ColorTemplate.VORDIPLOM_COLORS);
+            d4.setColors(Color.rgb(164, 228, 251));
+            d4.setHighLightAlpha(255);
+
+            //DATADET2
             BarDataSet d5 = new BarDataSet(valuesExpense2, c2);
             //d5.setColors(ColorTemplate.VORDIPLOM_COLORS);
             d5.setColors(Color.rgb(104, 241, 175));
             d5.setHighLightAlpha(255);
 
+            // GET THE LABELS
+            String[] theFinalLabels = list1.toArray(new String[0]);
 
-            //xAxis.setAxisMinimum(0);
-            //xAxis.setAxisMaximum(labelsExpense.length);
-            //xAxis.mAxisMaximum=labelsExpense.length;
-            //xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense));
-
-            //xAxis.setAvoidFirstLastClipping(true);
-
-            //xAxis.setAxisMaximum(40f);
 
             BarData data = new BarData(d4, d5);
             data.setBarWidth(0.15f); // TO SET BAR WIDTH
@@ -232,8 +289,8 @@ public class MyBarGraphComparison extends DemoBase implements
 
             XAxis xAxis = chart.getXAxis();
             xAxis.setTextSize(10); // Set size of x labels
-            xAxis.setLabelCount(labelsExpense.length); // set how many labels you want to see
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(labelsExpense)); // set user defined labels
+            xAxis.setLabelCount(list1.size()); // set how many labels you want to see
+            xAxis.setValueFormatter(new IndexAxisValueFormatter(theFinalLabels)); // set user defined labels
             xAxis.setCenterAxisLabels(true);
             xAxis.setGranularity(1);
 
@@ -242,16 +299,18 @@ public class MyBarGraphComparison extends DemoBase implements
 
             chart.setDragEnabled(true);
             chart.getXAxis().setAxisMinimum(0);
-            chart.getXAxis().setAxisMaximum(0 + chart.getBarData().getGroupWidth(groupSpace, barSpace) * labelsExpense.length);
+            chart.getXAxis().setAxisMaximum(0 + chart.getBarData().getGroupWidth(groupSpace, barSpace) * list1.size());
             chart.getAxisLeft().setAxisMinimum(0);
             chart.groupBars(0, groupSpace, barSpace);
 
 
             chart.animateXY(2000, 2000);
             chart.invalidate();
-        }catch(NullPointerException ignored){
+
+        } catch (NullPointerException ignored) {
 
         }
+
     }
 
     @Override
@@ -317,7 +376,7 @@ public class MyBarGraphComparison extends DemoBase implements
 
     @Override
     protected void saveToGallery() {
-        saveToGallery(chart, "MultiLineChartActivity");
+        saveToGallery(chart, "Bar Graph Comparison");
     }
 
     @Override

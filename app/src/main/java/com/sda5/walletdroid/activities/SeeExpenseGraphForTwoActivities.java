@@ -185,7 +185,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
 
         Intent intent = new Intent(this, MyBarGraphComparison.class);
 
-        System.out.println("SelectedTimeperiodInteger2Querry " +  selectedTimePeriodInteger2);
+        System.out.println("SelectedTimeperiodInteger2Querry " +  selectedTimePeriodInteger);
         System.out.println("SelectedTimeperiodIntegerQuerry " +  selectedTimePeriodInteger2);
         System.out.println("SelectedCategoryQuerry " +  selectedCategory);
         System.out.println("SelectedCategory2Querry " +  selectedCategory2);
@@ -235,8 +235,11 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
                                             totalExpenseMapByMonth.put(key, totalAmountForMonth);
                                         }
 
+
                                         intent.putExtra("map", (Serializable) totalExpenseMapByMonth);
                                         intent.putExtra("category1",selectedCategory);
+
+
                                         System.out.println("______________________" + totalExpenseMapByMonth.entrySet().toString());
                                     });
                                 }
@@ -258,6 +261,11 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
             StartEndDate startEndDate = getStartEndDate(selectedTimePeriodInteger2);
             long startDate = startEndDate.getStartDate();
             long endDate = startEndDate.getEndDate();
+            String startTime = startEndDate.getStart();// When search starts
+            String endTime = startEndDate.getEnd(); // When search ends
+
+            System.out.println("startDate "+ startTime);
+            System.out.println("endDate " + endTime);
 
             expenses2 = new ArrayList<>();
             database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
@@ -293,8 +301,12 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
                                             totalAmountForMonth2 += expense.getAmount();
                                             totalExpenseMapByMonth2.put(key, totalAmountForMonth2);
                                         }
+                                        String timeIntent = selectedTimePeriodInteger2.toString();
+                                        intent.putExtra("selectedTimePeriod", selectedTimePeriodInteger2 +"");
                                         intent.putExtra("map2", (Serializable) totalExpenseMapByMonth2);
                                         intent.putExtra("category2",selectedCategory2);
+                                        intent.putExtra("startDate", startTime);
+                                        intent.putExtra("endDate", endTime);
                                         startActivity(intent);
                                         System.out.println("______________________" + totalExpenseMapByMonth2.entrySet().toString());
                                     });
@@ -330,7 +342,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
         System.out.println("FROM==========" + fromDate.toString() + "TO==============" + toDate.toString());
         long fromDateLong = fromDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         long toDateLong = toDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return new StartEndDate(fromDateLong, toDateLong);
+        return new StartEndDate(fromDateLong, toDateLong, fromDate.toString(), toDate.toString());
     }
 
 }

@@ -54,7 +54,7 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
         chart = findViewById(R.id.chartpie);
         chart.setUsePercentValues(true);
         chart.getDescription().setEnabled(false);
-        chart.setExtraOffsets(5, 10, 5, 5);
+        chart.setExtraOffsets(10, 10, 10, 10);
 
         chart.setDragDecelerationFrictionCoef(0.95f);
 
@@ -91,9 +91,11 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
-        l.setXEntrySpace(7f);
-        l.setYEntrySpace(0f);
+        l.setXEntrySpace(15f);
+        l.setYEntrySpace(2f);
         l.setYOffset(0f);
+        l.setFormSize(10f);
+
 
         // entry label styling
         chart.setEntryLabelColor(Color.BLACK);
@@ -145,6 +147,7 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
 
         // add a lot of colors
 
+
         final int[] MY_COLORS = {
                 Color.rgb(255,192,0),
                 Color.rgb(177,30,50),
@@ -157,32 +160,14 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
         ArrayList<Integer> colors = new ArrayList<>();
         for(int c: MY_COLORS) colors.add(c);
 
-        /*
-        ArrayList<Integer> colors = new ArrayList<>();
-
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
-        */
         colors.add(ColorTemplate.getHoloBlue());
 
         dPie.setColors(colors);
 
         PieData data = new PieData(dPie);
         data.setValueFormatter(new PercentFormatter(chart));
-        data.setValueTextSize(13f);
-        data.setValueTextColor(Color.BLUE);
+        data.setValueTextSize(15f);
+        data.setValueTextColor(Color.WHITE);
         data.setValueTypeface(tfLight);
         chart.setData(data);
 
@@ -205,7 +190,7 @@ public class MyPieChartActivity extends DemoBase implements OnChartValueSelected
         switch (item.getItemId()) {
             case R.id.viewGithub: {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/PieChartActivity.java"));
+                i.setData(Uri.parse("https://github.com/walletDroid"));
                 startActivity(i);
                 break;
             }
