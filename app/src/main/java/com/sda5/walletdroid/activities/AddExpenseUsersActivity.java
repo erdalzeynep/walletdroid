@@ -81,7 +81,9 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
                                         for (QueryDocumentSnapshot doc : value) {
                                             Account account = doc.toObject(Account.class);
                                                 if (group.getAccountIdList().contains(account.getId())) {
-                                                    accountsForExpense.add(account);
+                                                    if(!accountsForExpense.contains(account)){
+                                                        accountsForExpense.add(account);
+                                                    }
                                                 }
                                         }
                                         accountAdapterAddExpense.notifyDataSetChanged();

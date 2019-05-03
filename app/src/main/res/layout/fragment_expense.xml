@@ -80,7 +80,7 @@
                         android:textColor="@color/startblue"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:text="Add expense"
+                        android:text="Add Expense"
                         android:onClick="addExpense"/>
 
                     <Button

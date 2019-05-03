@@ -15,6 +15,7 @@ public class Expense implements Serializable {
     private Long dateMillisec;
     private ArrayList<String> expenseAccountIds;
     private boolean isRecursive;
+    private Long logDate;
 
     public Expense() {
     }
@@ -31,6 +32,7 @@ public class Expense implements Serializable {
         this.expenseAccountIds = expenseAccountIds;
         this.isRecursive = isRecursive;
         this.id = UUID.randomUUID().toString();
+        this.logDate = System.currentTimeMillis();
     }
 
     public String getId() {
@@ -111,5 +113,13 @@ public class Expense implements Serializable {
 
     public void setDateMillisec(Long dateMillisec) {
         this.dateMillisec = dateMillisec;
+    }
+
+    public Long getLogDate() {
+        return logDate;
+    }
+
+    public void setLogDate(Long logDate) {
+        this.logDate = logDate;
     }
 }

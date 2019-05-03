@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,8 @@ import com.sda5.walletdroid.models.Account;
 import com.sda5.walletdroid.models.Group;
 import com.sda5.walletdroid.models.Notification;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,10 +48,16 @@ public class GroupDetailActivity extends AppCompatActivity {
     private Group group;
     private ArrayList<Account> accounts = new ArrayList<>();
     private ImageView btnAddMember;
+    private TextView txtAddMember;
+
     private ImageView btnDeleteMember;
+    private TextView txtDeleteMember;
     private ImageView btnDeleteGroup;
+    private TextView txtDeleteGroup;
+
     private Button btnLeaveGroup;
     private ImageView btnSettle;
+    private TextView txtSettle;
     private Account currentAccount;
     private final static int SEND_SMS_PERMISSION_REQ=1;
 
@@ -62,6 +71,10 @@ public class GroupDetailActivity extends AppCompatActivity {
         database = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
+
+        if(!checkPermission(Manifest.permission.SEND_SMS)) {
+            ActivityCompat.requestPermissions(GroupDetailActivity.this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
+        }
 
         Intent intent = getIntent();
         groupID = intent.getStringExtra("group_id");
@@ -77,6 +90,11 @@ public class GroupDetailActivity extends AppCompatActivity {
         btnLeaveGroup = findViewById(R.id.btn_leave_group);
         btnSettle = findViewById(R.id.btn_settle);
 
+        txtAddMember = findViewById(R.id.txt_add_member);
+        txtDeleteMember = findViewById(R.id.txt_delete_group_member);
+        txtDeleteGroup = findViewById(R.id.txt_delete_group);
+        txtSettle = findViewById(R.id.txt_settle);
+
 //        if(!checkPermission(Manifest.permission.SEND_SMS)) {
 //            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
 //        }
@@ -84,9 +102,6 @@ public class GroupDetailActivity extends AppCompatActivity {
         database.collection("Groups")
                 .whereEqualTo("id", groupID)
                 .addSnapshotListener((value, e) -> {
-                    if (e != null) {
-                        return;
-                    }
                     if (null != value) {
                         Optional<Group> groupOptional = value.toObjects(Group.class).stream().findAny();
                         if (groupOptional.isPresent()) {
@@ -99,8 +114,13 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 btnAddMember.setVisibility(View.GONE);
                                 btnDeleteMember.setVisibility(View.GONE);
                                 btnDeleteGroup.setVisibility(View.GONE);
+                                txtSettle.setVisibility(View.GONE);
+                                txtAddMember.setVisibility(View.GONE);
+                                txtDeleteMember.setVisibility(View.GONE);
+                                txtDeleteGroup.setVisibility(View.GONE);
                             } else {
                                 btnLeaveGroup.setVisibility(View.GONE);
+
                             }
                             CollectionReference accountRef = database.collection("Accounts");
                             for (String accountId : group.getAccountIdList()) {
@@ -108,10 +128,11 @@ public class GroupDetailActivity extends AppCompatActivity {
                                         .whereEqualTo("id", accountId)
                                         .get()
                                         .addOnSuccessListener(queryDocumentSnapshots -> {
-                                            accounts.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
+                                            if(!accounts.contains(queryDocumentSnapshots.toObjects(Account.class).get(0))){
+                                                accounts.add(queryDocumentSnapshots.toObjects(Account.class).get(0));
+                                            }
                                             accountAdapter.notifyDataSetChanged();
                                         });
-
                             }
                         }
                     }
@@ -164,6 +185,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddNewGroupMemberActivity.class);
         intent.putExtra("group_id", groupID);
         startActivity(intent);
+        finish();
     }
 
     public void deleteMembers(View view) {
@@ -187,8 +209,9 @@ public class GroupDetailActivity extends AppCompatActivity {
         database.collection("Groups").document(groupID)
                 .update(updateFields)
                 .addOnCompleteListener(task -> {
-                    finish();
+
                     startActivity(getIntent());
+                    finish();
                 });
     }
 
@@ -201,6 +224,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                             "Group is deleted successfully",
                             Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(GroupDetailActivity.this, ServiceActivity.class));
+
                 });
     }
 
@@ -218,12 +242,13 @@ public class GroupDetailActivity extends AppCompatActivity {
                         String tokenId;
                         String message;
                         String amount;
-                        String groupName = group.getName().toUpperCase();
+                        String groupName = group.getName();
                         Notification notification;
                         List<Account> externalAccounts = new ArrayList<>();
                         Map<Account, String> balanceStatus = new HashMap<>();
                         for (Account account : accounts) {
-                            amount = previousGroupBalance.get(account.getId()).toString();
+                            long amountL = Math.round(previousGroupBalance.get(account.getId()));
+                            amount = Long.toString(amountL);
                             balanceStatus.put(account, amount);
                             if (account.isInternalAccount()) {
                                 from = currentAccount.getOwnerName().toUpperCase();
@@ -256,17 +281,19 @@ public class GroupDetailActivity extends AppCompatActivity {
                                 // which they have balance different than zero.
                                 String phoneNo = account.getPhoneNumber();
                                 String emailTo = account.getEmail();
-                                String emailFrom = "sudutechio@gmail.com";
-                                String emailPass = "M3hdi#23";
+                                String emailFrom = "walletdroid@gmail.com";
+                                String emailPass = "walletdroid123";
 
-                                if(atLestOneSms){
+//                                if(atLestOneSms){
+//                                    if(!checkPermission(Manifest.permission.SEND_SMS)) {
+//                                        ActivityCompat.requestPermissions(GroupDetailActivity.this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
+//                                    }
+//                                }
+
+                                if(phoneNo != null && !phoneNo.equals("")){
                                     if(!checkPermission(Manifest.permission.SEND_SMS)) {
                                         ActivityCompat.requestPermissions(GroupDetailActivity.this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQ);
                                     }
-                                }
-
-                                if(phoneNo != null && !phoneNo.equals("")){
-
                                     atLestOneSms = true;
                                     if(sendSMS(phoneNo,messageContentIndividual)){
                                         numberOfSuccessfulSMS++;
