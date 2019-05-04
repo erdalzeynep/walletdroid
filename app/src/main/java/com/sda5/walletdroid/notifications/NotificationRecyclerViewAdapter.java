@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sda5.walletdroid.R;
+import com.sda5.walletdroid.models.Notification;
 
 import java.util.List;
 
