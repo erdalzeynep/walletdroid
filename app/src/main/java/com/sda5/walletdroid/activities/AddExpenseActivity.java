@@ -91,7 +91,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     // onRestoreInstanceState
     static String tempTitle;
     static String tempAmount;
-//    static LocalDate tempDate;
+    //    static LocalDate tempDate;
     static String tempDateS;
     static int sprCategoryDefaultItem;
     static int sprCurrencyDefaultItem;
@@ -260,11 +260,11 @@ public class AddExpenseActivity extends AppCompatActivity {
         if (!etTitle.getText().toString().trim().isEmpty()) {
             tempTitle = etTitle.getText().toString();
         }
-        if(!etAmount.getText().toString().trim().isEmpty()){
+        if (!etAmount.getText().toString().trim().isEmpty()) {
             tempAmount = etAmount.getText().toString();
         }
 
-        if(selectedDate != null){
+        if (selectedDate != null) {
             tempDateS = selectedDate.toString();
         }
         Intent intent = new Intent(this, ChooseGroupForExpenseActivity.class);
@@ -398,40 +398,36 @@ public class AddExpenseActivity extends AppCompatActivity {
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                         Group group = queryDocumentSnapshot.toObject(Group.class);
-
-
+                                        expenseUsersId.remove(buyerId);
                                         for (String accountID : expenseUsersId) {
-                                            if (accountID != buyerId) {
-                                                database.collection("Accounts").whereEqualTo("id", accountID).limit(1).get()
-                                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                            @Override
-                                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                                                    Account account = queryDocumentSnapshot.toObject(Account.class);
-                                                                    String tokenId = account.getTokenID();
-                                                                    Notification notification;
-                                                                    String from = mAuth.getCurrentUser().getDisplayName().toUpperCase();
-                                                                    String amount = balanceOfExpense.get(account.getId()).toString();
-                                                                    String message = "Hi! You are assigned to " + title + " expense with " + amount + " Kr";
-                                                                    String groupName = group.getName();
-                                                                    notification = new Notification(from, groupName, message, tokenId);
-                                                                    database.collection("Accounts")
-                                                                            .document(account.getId()).collection("Notifications")
-                                                                            .document(notification.getNotificationId())
-                                                                            .set(notification)
-                                                                            .addOnCompleteListener(task1 -> {
 
-                                                                            });
-                                                                }
+                                            database.collection("Accounts").whereEqualTo("id", accountID).limit(1).get()
+                                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                                                Account account = queryDocumentSnapshot.toObject(Account.class);
+                                                                String tokenId = account.getTokenID();
+                                                                Notification notification;
+                                                                String from = mAuth.getCurrentUser().getDisplayName().toUpperCase();
+                                                                String amount = balanceOfExpense.get(account.getId()).toString();
+                                                                String message = "Hi! You are assigned to " + title + " expense with " + amount + " Kr";
+                                                                String groupName = group.getName();
+                                                                notification = new Notification(from, groupName, message, tokenId);
+                                                                database.collection("Accounts")
+                                                                        .document(account.getId()).collection("Notifications")
+                                                                        .document(notification.getNotificationId())
+                                                                        .set(notification)
+                                                                        .addOnCompleteListener(task1 -> {
+
+                                                                        });
                                                             }
-                                                        });
-
-
-                                            }
+                                                        }
+                                                    });
                                         }
-
-
                                     }
+
+
                                 }
                             });
                 }
@@ -450,7 +446,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (selectedDate==null) selectedDate = LocalDate.now();
+        if (selectedDate == null) selectedDate = LocalDate.now();
         if (!etTitle.getText().toString().trim().isEmpty() || !etAmount.getText().toString().trim().isEmpty()) {
             outState.putString("Title", etTitle.getText().toString().trim());
             outState.putString("Amount", etAmount.getText().toString().trim());
@@ -484,10 +480,10 @@ public class AddExpenseActivity extends AppCompatActivity {
 //            selectedDate = LocalDate.parse(tempDateS);
 //            btnPickDate.setText(tempDateS);
 //        }
-        try{
+        try {
             selectedDate = LocalDate.parse(tempDateS);
             btnPickDate.setText(tempDateS);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
 
