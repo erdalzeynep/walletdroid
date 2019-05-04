@@ -412,7 +412,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                                                                     Notification notification;
                                                                     String from = mAuth.getCurrentUser().getDisplayName().toUpperCase();
                                                                     String amount = balanceOfExpense.get(account.getId()).toString();
-                                                                    String message = "Hi! You are assigned to " + title + " expense with" + amount + " Kr";
+                                                                    String message = "Hi! You are assigned to " + title + " expense with " + amount + " Kr";
                                                                     String groupName = group.getName();
                                                                     notification = new Notification(from, groupName, message, tokenId);
                                                                     database.collection("Accounts")
