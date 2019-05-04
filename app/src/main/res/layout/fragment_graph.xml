@@ -78,18 +78,18 @@
         android:onClick="runQueryForParticularExpense"
         android:text="Select Category" />
 
-
-    <Button
-        android:id="@+id/buttonBarChartComparison"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:textColor="@color/startblue"
-        android:background="@drawable/white_button"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:onClick="runQueryForExpenseComparison"
-        android:text="For Category Comparison" />
+        <Button
+            android:id="@+id/buttonBarChartComparison"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/white_button"
+            android:onClick="runQueryForExpenseComparison"
+            android:textColor="@color/startblue"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="For Two Categories"
+            android:textAllCaps="false"/>
 
 
 </LinearLayout>

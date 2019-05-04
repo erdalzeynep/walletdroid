@@ -61,6 +61,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
 
+        catlist.add("Choose Category");
         catlist.add("Grocery");
         catlist.add("Clothes");
         catlist.add("Transportation");
