@@ -4,19 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewMyBarComp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Expenses Comparison"
-
-        android:textAlignment="center" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chartMyBarComp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textViewMyBar" />
+        android:layout_below="@+id/textViewMyBar"
+        android:layout_marginTop="30dp"/>
 
 </RelativeLayout>
 

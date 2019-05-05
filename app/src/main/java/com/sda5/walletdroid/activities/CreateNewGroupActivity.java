@@ -54,9 +54,11 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_group);
 
+        accounts.clear();
+        externalAccountList.clear();
+
         database = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
 
         ListView listView = findViewById(R.id.account_list);
         listView.setScrollingCacheEnabled(false);

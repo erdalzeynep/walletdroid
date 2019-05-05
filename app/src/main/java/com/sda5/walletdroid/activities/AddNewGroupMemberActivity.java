@@ -54,14 +54,17 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_group_member_activity);
 
+        ListView listView = findViewById(R.id.account_list);
+        listView.setScrollingCacheEnabled(false);
+
+        accounts.clear();
+        externalAccountList.clear();
+
         database = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
         groupID = intent.getStringExtra("group_id");
-
-        ListView listView = findViewById(R.id.account_list);
-        listView.setScrollingCacheEnabled(false);
 
         externalUserAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
@@ -122,6 +125,13 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
                             });
                 });
     }
+//
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        accounts.clear();
+//        accountAdapter.notifyDataSetChanged();
+//    }
 
     public void addMembersToGroup(View view) {
 
@@ -152,7 +162,7 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
             return Tasks.forResult(null);
         } else {
             final Account externalAccount = new Account(false, ownerName, email);
-            externalAccount.setPhoneNumber( externalUserPhoneNumber.get(email));
+            externalAccount.setPhoneNumber(externalUserPhoneNumber.get(email));
             return database.collection("Accounts")
                     .document(externalAccount.getId())
                     .set(externalAccount)
@@ -166,7 +176,15 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
 
     private Task<Void> persistGroup(Task<Void> voidTask) {
         Map<String, Double> groupBalance = group.getBalance();
+//        TODO Something we can do here I think the duplicate may happen here
         group.getAccountIdList().addAll(accountAdapter.getSelectedAccountIDList());
+//        for(String newOne: accountAdapter.getSelectedAccountIDList()){
+//            if(!group.getAccountIdList().contains(newOne)){
+//                group.getAccountIdList().add(newOne);
+//            }
+//        }
+
+
         for (String accountID : accountAdapter.getSelectedAccountIDList()) {
             groupBalance.put(accountID, 0.0);
         }
@@ -207,7 +225,7 @@ public class AddNewGroupMemberActivity extends AppCompatActivity {
             externalUserAdapter.notifyDataSetChanged();
             editTextExternalAccountName.setText("");
             editTextExternalAccountEmail.setText("");
-            externalUserPhoneNumber.put(externalAccountEmail,editTextExternalAccountPhone.getText().toString());
+            externalUserPhoneNumber.put(externalAccountEmail, editTextExternalAccountPhone.getText().toString());
             editTextExternalAccountPhone.setText("");
         }
     }
