@@ -46,7 +46,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
     private HashMap<String, String> externalAccountNameAndEmails = new HashMap<>();
     private ArrayList<String> externalAccountList = new ArrayList<>();
     private ArrayAdapter<String> externalUserAdapter;
-    private String externalUserPhoneNumber;
+    private HashMap<String, String> externalUserPhoneNumber = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +54,11 @@ public class CreateNewGroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_group);
 
+        accounts.clear();
+        externalAccountList.clear();
+
         database = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
 
         ListView listView = findViewById(R.id.account_list);
         listView.setScrollingCacheEnabled(false);
@@ -163,7 +165,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
             return Tasks.forResult(null);
         } else {
             final Account externalAccount = new Account(false, ownerName, email);
-            externalAccount.setPhoneNumber(externalUserPhoneNumber);
+            externalAccount.setPhoneNumber( externalUserPhoneNumber.get(email));
             return database.collection("Accounts")
                     .document(externalAccount.getId())
                     .set(externalAccount)
@@ -207,7 +209,7 @@ public class CreateNewGroupActivity extends AppCompatActivity {
             externalUserAdapter.notifyDataSetChanged();
             editTextExternalAccountName.setText("");
             editTextExternalAccountEmail.setText("");
-            externalUserPhoneNumber = editTextExternalAccountPhone.getText().toString();
+            externalUserPhoneNumber.put(externalAccountEmail,editTextExternalAccountPhone.getText().toString());
             editTextExternalAccountPhone.setText("");
         }
     }
