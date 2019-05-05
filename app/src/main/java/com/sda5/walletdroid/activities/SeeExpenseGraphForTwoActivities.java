@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -61,6 +63,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         currentUserId = auth.getCurrentUser().getUid();
 
+        catlist.add("Choose Category");
         catlist.add("Grocery");
         catlist.add("Clothes");
         catlist.add("Transportation");
@@ -79,7 +82,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedCategory = (String) parent.getItemAtPosition(position);
-                System.out.println("SelectedCategory " +  selectedCategory);
+                System.out.println("SelectedCategory " + selectedCategory);
             }
 
             @Override
@@ -114,7 +117,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedTimePeriod = (String) parent.getItemAtPosition(position);
                 selectedTimePeriodInteger = timePeriod.get(selectedTimePeriod);
-                System.out.println("SelectedTimeperiodInteger " +  selectedTimePeriodInteger);
+                System.out.println("SelectedTimeperiodInteger " + selectedTimePeriodInteger);
 
             }
 
@@ -134,7 +137,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedCategory2 = (String) parent.getItemAtPosition(position);
-                System.out.println("SelectedCategory2 " +  selectedCategory2);
+                System.out.println("SelectedCategory2 " + selectedCategory2);
             }
 
             @Override
@@ -169,7 +172,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedTimePeriod2 = (String) parent.getItemAtPosition(position);
                 selectedTimePeriodInteger2 = timePeriod2.get(selectedTimePeriod2);
-                System.out.println("SelectedTimeperiodInteger2 " +  selectedTimePeriodInteger2);
+                System.out.println("SelectedTimeperiodInteger2 " + selectedTimePeriodInteger2);
             }
 
             @Override
@@ -185,137 +188,145 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
 
         Intent intent = new Intent(this, MyBarGraphComparison.class);
 
-        System.out.println("SelectedTimeperiodInteger2Querry " +  selectedTimePeriodInteger);
-        System.out.println("SelectedTimeperiodIntegerQuerry " +  selectedTimePeriodInteger2);
-        System.out.println("SelectedCategoryQuerry " +  selectedCategory);
-        System.out.println("SelectedCategory2Querry " +  selectedCategory2);
+        System.out.println("SelectedTimeperiodInteger2Querry " + selectedTimePeriodInteger);
+        System.out.println("SelectedTimeperiodIntegerQuerry " + selectedTimePeriodInteger2);
+        System.out.println("SelectedCategoryQuerry " + selectedCategory);
+        System.out.println("SelectedCategory2Querry " + selectedCategory2);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         if (selectedTimePeriodInteger == null) {
             Toast.makeText(SeeExpenseGraphForTwoActivities.this,
                     "" +
                             "Please select time period", Toast.LENGTH_SHORT).show();
+        } else if (selectedTimePeriodInteger2 == null) {
+            Toast.makeText(SeeExpenseGraphForTwoActivities.this,
+                    "" +
+                            "Please select time period Comp2", Toast.LENGTH_SHORT).show();
         } else {
             StartEndDate startEndDate = getStartEndDate(selectedTimePeriodInteger);
             long startDate = startEndDate.getStartDate();
             long endDate = startEndDate.getEndDate();
 
             expenses = new ArrayList<>();
-            database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
-                    task -> {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot accountSnapshot = task.getResult();
-                            if (null != accountSnapshot) {
-                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
-                                if (account.isPresent()) {
-                                    accountId = account.get().getId();
-                                    database.collection("Expenses")
-                                            .whereEqualTo("category", selectedCategory)
-                                            .whereArrayContains("expenseAccountIds", accountId)
-                                            .whereGreaterThanOrEqualTo("dateMillisec", startDate)
-                                            .whereLessThanOrEqualTo("dateMillisec", endDate)
-                                            .orderBy("dateMillisec")
-                                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
-                                        totalExpenseMapByMonth = new HashMap<>();
-                                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            Expense expense = documentSnapshot.toObject(Expense.class);
-                                            expense.setAmount(expense.getAmount() / expense.getExpenseAccountIds().size());
-                                            expenses.add(expense);
-                                            int expenseMonth = LocalDate.parse(expense.getDate(), formatter).getMonth().getValue();
-                                            int expenseYear = LocalDate.parse(expense.getDate(), formatter).getYear();
-                                            String key;
-                                            if(expenseMonth<10){
+            Task<Void> queryCategory1 = database.collection("Accounts").whereEqualTo("userID", currentUserId).get()
+                    .onSuccessTask(
+                            accountSnapshot -> {
+                                if (null != accountSnapshot) {
+                                    Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                                    if (account.isPresent()) {
+                                        accountId = account.get().getId();
+                                        return database.collection("Expenses")
+                                                .whereEqualTo("category", selectedCategory)
+                                                .whereArrayContains("expenseAccountIds", accountId)
+                                                .whereGreaterThanOrEqualTo("dateMillisec", startDate)
+                                                .whereLessThanOrEqualTo("dateMillisec", endDate)
+                                                .orderBy("dateMillisec")
+                                                .get()
+                                                .onSuccessTask(queryDocumentSnapshots -> {
+                                                    totalExpenseMapByMonth = new HashMap<>();
+                                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                        Expense expense = documentSnapshot.toObject(Expense.class);
+                                                        expense.setAmount(expense.getAmount() / expense.getExpenseAccountIds().size());
+                                                        expenses.add(expense);
+                                                        int expenseMonth = LocalDate.parse(expense.getDate(), formatter1).getMonth().getValue();
+                                                        int expenseYear = LocalDate.parse(expense.getDate(), formatter1).getYear();
+                                                        String key;
+                                                        if (expenseMonth < 10) {
 
-                                                key = expenseYear + "-" + "0"+ expenseMonth;
-                                            }else {
-                                                key = expenseYear + "-" + expenseMonth;
-                                            }
-                                            Double totalAmountForMonth = totalExpenseMapByMonth.getOrDefault(key, 0.0);
-                                            totalAmountForMonth += expense.getAmount();
-                                            totalExpenseMapByMonth.put(key, totalAmountForMonth);
-                                        }
-
-
-                                        intent.putExtra("map", (Serializable) totalExpenseMapByMonth);
-                                        intent.putExtra("category1",selectedCategory);
+                                                            key = expenseYear + "-" + "0" + expenseMonth;
+                                                        } else {
+                                                            key = expenseYear + "-" + expenseMonth;
+                                                        }
+                                                        Double totalAmountForMonth = totalExpenseMapByMonth.getOrDefault(key, 0.0);
+                                                        totalAmountForMonth += expense.getAmount();
+                                                        totalExpenseMapByMonth.put(key, totalAmountForMonth);
+                                                    }
 
 
-                                        System.out.println("______________________" + totalExpenseMapByMonth.entrySet().toString());
-                                    });
+                                                    intent.putExtra("map", (Serializable) totalExpenseMapByMonth);
+                                                    intent.putExtra("category1", selectedCategory);
+
+
+                                                    System.out.println("______________________" + totalExpenseMapByMonth.entrySet().toString());
+                                                    return Tasks.forResult(null);
+                                                });
+                                    } else {
+                                        return Tasks.forException(new RuntimeException("No account"));
+                                    }
+                                } else {
+                                    return Tasks.forException(new RuntimeException("No account"));
                                 }
                             }
-                        }
-                    }
-            );
-        }
+                    );
 
+            startEndDate = getStartEndDate(selectedTimePeriodInteger2);
+            final long startDate2 = startEndDate.getStartDate();
+            final long endDate2 = startEndDate.getEndDate();
+            final String startTime2 = startEndDate.getStart();// When search starts
+            final String endTime2 = startEndDate.getEnd(); // When search ends
 
-
-
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        if (selectedTimePeriodInteger2 == null) {
-            Toast.makeText(SeeExpenseGraphForTwoActivities.this,
-                    "" +
-                            "Please select time period Comp2", Toast.LENGTH_SHORT).show();
-        } else {
-            StartEndDate startEndDate = getStartEndDate(selectedTimePeriodInteger2);
-            long startDate = startEndDate.getStartDate();
-            long endDate = startEndDate.getEndDate();
-            String startTime = startEndDate.getStart();// When search starts
-            String endTime = startEndDate.getEnd(); // When search ends
-
-            System.out.println("startDate "+ startTime);
-            System.out.println("endDate " + endTime);
+            System.out.println("startDate " + startTime2);
+            System.out.println("endDate " + endTime2);
 
             expenses2 = new ArrayList<>();
-            database.collection("Accounts").whereEqualTo("userID", currentUserId).get().addOnCompleteListener(
-                    task -> {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot accountSnapshot = task.getResult();
-                            if (null != accountSnapshot) {
-                                Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
-                                if (account.isPresent()) {
-                                    accountId = account.get().getId();
-                                    database.collection("Expenses")
-                                            .whereEqualTo("category", selectedCategory2)
-                                            .whereArrayContains("expenseAccountIds", accountId)
-                                            .whereGreaterThanOrEqualTo("dateMillisec", startDate)
-                                            .whereLessThanOrEqualTo("dateMillisec", endDate)
-                                            .orderBy("dateMillisec")
-                                            .get().addOnSuccessListener(queryDocumentSnapshots -> {
-                                        totalExpenseMapByMonth2 = new HashMap<>();
-                                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                            Expense expense = documentSnapshot.toObject(Expense.class);
-                                            expense.setAmount(expense.getAmount() / expense.getExpenseAccountIds().size());
-                                            expenses2.add(expense);
-                                            int expenseMonth = LocalDate.parse(expense.getDate(), formatter2).getMonth().getValue();
-                                            int expenseYear = LocalDate.parse(expense.getDate(), formatter2).getYear();
-                                            String key;
-                                            if(expenseMonth<10){
+            Task<Void> queryForCategory2 = database.collection("Accounts").whereEqualTo("userID", currentUserId).get()
+                    .onSuccessTask(
+                            accountSnapshot -> {
+                                if (null != accountSnapshot) {
+                                    Optional<Account> account = accountSnapshot.toObjects(Account.class).stream().findFirst();
+                                    if (account.isPresent()) {
+                                        accountId = account.get().getId();
+                                        return database.collection("Expenses")
+                                                .whereEqualTo("category", selectedCategory2)
+                                                .whereArrayContains("expenseAccountIds", accountId)
+                                                .whereGreaterThanOrEqualTo("dateMillisec", startDate2)
+                                                .whereLessThanOrEqualTo("dateMillisec", endDate2)
+                                                .orderBy("dateMillisec")
+                                                .get()
+                                                .onSuccessTask(queryDocumentSnapshots -> {
+                                                    totalExpenseMapByMonth2 = new HashMap<>();
+                                                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                        Expense expense = documentSnapshot.toObject(Expense.class);
+                                                        expense.setAmount(expense.getAmount() / expense.getExpenseAccountIds().size());
+                                                        expenses2.add(expense);
+                                                        int expenseMonth = LocalDate.parse(expense.getDate(), formatter2).getMonth().getValue();
+                                                        int expenseYear = LocalDate.parse(expense.getDate(), formatter2).getYear();
+                                                        String key;
+                                                        if (expenseMonth < 10) {
 
-                                                key = expenseYear + "-" + "0"+ expenseMonth;
-                                            }else {
-                                                key = expenseYear + "-" + expenseMonth;
-                                            }
-                                            Double totalAmountForMonth2 = totalExpenseMapByMonth2.getOrDefault(key, 0.0);
-                                            totalAmountForMonth2 += expense.getAmount();
-                                            totalExpenseMapByMonth2.put(key, totalAmountForMonth2);
-                                        }
-                                        String timeIntent = selectedTimePeriodInteger2.toString();
-                                        intent.putExtra("selectedTimePeriod", selectedTimePeriodInteger2 +"");
-                                        intent.putExtra("map2", (Serializable) totalExpenseMapByMonth2);
-                                        intent.putExtra("category2",selectedCategory2);
-                                        intent.putExtra("startDate", startTime);
-                                        intent.putExtra("endDate", endTime);
-                                        startActivity(intent);
-                                        System.out.println("______________________" + totalExpenseMapByMonth2.entrySet().toString());
-                                    });
+                                                            key = expenseYear + "-" + "0" + expenseMonth;
+                                                        } else {
+                                                            key = expenseYear + "-" + expenseMonth;
+                                                        }
+                                                        Double totalAmountForMonth2 = totalExpenseMapByMonth2.getOrDefault(key, 0.0);
+                                                        totalAmountForMonth2 += expense.getAmount();
+                                                        totalExpenseMapByMonth2.put(key, totalAmountForMonth2);
+                                                    }
+                                                    String timeIntent = selectedTimePeriodInteger2.toString();
+                                                    intent.putExtra("selectedTimePeriod", selectedTimePeriodInteger2 + "");
+                                                    intent.putExtra("map2", (Serializable) totalExpenseMapByMonth2);
+                                                    intent.putExtra("category2", selectedCategory2);
+                                                    intent.putExtra("startDate", startTime2);
+                                                    intent.putExtra("endDate", endTime2);
+                                                    System.out.println("______________________" + totalExpenseMapByMonth2.entrySet().toString());
+                                                    return Tasks.forResult(null);
+
+                                                });
+                                    } else {
+                                        return Tasks.forException(new RuntimeException("No account"));
+                                    }
+                                } else {
+                                    return Tasks.forException(new RuntimeException("No account"));
                                 }
                             }
-                        }
-                    }
-            );
+                    );
+
+            Tasks.whenAll(queryCategory1, queryForCategory2)
+                    .addOnSuccessListener(aVoid -> startActivity(intent));
         }
+
+
         //return totalExpenseMapByMonth2;
 
         //finish();
@@ -323,7 +334,7 @@ public class SeeExpenseGraphForTwoActivities extends AppCompatActivity {
     }
 
 
-    public void queryForBarplot(View view){
+    public void queryForBarplot(View view) {
 
 
         // Graph method can be called from this line with totalExpenseMapByMonth Map.

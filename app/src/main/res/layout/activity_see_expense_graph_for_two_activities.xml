@@ -23,12 +23,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2">
+
         <Spinner
             android:id="@+id/query_categoryComp1"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            />
+            android:spinnerMode="dropdown" />
         <Spinner
             android:id="@+id/query_month_1"
             android:layout_width="0dp"
