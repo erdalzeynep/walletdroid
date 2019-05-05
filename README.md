@@ -24,11 +24,11 @@ Non App users get the request via Email or SMS</li>
 (3) Import the project in android studio.
 (4) Make sure you have latest dependencies.
 (5) Connect the application to Firebase database. You can do it in two ways.
-(6) Recommended way is to connect it from within Android Studio. Go to Tools>Firebase and follow the 
+(6) Recommended way is to connect it from within Android Studio. Go to Tools>Firebase and follow the
 instructions.
-(7) Other way is to use the Firebase console (https://console.firebase.google.com). To add a sample app 
+(7) Other way is to use the Firebase console (https://console.firebase.google.com). To add a sample app
 to a Firebase project, use the applicationId value specified in the app/build.gradle file of the app as
-the Android package name. Download the generated google-services.json file, and copy it to the app/ 
+the Android package name. Download the generated google-services.json file, and copy it to the app/
 directory of the sample you wish to run.
 (8) Once the application is connected to Firebase all is set to build/run.
 ```
@@ -70,8 +70,11 @@ This project is licensed.
 * Dena Hussain
 * Ric Glassey
 * Philipp Haller
+* Ahmet Dal
 * Firdose S
 * Marcus Dicander
 * Kwabena
 * Mazen
+* KTH
+* Novare Potential
 * MPAndroid library for making graphs
