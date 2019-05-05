@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.models.Account;
+import com.sda5.walletdroid.models.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class NotificationFragment extends Fragment {
         User_id = auth.getCurrentUser().getUid();
 
         // ArrayList initialized
-        notificationList = new ArrayList<Notification>();
+        notificationList = new ArrayList<>();
 
         // Adapter initialized
         notificationRecyclerViewAdapter = new NotificationRecyclerViewAdapter(notificationList, getContext());
@@ -119,18 +120,20 @@ public class NotificationFragment extends Fragment {
                                                 //Log.d(TAG, "FirebaseError: " + e.getMessage());
                                             }
                                             for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+
+
                                                 Notification notification = doc.getDocument().toObject(Notification.class);
 
-                                                String userNames = doc.getDocument().getString("From");
+                                                String userNames = doc.getDocument().getString("from");
                                                 Log.d(TAG, "usersFire= " + userNames);
                                                 notificationList.add(notification);
                                                 notificationRecyclerViewAdapter.notifyDataSetChanged();
-                                                Log.d(TAG, "remoteNotification" + notification.From);
+                                                Log.d(TAG, "remoteNotification" + notification.getFrom());
 
                                             }
                                         }
                                     });
-                            Toast.makeText(container.getContext(), "User_ID: " + current_user_email, Toast.LENGTH_LONG).show();
+                          //  Toast.makeText(container.getContext(), "User_ID: " + current_user_email, Toast.LENGTH_LONG).show();
 
 
                         }

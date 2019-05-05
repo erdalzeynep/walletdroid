@@ -9,16 +9,20 @@ import com.google.firebase.database.annotations.Nullable;
 import com.sda5.walletdroid.R;
 
 public class NotificationActivity extends AppCompatActivity {
-    TextView NotifyData;
+    TextView tvMessage;
+    TextView tvFrom;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        NotifyData = (TextView)findViewById(R.id.text);
+        tvFrom = (TextView)findViewById(R.id.tv_notification_from);
+        tvMessage = (TextView)findViewById(R.id.tv_notification_message);
 
         String message = getIntent().getStringExtra("message");
         String from  = getIntent().getStringExtra("sentBy");
 
-        NotifyData.setText("From: " + from + " Message: "+message);
+        tvFrom.setText(from);
+        tvMessage.setText(message);
+//        Message.setText("From: " + from + " Message: "+message);
     }
 }
