@@ -49,12 +49,13 @@ Android SDK26 and above.
 
 ## Authors
 
-* **Mehdi A** - *Initial work*
-* **Zeynep D** - *Initial work*
-* **Obaid A** - *Initial work*
-* **Priyanka K** - *Initial work*
-* **Manimala C** - *Initial work*
-* **Sanaz** - *Initial work*
+* **Mehdi** - *Initial work* <https://www.linkedin.com/in/mehdi-attarpour-1998549a/>
+* **Zeynep** - *Initial work* <https://www.linkedin.com/in/zeynep-dal-a85bb83b/>
+* **Obaid** - *Initial work* <https://www.linkedin.com/in/obaid-a-9103a479/>
+* **Priyanka** - *Initial work* <https://www.linkedin.com/in/priyanka-karia-359127107/>
+* **Manimala** - *Initial work* <https://www.linkedin.com/in/manimala-chakravarti-95188b119/>
+* **Sanaz** - *Initial work* <https://www.linkedin.com/in/sanaz-sepehrian-bb0885aa/>
+
 
 ## License
 
