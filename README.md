@@ -70,6 +70,7 @@ This project is licensed.
 * Dena Hussain
 * Ric Glassey
 * Philipp Haller
+* Ahmet Dal
 * Firdose S
 * Marcus Dicander
 * Kwabena
