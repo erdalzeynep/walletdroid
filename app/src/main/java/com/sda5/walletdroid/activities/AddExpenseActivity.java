@@ -109,7 +109,9 @@ public class AddExpenseActivity extends AppCompatActivity {
         checkBoxGroupExpense = findViewById(R.id.checkBox_group_expense);
         addExpenseUsers.setVisibility(View.GONE);
 
-
+        if (btnPickDate.getText().toString().trim().isEmpty()){
+            btnPickDate.setText(LocalDate.now().toString());
+        }
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -410,8 +412,9 @@ public class AddExpenseActivity extends AppCompatActivity {
                                                                 String tokenId = account.getTokenID();
                                                                 Notification notification;
                                                                 String from = mAuth.getCurrentUser().getDisplayName().toUpperCase();
-                                                                String amount = balanceOfExpense.get(account.getId()).toString();
-                                                                String message = "Hi! You are assigned to " + title + " expense with " + amount + " Kr";
+                                                                Double amount = balanceOfExpense.get(account.getId());
+                                                                Long amountForNot = Math.round(amount);
+                                                                String message = "Hi! You are assigned to " + title + " expense with " + amountForNot + " Kr";
                                                                 String groupName = group.getName();
                                                                 notification = new Notification(from, groupName, message, tokenId);
                                                                 database.collection("Accounts")

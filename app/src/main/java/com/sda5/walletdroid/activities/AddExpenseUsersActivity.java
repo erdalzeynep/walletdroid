@@ -49,6 +49,8 @@ public class AddExpenseUsersActivity extends AppCompatActivity {
         database = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
+        accountsForExpense.clear();
+
         Intent intent = getIntent();
         groupID = intent.getStringExtra("group_id");
 

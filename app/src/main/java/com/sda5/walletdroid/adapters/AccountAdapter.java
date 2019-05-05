@@ -16,7 +16,9 @@ import com.sda5.walletdroid.R;
 import com.sda5.walletdroid.models.Account;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import androidx.annotation.NonNull;
@@ -99,6 +101,9 @@ public class AccountAdapter extends ArrayAdapter<Account> {
     }
 
     public List<String> getSelectedAccountIDList() {
+        Set<String> set = new HashSet<>(selectedAccountIDList);
+        selectedAccountIDList.clear();
+        selectedAccountIDList.addAll(set);
         return selectedAccountIDList;
     }
 
