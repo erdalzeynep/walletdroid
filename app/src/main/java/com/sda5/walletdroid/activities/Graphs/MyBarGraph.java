@@ -39,6 +39,7 @@ public class MyBarGraph extends DemoBase implements
 
     private BarChart chart;
 
+    private String categoryIntent;
 
     private HashMap<String, Double> expenseMaps = new HashMap<>();
 
@@ -51,7 +52,7 @@ public class MyBarGraph extends DemoBase implements
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_my_bar_graph);
 
-        setTitle("My Line Chart Activity");
+        setTitle("Bar plot for One Expense");
 
         chart = findViewById(R.id.chartMyBar);
         chart.setOnChartValueSelectedListener(this);
@@ -102,13 +103,14 @@ public class MyBarGraph extends DemoBase implements
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         l.setOrientation(Legend.LegendOrientation.VERTICAL);
         l.setDrawInside(false);
+        l.setTextSize(12);
 
         // Get  HashMap from the incoming intent
         Intent intent = getIntent();
         expenseMaps = (HashMap<String, Double>) intent.getSerializableExtra("map");
-
+        categoryIntent = (intent.getStringExtra("category"));
         //generateDataLine();
-        getRemoteData(expenseMaps);
+        getRemoteData(expenseMaps, categoryIntent);
     }
 
     private final int[] colors = new int[]{
@@ -121,7 +123,7 @@ public class MyBarGraph extends DemoBase implements
     /**
      * @param expenseRemote
      */
-    private void getRemoteData(HashMap<String, Double> expenseRemote) {
+    private void getRemoteData(HashMap<String, Double> expenseRemote, String c1) {
 
 
         Set<String> keySet = expenseRemote.keySet();//Getting Set of keys Categories/months from HashMap
@@ -173,7 +175,7 @@ public class MyBarGraph extends DemoBase implements
         }
 
         //
-        BarDataSet d4 = new BarDataSet(valuesExpense, "Expenses ");
+        BarDataSet d4 = new BarDataSet(valuesExpense, c1);
         d4.setColors(ColorTemplate.VORDIPLOM_COLORS);
         d4.setHighLightAlpha(255);
 

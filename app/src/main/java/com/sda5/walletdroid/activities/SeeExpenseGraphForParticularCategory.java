@@ -166,6 +166,7 @@ public class SeeExpenseGraphForParticularCategory extends AppCompatActivity {
                                         // Graph method can be called from this line with totalExpenseMapByMonth Map.
                                         Intent intent = new Intent(this, MyBarGraph.class);
                                         intent.putExtra("map", (Serializable) totalExpenseMapByMonth);
+                                        intent.putExtra("category",selectedCategory);
                                         startActivity(intent);
                                         //finish();
                                         System.out.println("______________________" + totalExpenseMapByMonth.entrySet().toString());

@@ -77,5 +77,25 @@
         android:textStyle="bold"
         android:onClick="runQueryForParticularExpense"
         android:text="Select Category" />
+
+
+    <Button
+        android:id="@+id/buttonBarChartComparison"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/startblue"
+        android:background="@drawable/white_button"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:onClick="runQueryForExpenseComparison"
+        android:textAllCaps="false"
+        android:text="Category Comparison" />
+
+
 </LinearLayout>
 </RelativeLayout>
