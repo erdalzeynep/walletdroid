@@ -18,7 +18,7 @@ Non App users get the request via Email or SMS</li>
 
 ## Getting Started
 
-```
+
 1. Install Android Studio if it's not pre installed.
 2. Clone the repository https://github.com/sda5-walletdroid/walletdroid to your local machine.
 3. Import the project in android studio.
@@ -34,7 +34,7 @@ directory of the sample you wish to run.
 9. In Firebase console, open the Authentication section and enable the sign-in methods. (Email-password
 and Google sign in)
 10. Once the application is connected to Firebase all is set to build/run.
-```
+
 
 ## Prerequisites
 Android SDK Platform 26 and above.
