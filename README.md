@@ -19,22 +19,33 @@ Non App users get the request via Email or SMS</li>
 ## Getting Started
 
 ```
-(1) Install Android Studio if it's not pre installed.
-(2) Clone the repository https://github.com/sda5-walletdroid/walletdroid to your local machine.
-(3) Import the project in android studio.
-(4) Make sure you have latest dependencies.
-(5) Connect the application to Firebase database. You can do it in two ways.
-(6) Recommended way is to connect it from within Android Studio. Go to Tools>Firebase and follow the
+1. Install Android Studio if it's not pre installed.
+2. Clone the repository https://github.com/sda5-walletdroid/walletdroid to your local machine.
+3. Import the project in android studio.
+4. Make sure you have latest dependencies.
+5. Connect the application to Firebase-Cloud Firestore database. You can do it in two ways.
+6. Recommended way is to connect it from within Android Studio. Go to Tools>Firebase and follow the
 instructions.
-(7) Other way is to use the Firebase console (https://console.firebase.google.com). To add a sample app
+7. Other way is to use the Firebase console (https://console.firebase.google.com). To add a sample app
 to a Firebase project, use the applicationId value specified in the app/build.gradle file of the app as
 the Android package name. Download the generated google-services.json file, and copy it to the app/
 directory of the sample you wish to run.
-(8) Once the application is connected to Firebase all is set to build/run.
+8. In Firebase console, open the Database section and create indexes as describe in Prerequisites.
+9. In Firebase console, open the Authentication section and enable the sign-in methods. (Email-password
+and Google sign in)
+10. Once the application is connected to Firebase all is set to build/run.
 ```
 
 ## Prerequisites
 Android SDK Platform 26 and above.
+#### Index creation
+
+| Collcetion Id 	| Fields indexed                                  	|
+|---------------	|-------------------------------------------------	|
+| Expenses      	| category Ascending dateMillisec Ascending       	|
+| Expenses      	| expenseAccountIds Arrays logDate Descending     	|
+| Expenses      	| expenseAccountIds Arrays dateMillisec Ascending 	|
+| Expenses      	| payerAccountId Ascending dateMillisec Ascending 	|
 
 ## Examples
 
@@ -70,7 +81,6 @@ This project is licensed.
 * Dena Hussain
 * Ric Glassey
 * Philipp Haller
-* Ahmet Dal
 * Firdose S
 * Marcus Dicander
 * Kwabena
