@@ -3,7 +3,9 @@ package com.sda5.walletdroid.models;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class Group {
@@ -43,6 +45,9 @@ public class Group {
     }
 
     public List<String> getAccountIdList() {
+        Set<String> set = new HashSet<>(accountIdList);
+        accountIdList.clear();
+        accountIdList.addAll(set);
         return accountIdList;
     }
 
