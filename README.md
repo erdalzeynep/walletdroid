@@ -2,7 +2,7 @@
 
 # Walletdroid- the personal and shared expense tracker
 
-Walletdroid has been designed as a APP to track personal expenses of a user and also to track and split expenses among a group of people. the people splitting expenses using the app may or maynot be the users of the APP.
+Walletdroid has been designed as an APP to track personal expenses of a user and also to track and split expenses among a group of people. The people splitting expenses using the app may or maynot be the users of the APP.
 
 <h3> Features summary of Walletdroid</h3>
 <ul>
@@ -22,7 +22,7 @@ Non App users get the request via Email or SMS</li>
 1. Install Android Studio if it's not pre installed.
 2. Clone the repository https://github.com/sda5-walletdroid/walletdroid to your local machine.
 3. Import the project in android studio.
-4. Make sure you have latest dependencies.
+4. Make sure you have latest dependencies in gradle files.
 5. Connect the application to Firebase-Cloud Firestore database. You can do it in two ways.
 6. Recommended way is to connect it from within Android Studio. Go to Tools>Firebase and follow the
 instructions.
